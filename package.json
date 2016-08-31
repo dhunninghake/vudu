@@ -2,7 +2,7 @@
   "name": "vudu",
   "version": "1.0.0",
   "description": "Lightweight CSS in JS solution",
-  "main": "dist/index.js",
+  "main": "dist/vudu.js",
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "babel src --out-dir dist --copy-files",
