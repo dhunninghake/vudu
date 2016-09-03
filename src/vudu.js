@@ -34,16 +34,19 @@ const buildRuleset = (item, decs) => {
 
       Object.keys(item.element[k]).forEach(s => { 
         const styles = item.element[k];
+        const declarations = buildDeclarations(styles[s]);
         
         if (s.startsWith('@')) {
-          const declarations = buildDeclarations(styles[s]);
           const rule = `${s} { .${className} { ${declarations} } }`;
           vStyleSheet.insertRule(rule, vStyleSheet.rules.length);
         }
         if (s.startsWith('>>')) {
-          const declarations = buildDeclarations(styles[s]);
           s = s.replace('>> ', '');
           const rule = `.${className} ${s} { ${declarations} }`;
+          vStyleSheet.insertRule(rule, vStyleSheet.rules.length);
+        }
+        if (s.startsWith(':')) {
+          const rule = `.${className}${s} { ${declarations} }`;
           vStyleSheet.insertRule(rule, vStyleSheet.rules.length);
         }
       });
