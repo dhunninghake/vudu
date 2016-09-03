@@ -40,6 +40,12 @@ const buildRuleset = (item, decs) => {
           const rule = `${s} { .${className} { ${declarations} } }`;
           vStyleSheet.insertRule(rule, vStyleSheet.rules.length);
         }
+        if (s.startsWith('>>')) {
+          const declarations = buildDeclarations(styles[s]);
+          s = s.replace('>> ', '');
+          const rule = `.${className} ${s} { ${declarations} }`;
+          vStyleSheet.insertRule(rule, vStyleSheet.rules.length);
+        }
       });
     }
     

@@ -3,8 +3,8 @@ export const camelToHyphen = (c) => {
 };
 
 export const guid = () => {
-  return Math.random().toString(36).substring(2, 15) +
-    Math.random().toString(36).substring(2, 15);
+  return Math.random().toString(26).substring(2, 10) +
+    Math.random().toString(26).substring(2, 10);
 };
 
 export const vStyleSheet = (() => {

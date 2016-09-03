@@ -1,14 +1,20 @@
 import React, { Component } from 'react';
+import v from '../../src/vudu';
 
 export default class App extends Component {
   render() {
-    const Root = () => {
-      return (
-        <h1>Vudu!</h1>
-      );
-    };
+    const styles = v({
+      container: {
+        textAlign: 'center',
+        '>> h1': {
+          color: 'red'
+        }
+      }
+    });
     return (
-      <Root />
+      <div className={styles.container}>
+        <h1>Vudu!</h1>
+      </div>
     );
   }
 }
