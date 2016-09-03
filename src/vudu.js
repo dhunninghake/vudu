@@ -72,6 +72,8 @@ export default function v(el) {
   cacheItem.className = `v-${guid()}`;
   cache.push(cacheItem);
 
+  console.log(vStyleSheet);
+
   //return an object of classnames
   return buildRuleset(cacheItem, true);
 };
