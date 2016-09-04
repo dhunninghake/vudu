@@ -21447,7 +21447,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _vudu = __webpack_require__(173);
+	var _README = __webpack_require__(173);
+
+	var _README2 = _interopRequireDefault(_README);
+
+	var _vudu = __webpack_require__(174);
 
 	var _vudu2 = _interopRequireDefault(_vudu);
 
@@ -21458,6 +21462,25 @@
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Readme = function Readme() {
+	  var styles = (0, _vudu2.default)({
+	    container: {
+	      width: '41.66%'
+	    },
+	    readme: {
+	      '>> h1': {
+	        fontSize: '6rem',
+	        margin: 0
+	      }
+	    }
+	  });
+	  return _react2.default.createElement(
+	    'div',
+	    { className: styles.container },
+	    _react2.default.createElement('div', { className: styles.readme, dangerouslySetInnerHTML: { __html: _README2.default } })
+	  );
+	};
 
 	var App = function (_Component) {
 	  _inherits(App, _Component);
@@ -21472,29 +21495,17 @@
 	    key: 'render',
 	    value: function render() {
 	      var styles = (0, _vudu2.default)({
-	        container: {
-	          textAlign: 'center',
-	          '>> h1': {
-	            color: 'red'
-	          },
-	          '>> h2': {
-	            color: 'blue'
-	          }
+	        wrapper: {
+	          width: '91.66%',
+	          margin: '0 auto',
+	          overflow: 'hidden',
+	          padding: '2rem'
 	        }
 	      });
 	      return _react2.default.createElement(
 	        'div',
-	        { className: styles.container },
-	        _react2.default.createElement(
-	          'h1',
-	          null,
-	          'Vudu!'
-	        ),
-	        _react2.default.createElement(
-	          'h2',
-	          null,
-	          'rocks!'
-	        )
+	        { className: styles.wrapper },
+	        _react2.default.createElement(Readme, null)
 	      );
 	    }
 	  }]);
@@ -21506,6 +21517,12 @@
 
 /***/ },
 /* 173 */
+/***/ function(module, exports) {
+
+	module.exports = "<h1 id=\"vudu\">Vudu</h1>\n<p>Vudu is a lightweight CSS-in-JS solution.</p>\n<h2 id=\"features\">Features</h2>\n<ul>\n<li>Support for custom media queries</li>\n<li>Pseudo selectors <code>:hover</code>, <code>:active</code>, <code>:focus</code>, <code>:before</code> etc</li>\n<li>Updates styles as state changes but doens&#39;t make duplicates</li>\n<li>Target child nodes for dynamically inserted markup</li>\n<li>Use with or without popular frameworks like React</li>\n<li>Easily author styles next to the components they pertain to</li>\n</ul>\n";
+
+/***/ },
+/* 174 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -21515,7 +21532,7 @@
 	});
 	exports.default = v;
 
-	var _utils = __webpack_require__(174);
+	var _utils = __webpack_require__(175);
 
 	var cache = [];
 
@@ -21546,17 +21563,20 @@
 
 	      Object.keys(item.element[k]).forEach(function (s) {
 	        var styles = item.element[k];
+	        var declarations = buildDeclarations(styles[s]);
 
 	        if (s.startsWith('@')) {
-	          var _declarations = buildDeclarations(styles[s]);
-	          var _rule = s + ' { .' + className + ' { ' + _declarations + ' } }';
+	          var _rule = s + ' { .' + className + ' { ' + declarations + ' } }';
 	          _utils.vStyleSheet.insertRule(_rule, _utils.vStyleSheet.rules.length);
 	        }
 	        if (s.startsWith('>>')) {
-	          var _declarations2 = buildDeclarations(styles[s]);
 	          s = s.replace('>> ', '');
-	          var _rule2 = '.' + className + ' ' + s + ' { ' + _declarations2 + ' }';
+	          var _rule2 = '.' + className + ' ' + s + ' { ' + declarations + ' }';
 	          _utils.vStyleSheet.insertRule(_rule2, _utils.vStyleSheet.rules.length);
+	        }
+	        if (s.startsWith(':')) {
+	          var _rule3 = '.' + className + s + ' { ' + declarations + ' }';
+	          _utils.vStyleSheet.insertRule(_rule3, _utils.vStyleSheet.rules.length);
 	        }
 	      });
 	    }
@@ -21590,7 +21610,7 @@
 	};
 
 /***/ },
-/* 174 */
+/* 175 */
 /***/ function(module, exports) {
 
 	'use strict';
