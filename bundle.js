@@ -21504,12 +21504,40 @@
 	          margin: '0 auto',
 	          overflow: 'hidden',
 	          padding: '2rem'
+	        },
+	        circle: {
+	          width: '1rem',
+	          height: '1rem',
+	          marginLeft: '0px',
+	          backgroundColor: 'fuchsia',
+	          borderRadius: '50%',
+	          animationName: 'circle',
+	          animationDuration: '4s',
+	          animationIterationCount: 'infinite',
+	          '@keyframes circle': {
+	            '0%': {
+	              marginLeft: '0px',
+	              width: '1rem',
+	              height: '1rem'
+	            },
+	            '50%': {
+	              marginLeft: '40px',
+	              width: '2rem',
+	              height: '2rem'
+	            },
+	            '100%': {
+	              marginLeft: '0px',
+	              width: '1rem',
+	              height: '1rem'
+	            }
+	          }
 	        }
 	      });
 	      return _react2.default.createElement(
 	        'div',
 	        { className: styles.wrapper },
-	        _react2.default.createElement(Readme, null)
+	        _react2.default.createElement(Readme, null),
+	        _react2.default.createElement('div', { className: styles.circle })
 	      );
 	    }
 	  }]);
@@ -21559,6 +21587,17 @@
 	  return declarations;
 	};
 
+	var buildKeyframes = function buildKeyframes() {
+	  var keyframe = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+	  var keyframes = '';
+	  Object.keys(keyframe).forEach(function (kf) {
+	    var declarations = buildDeclarations(keyframe[kf]);
+	    keyframes = keyframes.concat(kf + ' { ' + declarations + ' }\n');
+	  });
+	  return keyframes;
+	};
+
 	var buildRuleset = function buildRuleset(element, className) {
 	  var classes = {};
 
@@ -21569,20 +21608,24 @@
 	    Object.keys(styles).forEach(function (s) {
 	      if (_typeof(styles[s]) === 'object') {
 	        var declarations = buildDeclarations(styles[s]);
-	        if (s.startsWith('@')) {
+	        if (s.startsWith('@media')) {
 	          var rule = s + ' { .' + newClassName + ' { ' + declarations + ' } }';
 	          vStyleSheet.insertRule(rule, vStyleSheet.rules.length);
 	        } else if (s.startsWith(':')) {
 	          var _rule = '.' + newClassName + s + ' { ' + declarations + ' }';
 	          vStyleSheet.insertRule(_rule, vStyleSheet.rules.length);
-	        } else {
-	          var _rule2 = '.' + newClassName + ' ' + s + ' { ' + declarations + ' }';
+	        } else if (s.startsWith('@keyframes')) {
+	          var keyframes = buildKeyframes(styles[s]);
+	          var _rule2 = s + ' {\n ' + keyframes + ' \n}';
 	          vStyleSheet.insertRule(_rule2, vStyleSheet.rules.length);
+	        } else {
+	          var _rule3 = '.' + newClassName + ' ' + s + ' { ' + declarations + ' }';
+	          vStyleSheet.insertRule(_rule3, vStyleSheet.rules.length);
 	        }
 	      } else {
 	        var _declarations = buildDeclarations(styles);
-	        var _rule3 = '.' + newClassName + ' { ' + _declarations + ' }';
-	        vStyleSheet.insertRule(_rule3, vStyleSheet.rules.length);
+	        var _rule4 = '.' + newClassName + ' { ' + _declarations + ' }';
+	        vStyleSheet.insertRule(_rule4, vStyleSheet.rules.length);
 	      }
 	    });
 

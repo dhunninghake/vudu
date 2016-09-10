@@ -21,6 +21,14 @@ const buildDeclarations = (styles={}) => {
   return declarations;
 };
 
+const buildKeyframes = (keyframe={}) => {
+  let keyframes = '';
+  Object.keys(keyframe).forEach(kf => {
+    const declarations = buildDeclarations(keyframe[kf]);
+    keyframes = keyframes.concat(`${kf} { ${declarations} }\n`);
+  });
+  return keyframes;
+};
 
 const buildRuleset = (element, className) => {
   const classes = {};
@@ -32,11 +40,15 @@ const buildRuleset = (element, className) => {
     Object.keys(styles).forEach(s => {
       if (typeof styles[s] === 'object') {
         const declarations = buildDeclarations(styles[s]);
-        if (s.startsWith('@')) {
+        if (s.startsWith('@media')) {
           const rule = `${s} { .${newClassName} { ${declarations} } }`;
           vStyleSheet.insertRule(rule, vStyleSheet.rules.length);
         } else if (s.startsWith(':')) {
           const rule = `.${newClassName}${s} { ${declarations} }`;
+          vStyleSheet.insertRule(rule, vStyleSheet.rules.length);
+        } else if (s.startsWith('@keyframes')) {
+          const keyframes = buildKeyframes(styles[s]);
+          const rule = `${s} {\n ${keyframes} \n}`;
           vStyleSheet.insertRule(rule, vStyleSheet.rules.length);
         } else {
           const rule = `.${newClassName} ${s} { ${declarations} }`;
@@ -54,6 +66,7 @@ const buildRuleset = (element, className) => {
 
   return classes;
 };
+
 
 export default function v(el) {
   //return cached styles
