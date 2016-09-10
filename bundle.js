@@ -21466,10 +21466,14 @@
 	var Readme = function Readme() {
 	  var styles = (0, _vudu2.default)({
 	    container: {
-	      width: '41.66%'
+	      width: '50%',
+	      backgroundColor: 'red',
+	      '@media (min-width: 40em)': {
+	        backgroundColor: 'blue'
+	      }
 	    },
 	    readme: {
-	      '>> h1': {
+	      'h1': {
 	        fontSize: '6rem',
 	        margin: 0
 	      }
@@ -21530,83 +21534,83 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
 	exports.default = v;
 
 	var _utils = __webpack_require__(175);
 
 	var cache = [];
 
-	var buildDeclarations = function buildDeclarations(styles) {
+	var vStyleSheet = (0, _utils.createStyleSheet)();
+
+	var buildDeclarations = function buildDeclarations() {
+	  var styles = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
 	  var declarations = '';
 	  Object.keys(styles).forEach(function (s) {
-	    var cssProperty = (0, _utils.camelToHyphen)(s);
-	    var declaration = cssProperty + ': ' + styles[s] + ';';
-
-	    if (!s.startsWith('@')) {
+	    if (_typeof(styles[s]) !== 'object') {
+	      var cssProperty = (0, _utils.camelToHyphen)(s);
+	      var declaration = cssProperty + ': ' + styles[s] + ';';
 	      declarations = declarations.concat(declaration);
 	    }
 	  });
 	  return declarations;
 	};
 
-	var buildRuleset = function buildRuleset(item, decs) {
+	var buildRuleset = function buildRuleset(element, className) {
 	  var classes = {};
 
-	  Object.keys(item.element).forEach(function (k) {
-	    var className = item.className + '-' + k;
+	  Object.keys(element).forEach(function (k) {
+	    var newClassName = className + '-' + k;
+	    var styles = element[k];
 
-	    if (decs) {
-
-	      var declarations = buildDeclarations(item.element[k]);
-	      var rule = '.' + className + ' { ' + declarations + ' }';
-	      _utils.vStyleSheet.insertRule(rule, _utils.vStyleSheet.rules.length);
-
-	      Object.keys(item.element[k]).forEach(function (s) {
-	        var styles = item.element[k];
+	    Object.keys(styles).forEach(function (s) {
+	      if (_typeof(styles[s]) === 'object') {
 	        var declarations = buildDeclarations(styles[s]);
-
 	        if (s.startsWith('@')) {
-	          var _rule = s + ' { .' + className + ' { ' + declarations + ' } }';
-	          _utils.vStyleSheet.insertRule(_rule, _utils.vStyleSheet.rules.length);
+	          var rule = s + ' { .' + newClassName + ' { ' + declarations + ' } }';
+	          vStyleSheet.insertRule(rule, vStyleSheet.rules.length);
+	        } else if (s.startsWith(':')) {
+	          var _rule = '.' + newClassName + s + ' { ' + declarations + ' }';
+	          vStyleSheet.insertRule(_rule, vStyleSheet.rules.length);
+	        } else {
+	          var _rule2 = '.' + newClassName + ' ' + s + ' { ' + declarations + ' }';
+	          vStyleSheet.insertRule(_rule2, vStyleSheet.rules.length);
 	        }
-	        if (s.startsWith('>>')) {
-	          s = s.replace('>> ', '');
-	          var _rule2 = '.' + className + ' ' + s + ' { ' + declarations + ' }';
-	          _utils.vStyleSheet.insertRule(_rule2, _utils.vStyleSheet.rules.length);
-	        }
-	        if (s.startsWith(':')) {
-	          var _rule3 = '.' + className + s + ' { ' + declarations + ' }';
-	          _utils.vStyleSheet.insertRule(_rule3, _utils.vStyleSheet.rules.length);
-	        }
-	      });
-	    }
+	      } else {
+	        var _declarations = buildDeclarations(styles);
+	        var _rule3 = '.' + newClassName + ' { ' + _declarations + ' }';
+	        vStyleSheet.insertRule(_rule3, vStyleSheet.rules.length);
+	      }
+	    });
 
-	    classes[k] = className;
+	    classes[k] = newClassName;
 	  });
+
 	  return classes;
 	};
 
 	function v(el) {
-	  var cacheItem = {};
-
 	  //return cached styles
-	  if (cache.length > 0) {
-	    for (var i = 0; i < cache.length; i++) {
-	      if (JSON.stringify(cache[i].element) === JSON.stringify(el)) {
-	        return buildRuleset(cache[i], false);
-	      }
+	  for (var i = 0; i < cache.length; i++) {
+	    if ((0, _utils.deepEqual)(cache[i].element, el)) {
+	      return cache[i].classes;
 	    }
 	  }
 
-	  //cache new styles
+	  //otherwise create new ones!
+	  var cacheItem = {};
+	  var className = 'v-' + (0, _utils.guid)();
+	  var classes = buildRuleset(el, className);
+
 	  cacheItem.element = el;
-	  cacheItem.className = 'v-' + (0, _utils.guid)();
+	  cacheItem.className = className;
+	  cacheItem.classes = classes;
 	  cache.push(cacheItem);
 
-	  console.log(_utils.vStyleSheet);
-
-	  //return an object of classnames
-	  return buildRuleset(cacheItem, true);
+	  return classes;
 	};
 
 /***/ },
@@ -21618,6 +21622,9 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
 	var camelToHyphen = exports.camelToHyphen = function camelToHyphen(c) {
 	  return c.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
 	};
@@ -21626,7 +21633,7 @@
 	  return Math.random().toString(26).substring(2, 10) + Math.random().toString(26).substring(2, 10);
 	};
 
-	var vStyleSheet = exports.vStyleSheet = function () {
+	var createStyleSheet = exports.createStyleSheet = function createStyleSheet() {
 	  if (document.getElementById('vStyleSheet')) {
 	    return;
 	  } else {
@@ -21636,7 +21643,32 @@
 	    document.head.appendChild(style);
 	    return style.sheet;
 	  }
-	}();
+	};
+
+	var deepEqual = exports.deepEqual = function deepEqual(a, b) {
+	  var isAobj = (typeof a === 'undefined' ? 'undefined' : _typeof(a)) === 'object';
+	  var isBobj = (typeof b === 'undefined' ? 'undefined' : _typeof(b)) === 'object';
+	  var isABobjs = isAobj && isBobj;
+	  var out = a === b;
+
+	  function checkX(x) {
+	    var ix = void 0,
+	        res = void 0;
+	    for (ix in x) {
+	      if (x.hasOwnProperty(ix)) {
+	        res = deepEqual(a[ix], b[ix]);
+	      }
+	      if (!res) {
+	        break;
+	      }
+	    }
+	    return res;
+	  }
+	  if (a && b && isABobjs && !out) {
+	    out = checkX(a) && checkX(b);
+	  }
+	  return out;
+	};
 
 /***/ }
 /******/ ]);

@@ -1,17 +1,19 @@
 {
   "name": "vudu",
-  "version": "1.2.3",
+  "version": "1.3.3",
   "description": "Lightweight CSS in JS solution",
   "main": "dist/vudu.js",
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "babel src --out-dir dist --copy-files",
-    "start": "webpack-dev-server --hot --progress --colors"
+    "start": "webpack-dev-server --hot --progress --colors",
+    "test": "ava"
   },
   "author": "Daniel Hunninghake <d@dhunninghake.com> (http://dhunninghake.com/)",
   "license": "MIT",
   "dependencies": {},
   "devDependencies": {
+    "ava": "^0.16.0",
     "babel-cli": "^6.14.0",
     "babel-core": "^6.14.0",
     "babel-loader": "^6.2.5",
@@ -20,6 +22,7 @@
     "babel-preset-stage-0": "^6.5.0",
     "html-loader": "^0.4.3",
     "html-webpack-plugin": "^2.22.0",
+    "jsdom": "^9.5.0",
     "json-loader": "^0.5.4",
     "markdown-loader": "^0.1.7",
     "react": "^15.3.1",
@@ -34,6 +37,13 @@
       "stage-0",
       "react"
     ]
+  },
+  "ava": {
+    "require": [
+      "babel-register",
+      "./test/helpers/setup-browser-env.js"
+    ],
+    "babel": "inherit"
   },
   "keywords": [
     "react",

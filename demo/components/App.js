@@ -5,10 +5,14 @@ import v from '../../src/vudu';
 const Readme = () => {
   const styles = v({
     container: {
-      width: '41.66%',
+      width: '50%',
+      backgroundColor: 'red',
+      '@media (min-width: 40em)': {
+        backgroundColor: 'blue'
+      }
     },
     readme: {
-      '>> h1': {
+      'h1': {
         fontSize: '6rem',
         margin: 0,
       }
