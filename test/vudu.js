@@ -19,7 +19,7 @@ test.beforeEach(() => {
 
 test.afterEach(() => {
   cache.clearItems();
-  sheet.reset();
+  sheet.reset();  
 });
 
 
@@ -90,7 +90,9 @@ test('creates @media query rules', t => {
       }
     }
   };
+
   v(styles);
+
   const mediaRule = sheet.stylesheet.cssRules[1];
   t.true(mediaRule.hasOwnProperty('media'));
 });
@@ -117,12 +119,31 @@ test('creates @media rules in the correct order', t => {
       },
     }
   };
+
   v(styles);
-  t.is(sheet.stylesheet.cssRules[1].media[0], breakpoints[0]);
-  t.is(sheet.stylesheet.cssRules[2].media[0], breakpoints[1]);
-  t.is(sheet.stylesheet.cssRules[3].media[0], breakpoints[2]);
+
+  const rules = sheet.stylesheet.cssRules;
+  t.is(rules[1].media[0], breakpoints[0]);
+  t.is(rules[2].media[0], breakpoints[1]);
+  t.is(rules[3].media[0], breakpoints[2]);
 });
 
 
+test('creates pseudo selectors', t => {
+  sheet.reset();
+  const pseudo = ':hover';
+  const styles = {
+    container: {
+      color: 'yellow',
+      [pseudo]: {
+        color: 'blue'
+      }
+    }
+  };
 
+  v(styles);
+
+  const selector = sheet.stylesheet.cssRules[1].selectorText;
+  t.true(selector.includes(pseudo));
+});
 
