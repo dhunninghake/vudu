@@ -13,12 +13,12 @@ const styles = {
 };
 
 test.beforeEach(() => {
-  cache.clear();
+  cache.clearItems();
   sheet.reset();
 });
 
 test.afterEach(() => {
-  cache.clear();
+  cache.clearItems();
   sheet.reset();
 });
 
@@ -49,7 +49,7 @@ test('returns an object of values with type string', t => {
   t.plan(2);
   const style = v(styles);
   t.is(typeof style, 'object');
-  t.is(typeof style[0], 'string');
+  t.is(typeof style.container, 'string');
 });
 
 
@@ -81,6 +81,48 @@ test('doesnt add to cache if deep equal', t => {
 
 
 test('creates @media query rules', t => {
-  
+  t.plan(1);
+  const styles = {
+    container: {
+      width: '50%',
+      '@media (min-width: 40em)': {
+        width: '75%'
+      }
+    }
+  };
+  v(styles);
+  const mediaRule = sheet.stylesheet.cssRules[1];
+  t.true(mediaRule.hasOwnProperty('media'));
 });
+
+
+test('creates @media rules in the correct order', t => {
+  t.plan(3);
+  const breakpoints = [
+    '(min-width: 40em)',
+    '(min-width: 52em)',
+    '(min-width: 64em)'
+  ];
+  const styles = {
+    container: {
+      width: '50%',
+      [`@media ${breakpoints[0]}`]: {
+        width: '75%'
+      },
+      [`@media ${breakpoints[1]}`]: {
+        width: '85%'
+      },
+      [`@media ${breakpoints[2]}`]: {
+        width: '95%'
+      },
+    }
+  };
+  v(styles);
+  t.is(sheet.stylesheet.cssRules[1].media[0], breakpoints[0]);
+  t.is(sheet.stylesheet.cssRules[2].media[0], breakpoints[1]);
+  t.is(sheet.stylesheet.cssRules[3].media[0], breakpoints[2]);
+});
+
+
+
 

@@ -8,7 +8,7 @@ export default class Cache {
     this.items.push(item);
   }
   
-  clear() {
+  clearItems() {
     this.items = [];
   }
 
