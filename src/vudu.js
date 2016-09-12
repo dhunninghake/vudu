@@ -1,13 +1,12 @@
-import { 
-  guid, 
-  deepEqual,
-  createStyleSheet, 
-  camelToHyphen, 
-} from './utils';
+import { guid, deepEqual, camelToHyphen, } from './utils';
+import Cache from './cache';
+import Sheet from './sheet';
 
-let cache = [];
+export let cache = new Cache();
+export let sheet = new Sheet();
 
-const vStyleSheet = createStyleSheet();
+const { stylesheet } = sheet;
+
 
 const buildDeclarations = (styles={}) => {
   let declarations = '';
@@ -18,6 +17,7 @@ const buildDeclarations = (styles={}) => {
       declarations = declarations.concat(declaration);
     }
   });
+
   return declarations;
 };
 
@@ -27,6 +27,7 @@ const buildKeyframes = (keyframe={}) => {
     const declarations = buildDeclarations(keyframe[kf]);
     keyframes = keyframes.concat(`${kf} { ${declarations} }\n`);
   });
+
   return keyframes;
 };
 
@@ -42,22 +43,22 @@ const buildRuleset = (element, className) => {
         const declarations = buildDeclarations(styles[s]);
         if (s.startsWith('@media')) {
           const rule = `${s} { .${newClassName} { ${declarations} } }`;
-          vStyleSheet.insertRule(rule, vStyleSheet.rules.length);
+          stylesheet.insertRule(rule, stylesheet.cssRules.length);
         } else if (s.startsWith(':')) {
           const rule = `.${newClassName}${s} { ${declarations} }`;
-          vStyleSheet.insertRule(rule, vStyleSheet.rules.length);
+          stylesheet.insertRule(rule, stylesheet.cssRules.length);
         } else if (s.startsWith('@keyframes')) {
           const keyframes = buildKeyframes(styles[s]);
           const rule = `${s} {\n ${keyframes} \n}`;
-          vStyleSheet.insertRule(rule, vStyleSheet.rules.length);
+          stylesheet.insertRule(rule, stylesheet.cssRules.length);
         } else {
           const rule = `.${newClassName} ${s} { ${declarations} }`;
-          vStyleSheet.insertRule(rule, vStyleSheet.rules.length);
+          stylesheet.insertRule(rule, stylesheet.cssRules.length);
         }
       } else {
         const declarations = buildDeclarations(styles);
         const rule = `.${newClassName} { ${declarations} }`;
-        vStyleSheet.insertRule(rule, vStyleSheet.rules.length);
+        stylesheet.insertRule(rule, stylesheet.cssRules.length);
       }
     });
     
@@ -70,9 +71,9 @@ const buildRuleset = (element, className) => {
 
 export default function v(el) {
   //return cached styles
-  for (let i = 0; i < cache.length; i++) {
-    if (deepEqual(cache[i].element, el)) {
-      return cache[i].classes;
+  for (let i = 0; i < cache.items.length; i++) {
+    if (deepEqual(cache.items[i].element, el)) {
+      return cache.items[i].classes;
     }
   }
 
@@ -84,7 +85,7 @@ export default function v(el) {
   cacheItem.element = el;
   cacheItem.className = className;
   cacheItem.classes = classes;
-  cache.push(cacheItem);
+  cache.addItem(cacheItem);
 
   return classes;
 };
