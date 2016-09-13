@@ -23,6 +23,7 @@ const Readme = () => {
 
 export default class App extends Component {
   render() {
+    const name = 'circle';
     const styles = v({
       wrapper: {
         width: '91.66%',
@@ -36,10 +37,10 @@ export default class App extends Component {
         marginLeft: '0px',
         backgroundColor: 'fuchsia',
         borderRadius: '50%',
-        animationName: 'circle',
+        animationName: name,
         animationDuration: '4s',
         animationIterationCount: 'infinite',
-        '@keyframes circle': {
+        [`@keyframes ${name}`]: {
           '0%': {
             marginLeft: '0px',
             width: '1rem',

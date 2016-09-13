@@ -5,8 +5,7 @@ import Sheet from './sheet';
 export let cache = new Cache();
 export let sheet = new Sheet();
 
-const { stylesheet } = sheet;
-
+const { vStyleSheet } = sheet;
 
 const buildDeclarations = (styles={}) => {
   let declarations = '';
@@ -17,7 +16,6 @@ const buildDeclarations = (styles={}) => {
       declarations = declarations.concat(declaration);
     }
   });
-
   return declarations;
 };
 
@@ -31,14 +29,21 @@ const buildKeyframes = (keyframe={}) => {
   return keyframes;
 };
 
-const buildRuleset = (element, className) => {
+const buildRuleset = (element, className, customSheet) => {
+  const stylesheet = customSheet ? customSheet : vStyleSheet;
   const classes = {};
   
   Object.keys(element).forEach(k => {
     const newClassName = `${className}-${k}`;
     const styles = element[k];
 
-    Object.keys(styles).forEach(s => {
+    //build base level styles (strings)
+    const declarations = buildDeclarations(styles);
+    const rule = `.${newClassName} { ${declarations} }`;
+    stylesheet.insertRule(rule, stylesheet.cssRules.length);
+
+    //handle special cases (objects)
+    Object.keys(styles).forEach(s => {      
       if (typeof styles[s] === 'object') {
         const declarations = buildDeclarations(styles[s]);
         if (s.startsWith('@media')) {
@@ -55,13 +60,9 @@ const buildRuleset = (element, className) => {
           const rule = `.${newClassName} ${s} { ${declarations} }`;
           stylesheet.insertRule(rule, stylesheet.cssRules.length);
         }
-      } else {
-        const declarations = buildDeclarations(styles);
-        const rule = `.${newClassName} { ${declarations} }`;
-        stylesheet.insertRule(rule, stylesheet.cssRules.length);
       }
     });
-    
+
     classes[k] = newClassName;
   });
 
@@ -69,7 +70,7 @@ const buildRuleset = (element, className) => {
 };
 
 
-export default function v(el) {
+export default function v(el, customSheet) {
   //return cached styles
   for (let i = 0; i < cache.items.length; i++) {
     if (deepEqual(cache.items[i].element, el)) {
@@ -80,7 +81,7 @@ export default function v(el) {
   //otherwise create new ones!
   const cacheItem = {};
   const className = `v-${guid()}`;
-  const classes = buildRuleset(el, className);
+  const classes = buildRuleset(el, className, customSheet);
 
   cacheItem.element = el;
   cacheItem.className = className;

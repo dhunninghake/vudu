@@ -1,24 +1,24 @@
 export default class Sheet {
   
   constructor() {
-    this.stylesheet = this.create();
+    this.vStyleSheet = this.create('vStyleSheet');
   }
 
-  create() {
-    if (document.getElementById('vStyleSheet')) {
+  create(id) {
+    if (document.getElementById(id)) {
       return;
     } else {
       let style = document.createElement('style');
       style.appendChild(document.createTextNode(''));
-      style.setAttribute('id', 'vStyleSheet');
+      style.setAttribute('id', id);
       document.head.appendChild(style);
       return style.sheet;
     }
   }
 
   reset() {
-    this.stylesheet.cssRules.forEach((item, index) => {
-      this.stylesheet.deleteRule(index);
+    return this.stylesheet.cssRules.forEach((item, index) => {
+      return this.stylesheet.deleteRule(index);
     });
   }
 
