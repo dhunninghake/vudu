@@ -17,8 +17,8 @@ export default class Sheet {
   }
 
   reset() {
-    return this.stylesheet.cssRules.forEach((item, index) => {
-      return this.stylesheet.deleteRule(index);
+    this.stylesheet.cssRules.forEach((item, index) => {
+      this.stylesheet.deleteRule(index);
     });
   }
 
