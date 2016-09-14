@@ -20,7 +20,7 @@ const buildDeclarations = (styles={}) => {
   let declarations = '';
   Object.keys(styles).forEach(s => {
     if (typeof styles[s] !== 'object') {
-      const needsPrefix = /[A-Z]/.test( s[0]);
+      const needsPrefix = /[A-Z]/.test(s[0]);
       const cssProperty = needsPrefix ? `-${camelToHyphen(s)}` : camelToHyphen(s);
       const declaration = `${cssProperty}: ${styles[s]};`;
       declarations = declarations.concat(declaration);
@@ -31,7 +31,7 @@ const buildDeclarations = (styles={}) => {
       declarations = declarations.concat(prefix(s, styles[s]));
     }
   });
-  
+
   return declarations;
 };
 
@@ -58,7 +58,6 @@ const buildRuleset = (element, className, customSheet) => {
     //build base level styles (strings)
     const declarations = buildDeclarations(prefixed);
     const rule = `.${newClassName} { ${declarations} }`;
-    console.log(rule);
     stylesheet.insertRule(rule, stylesheet.cssRules.length);
 
     //handle special cases (objects)
