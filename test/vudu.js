@@ -1,5 +1,5 @@
 import test from 'ava';
-import { guid } from '../src/utils';
+import { guid, camelToHyphen } from '../src/utils';
 import v, { cache, sheet } from '../src/vudu';
 
 const styles = {
@@ -166,5 +166,23 @@ test('creates @keyframes rules', t => {
 
   const keyrule = rules[1].cssRules[0];
   t.true(keyrule.hasOwnProperty('keyText'));
+});
+
+
+test('adds vendor prefixes', t => {
+  t.plan(3);
+  const styles = {
+    columns: {
+      columnCount: '3',
+      columnGap: '10px',
+    }
+  };
+
+  v(styles, t.context.sheet);
+
+  const rule = t.context.sheet.cssRules[0].style;
+  t.is(rule[0], 'column-count');
+  t.is(rule[2], '-webkit-column-count');
+  t.is(rule[3], '-moz-column-count');
 });
 

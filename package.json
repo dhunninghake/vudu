@@ -1,6 +1,6 @@
 {
   "name": "vudu",
-  "version": "1.4.3",
+  "version": "1.5.3",
   "description": "Lightweight CSS in JS solution",
   "main": "dist/vudu.js",
   "scripts": {
@@ -11,7 +11,9 @@
   },
   "author": "Daniel Hunninghake <d@dhunninghake.com> (http://dhunninghake.com/)",
   "license": "MIT",
-  "dependencies": {},
+  "dependencies": {
+    "inline-style-prefixer": "^2.0.1"
+  },
   "devDependencies": {
     "ava": "^0.16.0",
     "babel-cli": "^6.14.0",

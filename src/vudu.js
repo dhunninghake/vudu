@@ -1,4 +1,5 @@
 import { guid, deepEqual, camelToHyphen, } from './utils';
+import prefixer from 'inline-style-prefixer/static';
 import Cache from './cache';
 import Sheet from './sheet';
 
@@ -7,17 +8,33 @@ export let sheet = new Sheet();
 
 const { vStyleSheet } = sheet;
 
+
+const prefix = (prop, vendors) => {
+  let flattened = '';
+  vendors.forEach(v => flattened = flattened.concat(`${prop}: ${v};`));
+  return flattened;
+};
+
+
 const buildDeclarations = (styles={}) => {
   let declarations = '';
   Object.keys(styles).forEach(s => {
     if (typeof styles[s] !== 'object') {
-      const cssProperty = camelToHyphen(s);
+      const needsPrefix = /[A-Z]/.test( s[0]);
+      const cssProperty = needsPrefix ? `-${camelToHyphen(s)}` : camelToHyphen(s);
       const declaration = `${cssProperty}: ${styles[s]};`;
       declarations = declarations.concat(declaration);
     }
+
+    //for cases like flexbox
+    if (Array.isArray(styles[s])) {
+      declarations = declarations.concat(prefix(s, styles[s]));
+    }
   });
+  
   return declarations;
 };
+
 
 const buildKeyframes = (keyframe={}) => {
   let keyframes = '';
@@ -36,10 +53,12 @@ const buildRuleset = (element, className, customSheet) => {
   Object.keys(element).forEach(k => {
     const newClassName = `${className}-${k}`;
     const styles = element[k];
+    const prefixed = prefixer(styles);
 
     //build base level styles (strings)
-    const declarations = buildDeclarations(styles);
+    const declarations = buildDeclarations(prefixed);
     const rule = `.${newClassName} { ${declarations} }`;
+    console.log(rule);
     stylesheet.insertRule(rule, stylesheet.cssRules.length);
 
     //handle special cases (objects)
