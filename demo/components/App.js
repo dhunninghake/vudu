@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import readme from '../../README.md';
 import v from '../../src/vudu';
+import { ttf, woff, woff2, eot } from '../fonts';
+
 
 const Readme = () => {
   const styles = v({
@@ -10,6 +12,7 @@ const Readme = () => {
     readme: {
       'h1': {
         fontSize: '6rem',
+        fontWeight: 'normal',
         margin: 0,
       }
     }
@@ -20,6 +23,7 @@ const Readme = () => {
     </div>
   );
 };
+
 
 export default class App extends Component {
   render() {
@@ -32,25 +36,37 @@ export default class App extends Component {
         padding: '2rem',
         transition: 'color 2s ease',
         boxSizing: 'border-box',
+        fontFamily: '"CalibreRegular", Times',
+        '@font-face': {
+          fontFamily: 'CalibreRegular',
+          sources: [
+            { path: eot, format: 'embedded-opentype' },
+            { path: woff2, format: 'woff2' },
+            { path: woff, format: 'woff' },
+            { path: ttf, format: 'truetype' },
+          ],
+          fontWeight: 'normal',
+          fontStyle: 'normal'
+        }
       },
       flex: {
         display: 'flex',
+        border: '2px solid black',
       },
       flexLeft: {
         order: 1,
         width: '20%',
-        backgroundColor: 'red',
         flex: 1,
+        borderRight: '2px solid black',
       },
       flexMiddle: {
         order: 2,
         width: '60%',
-        backgroundColor: 'blue',
       },
       flexRight: {
         order: 3,
         width: '20%',
-        backgroundColor: 'green',
+        borderLeft: '2px solid black',
         flex: 1,
       },
       circle: {

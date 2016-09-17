@@ -26,9 +26,38 @@ const buildDeclarations = (styles={}) => {
       declarations = declarations.concat(declaration);
     }
 
-    //for cases like flexbox
+    // sometimes a property has an array of values
+    // e.g. display: [-webkit-box, -ms-flexbox, etc.]
+    // this little bit flattens out those values
     if (Array.isArray(styles[s])) {
       declarations = declarations.concat(prefix(s, styles[s]));
+    }
+  });
+
+  return declarations;
+};
+
+
+const buildFontface = (styles={}) => {
+  let declarations = '';
+  Object.keys(styles).forEach(s => {
+    if (!Array.isArray(styles[s])) {
+      declarations = declarations.concat(`${camelToHyphen(s)}: ${styles[s]};`);      
+    } else {
+      let sourceDecs = 'src: ';
+      styles[s].forEach((source, index) => {
+        if (source.format === 'embedded-opentype') {
+          const line = `url(${source.path}?#iefix) format('${source.format}'),`;
+          sourceDecs = `src: url(${source.path}); ${sourceDecs}`; 
+          sourceDecs = sourceDecs.concat(line);
+        } else {
+          const comma = index < styles[s].length - 1 ? ',' : '';
+          const line = `url(${source.path}) format('${source.format}')${comma}`;
+          sourceDecs = sourceDecs.concat(line);
+        }
+      });
+      sourceDecs = sourceDecs.concat(';');
+      declarations = declarations.concat(sourceDecs);
     }
   });
 
@@ -46,6 +75,7 @@ const buildKeyframes = (keyframe={}) => {
   return keyframes;
 };
 
+
 const buildRuleset = (element, className, customSheet) => {
   const stylesheet = customSheet ? customSheet : vStyleSheet;
   const classes = {};
@@ -55,12 +85,14 @@ const buildRuleset = (element, className, customSheet) => {
     const styles = element[k];
     const prefixed = prefixer(styles);
 
-    //build base level styles (strings)
+    // build base level styles (strings)
     const declarations = buildDeclarations(prefixed);
-    const rule = `.${newClassName} { ${declarations} }`;
-    stylesheet.insertRule(rule, stylesheet.cssRules.length);
+    if (declarations.length > 0) {
+      const rule = `.${newClassName} { ${declarations} }`;
+      stylesheet.insertRule(rule, stylesheet.cssRules.length);
+    }
 
-    //handle special cases (objects)
+    // handle special cases (objects)
     Object.keys(styles).forEach(s => {      
       if (typeof styles[s] === 'object') {
         const declarations = buildDeclarations(styles[s]);
@@ -73,6 +105,10 @@ const buildRuleset = (element, className, customSheet) => {
         } else if (s.startsWith('@keyframes')) {
           const keyframes = buildKeyframes(styles[s]);
           const rule = `${s} {\n ${keyframes} \n}`;
+          stylesheet.insertRule(rule, stylesheet.cssRules.length);
+        } else if (s.startsWith('@font-face')) {
+          const fontface = buildFontface(styles[s]);
+          const rule = `${s} { ${fontface} }`;
           stylesheet.insertRule(rule, stylesheet.cssRules.length);
         } else {
           const rule = `.${newClassName} ${s} { ${declarations} }`;
@@ -89,14 +125,14 @@ const buildRuleset = (element, className, customSheet) => {
 
 
 export default function v(el, customSheet) {
-  //return cached styles
+  // return cached styles
   for (let i = 0; i < cache.items.length; i++) {
     if (deepEqual(cache.items[i].element, el)) {
       return cache.items[i].classes;
     }
   }
 
-  //otherwise create new ones!
+  // otherwise create new ones!
   const cacheItem = {};
   const className = `v-${guid()}`;
   const classes = buildRuleset(el, className, customSheet);

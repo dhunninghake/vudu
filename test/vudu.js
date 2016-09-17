@@ -186,3 +186,32 @@ test('adds vendor prefixes', t => {
   t.is(rule[3], '-moz-column-count');
 });
 
+
+test('creates @font-face rule', t => {
+  t.plan(1);
+  const paths = {
+    eot: 'df228136e3ffa29078f5e7bea378b384.eot',
+    woff2: '5de2bf0fc200189f0f574489addec42b.woff2',
+    woff: '9264697e1103c572c9d1dd7e3df81136.woff',
+    ttf: '125b49e0eabb42aeb9fb8ad0d2a1581b.ttf'
+  }
+  const styles = {
+    font: {
+      '@font-face': {
+        fontFamily: 'CalibreRegular',
+        sources: [
+          { path: paths.eot, format: 'embedded-opentype' },
+          { path: paths.woff2, format: 'woff2' },
+          { path: paths.woff, format: 'woff' },
+          { path: paths.ttf, format: 'truetype' },
+        ],
+        fontWeight: 'normal',
+        fontStyle: 'normal'
+      }
+    }
+  };
+
+  v(styles, t.context.sheet);
+
+  t.is(t.context.sheet.cssRules[0].style.length, 4);
+});

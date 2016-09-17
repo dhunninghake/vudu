@@ -14,6 +14,10 @@ module.exports = {
         exclude: /node_modules/,
         test: /\.js$/
       },
+      {
+        test: /\.(ttf|eot|woff(2)?)(\?[a-z0-9=&.]+)?$/,
+        loader: 'file-loader'
+      },
       { 
         loader: 'html!markdown',
         test: /\.md/ 
