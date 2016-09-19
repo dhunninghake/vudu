@@ -42,13 +42,13 @@ const buildFontface = (styles={}) => {
   let declarations = '';
   Object.keys(styles).forEach(s => {
     if (!Array.isArray(styles[s])) {
-      declarations = declarations.concat(`${camelToHyphen(s)}: ${styles[s]};`);      
+      declarations = declarations.concat(`${camelToHyphen(s)}: ${styles[s]};`);
     } else {
       let sourceDecs = 'src: ';
       styles[s].forEach((source, index) => {
         if (source.format === 'embedded-opentype') {
           const line = `url(${source.path}?#iefix) format('${source.format}'),`;
-          sourceDecs = `src: url(${source.path}); ${sourceDecs}`; 
+          sourceDecs = `src: url(${source.path}); ${sourceDecs}`;
           sourceDecs = sourceDecs.concat(line);
         } else {
           const comma = index < styles[s].length - 1 ? ',' : '';
@@ -79,7 +79,7 @@ const buildKeyframes = (keyframe={}) => {
 const buildRuleset = (element, className, customSheet) => {
   const stylesheet = customSheet ? customSheet : vStyleSheet;
   const classes = {};
-  
+
   Object.keys(element).forEach(k => {
     const newClassName = `${className}-${k}`;
     const styles = element[k];
@@ -93,7 +93,7 @@ const buildRuleset = (element, className, customSheet) => {
     }
 
     // handle special cases (objects)
-    Object.keys(styles).forEach(s => {      
+    Object.keys(styles).forEach(s => {
       if (typeof styles[s] === 'object') {
         const declarations = buildDeclarations(styles[s]);
         if (s.startsWith('@media')) {
@@ -124,7 +124,7 @@ const buildRuleset = (element, className, customSheet) => {
 };
 
 
-export default function v(el, customSheet) {
+let vFunction = function(el, customSheet) {
   // return cached styles
   for (let i = 0; i < cache.items.length; i++) {
     if (deepEqual(cache.items[i].element, el)) {
@@ -145,3 +145,5 @@ export default function v(el, customSheet) {
   return classes;
 };
 
+export const v = vFunction;
+export default vFunction;
