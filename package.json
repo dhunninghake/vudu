@@ -43,7 +43,9 @@
     ]
   },
   "ava": {
-    "require": ["./test/helpers/setup-browser-env.js"],
+    "require": [
+      "./test/helpers/setup-browser-env.js"
+    ],
     "babel": {
       "presets": [
         "es2015",
