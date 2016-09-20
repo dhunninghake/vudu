@@ -76,12 +76,13 @@ const buildKeyframes = (keyframe={}) => {
 };
 
 
-const buildRuleset = (element, className, customSheet) => {
+const buildRuleset = (element, customSheet) => {
   const stylesheet = customSheet ? customSheet : vStyleSheet;
+  const className = guid();
   const classes = {};
 
   Object.keys(element).forEach(k => {
-    const newClassName = `${className}-${k}`;
+    const newClassName = `${k}-${className}`;
     const styles = element[k];
     const prefixed = prefixer(styles);
 
@@ -134,11 +135,9 @@ let vFunction = function(el, customSheet) {
 
   // otherwise create new ones!
   const cacheItem = {};
-  const className = `v-${guid()}`;
-  const classes = buildRuleset(el, className, customSheet);
+  const classes = buildRuleset(el, customSheet);
 
   cacheItem.element = el;
-  cacheItem.className = className;
   cacheItem.classes = classes;
   cache.addItem(cacheItem);
 
@@ -147,3 +146,4 @@ let vFunction = function(el, customSheet) {
 
 export const v = vFunction;
 export default vFunction;
+
