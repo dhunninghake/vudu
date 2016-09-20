@@ -15,14 +15,15 @@ module.exports = {
         test: /\.js$/
       },
       {
-        test: /\.(ttf|eot|woff(2)?)(\?[a-z0-9=&.]+)?$/,
-        loader: 'file-loader'
+        loader: 'file-loader',
+        test: /\.(ttf|eot|woff(2)?)(\?[a-z0-9=&.]+)?$/
       },
       { 
         loader: 'html!markdown',
         test: /\.md/ 
       },
-      { loader: 'json',
+      { 
+        loader: 'json',
         test: /\.json$/ 
       }
     ]

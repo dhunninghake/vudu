@@ -275,12 +275,13 @@ var buildKeyframes = function buildKeyframes() {
   return keyframes;
 };
 
-var buildRuleset = function buildRuleset(element, className, customSheet) {
+var buildRuleset = function buildRuleset(element, customSheet) {
   var stylesheet = customSheet ? customSheet : vStyleSheet;
+  var className = guid();
   var classes = {};
 
   Object.keys(element).forEach(function (k) {
-    var newClassName = className + '-' + k;
+    var newClassName = k + '-' + className;
     var styles = element[k];
     var prefixed = prefixer(styles);
 
@@ -332,11 +333,9 @@ var vFunction = function vFunction(el, customSheet) {
 
   // otherwise create new ones!
   var cacheItem = {};
-  var className = 'v-' + guid();
-  var classes = buildRuleset(el, className, customSheet);
+  var classes = buildRuleset(el, customSheet);
 
   cacheItem.element = el;
-  cacheItem.className = className;
   cacheItem.classes = classes;
   cache.addItem(cacheItem);
 
