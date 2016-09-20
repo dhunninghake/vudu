@@ -1,6 +1,10 @@
 import test from 'ava';
-import { guid, camelToHyphen } from '../src/utils';
-import v, { cache, sheet } from '../src/vudu';
+import v, { cache, sheet } from '../dist/vudu';
+
+const guid = () => {
+  return Math.random().toString(26).substring(2, 10) +
+    Math.random().toString(26).substring(2, 10);
+};
 
 const styles = {
   container: {
@@ -153,7 +157,7 @@ test('creates @keyframes rules', t => {
       animationIterationCount: 'infinite',
       [`@keyframes ${name}`]: {
         '0%':   { color: 'blue' },
-        '50%':  { color: 'green' }, 
+        '50%':  { color: 'green' },
         '100%': { color: 'blue' }
       }
     }
