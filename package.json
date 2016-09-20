@@ -43,11 +43,14 @@
     ]
   },
   "ava": {
-    "require": [
-      "babel-register",
-      "./test/helpers/setup-browser-env.js"
-    ],
-    "babel": "inherit"
+    "require": ["./test/helpers/setup-browser-env.js"],
+    "babel": {
+      "presets": [
+        "es2015",
+        "stage-0",
+        "react"
+      ]
+    }
   },
   "keywords": [
     "react",
