@@ -12,7 +12,10 @@ module.exports = {
       {
         loader: 'babel-loader',
         exclude: /node_modules/,
-        test: /\.js$/
+        test: /\.js$/,
+        query: {
+          presets: ['es2015']
+        }
       },
       {
         loader: 'file-loader',
@@ -21,10 +24,6 @@ module.exports = {
       { 
         loader: 'html!markdown',
         test: /\.md/ 
-      },
-      { 
-        loader: 'json',
-        test: /\.json$/ 
       }
     ]
   },

@@ -4,110 +4,11 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
+var _typeof = _interopDefault(require('babel-runtime/helpers/typeof'));
+var _Object$keys = _interopDefault(require('babel-runtime/core-js/object/keys'));
 var prefixer = _interopDefault(require('inline-style-prefixer/static'));
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
-  return typeof obj;
-} : function (obj) {
-  return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj;
-};
-
-
-
-
-
-var classCallCheck = function (instance, Constructor) {
-  if (!(instance instanceof Constructor)) {
-    throw new TypeError("Cannot call a class as a function");
-  }
-};
-
-var createClass = function () {
-  function defineProperties(target, props) {
-    for (var i = 0; i < props.length; i++) {
-      var descriptor = props[i];
-      descriptor.enumerable = descriptor.enumerable || false;
-      descriptor.configurable = true;
-      if ("value" in descriptor) descriptor.writable = true;
-      Object.defineProperty(target, descriptor.key, descriptor);
-    }
-  }
-
-  return function (Constructor, protoProps, staticProps) {
-    if (protoProps) defineProperties(Constructor.prototype, protoProps);
-    if (staticProps) defineProperties(Constructor, staticProps);
-    return Constructor;
-  };
-}();
-
-
-
-
-
-
-
-var get = function get(object, property, receiver) {
-  if (object === null) object = Function.prototype;
-  var desc = Object.getOwnPropertyDescriptor(object, property);
-
-  if (desc === undefined) {
-    var parent = Object.getPrototypeOf(object);
-
-    if (parent === null) {
-      return undefined;
-    } else {
-      return get(parent, property, receiver);
-    }
-  } else if ("value" in desc) {
-    return desc.value;
-  } else {
-    var getter = desc.get;
-
-    if (getter === undefined) {
-      return undefined;
-    }
-
-    return getter.call(receiver);
-  }
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-var set = function set(object, property, value, receiver) {
-  var desc = Object.getOwnPropertyDescriptor(object, property);
-
-  if (desc === undefined) {
-    var parent = Object.getPrototypeOf(object);
-
-    if (parent !== null) {
-      set(parent, property, value, receiver);
-    }
-  } else if ("value" in desc && desc.writable) {
-    desc.value = value;
-  } else {
-    var setter = desc.set;
-
-    if (setter !== undefined) {
-      setter.call(receiver, value);
-    }
-  }
-
-  return value;
-};
+var _classCallCheck = _interopDefault(require('babel-runtime/helpers/classCallCheck'));
+var _createClass = _interopDefault(require('babel-runtime/helpers/createClass'));
 
 var camelToHyphen = function camelToHyphen(c) {
   return c.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
@@ -144,12 +45,12 @@ var deepEqual = function deepEqual(a, b) {
 
 var Cache = function () {
   function Cache() {
-    classCallCheck(this, Cache);
+    _classCallCheck(this, Cache);
 
     this.items = [];
   }
 
-  createClass(Cache, [{
+  _createClass(Cache, [{
     key: "addItem",
     value: function addItem(item) {
       this.items.push(item);
@@ -160,17 +61,18 @@ var Cache = function () {
       this.items = [];
     }
   }]);
+
   return Cache;
 }();
 
 var Sheet = function () {
   function Sheet() {
-    classCallCheck(this, Sheet);
+    _classCallCheck(this, Sheet);
 
     this.vStyleSheet = this.create('vStyleSheet');
   }
 
-  createClass(Sheet, [{
+  _createClass(Sheet, [{
     key: 'create',
     value: function create(id) {
       if (document.getElementById(id)) {
@@ -193,6 +95,7 @@ var Sheet = function () {
       });
     }
   }]);
+
   return Sheet;
 }();
 
@@ -205,8 +108,9 @@ var vStyleSheet = sheet.vStyleSheet;
 var prefix = function prefix(prop, vendors) {
   var flattened = '';
   vendors.forEach(function (v) {
-    return flattened = flattened.concat(prop + ': ' + v + ';');
+    return flattened = flattened.concat(camelToHyphen(prop) + ': ' + v + ';');
   });
+
   return flattened;
 };
 
@@ -214,7 +118,7 @@ var buildDeclarations = function buildDeclarations() {
   var styles = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
   var declarations = '';
-  Object.keys(styles).forEach(function (s) {
+  _Object$keys(styles).forEach(function (s) {
     if (_typeof(styles[s]) !== 'object') {
       var needsPrefix = /[A-Z]/.test(s[0]);
       var cssProperty = needsPrefix ? '-' + camelToHyphen(s) : camelToHyphen(s);
@@ -226,6 +130,7 @@ var buildDeclarations = function buildDeclarations() {
     // e.g. display: [-webkit-box, -ms-flexbox, etc.]
     // this little bit flattens out those values
     if (Array.isArray(styles[s])) {
+      console.log(styles[s]);
       declarations = declarations.concat(prefix(s, styles[s]));
     }
   });
@@ -237,7 +142,7 @@ var buildFontface = function buildFontface() {
   var styles = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
   var declarations = '';
-  Object.keys(styles).forEach(function (s) {
+  _Object$keys(styles).forEach(function (s) {
     if (!Array.isArray(styles[s])) {
       declarations = declarations.concat(camelToHyphen(s) + ': ' + styles[s] + ';');
     } else {
@@ -267,7 +172,7 @@ var buildKeyframes = function buildKeyframes() {
   var keyframe = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
   var keyframes = '';
-  Object.keys(keyframe).forEach(function (kf) {
+  _Object$keys(keyframe).forEach(function (kf) {
     var declarations = buildDeclarations(keyframe[kf]);
     keyframes = keyframes.concat(kf + ' { ' + declarations + ' }\n');
   });
@@ -280,7 +185,7 @@ var buildRuleset = function buildRuleset(element, customSheet) {
   var className = guid();
   var classes = {};
 
-  Object.keys(element).forEach(function (k) {
+  _Object$keys(element).forEach(function (k) {
     var newClassName = k + '-' + className;
     var styles = element[k];
     var prefixed = prefixer(styles);
@@ -293,7 +198,7 @@ var buildRuleset = function buildRuleset(element, customSheet) {
     }
 
     // handle special cases (objects)
-    Object.keys(styles).forEach(function (s) {
+    _Object$keys(styles).forEach(function (s) {
       if (_typeof(styles[s]) === 'object') {
         var _declarations = buildDeclarations(styles[s]);
         if (s.startsWith('@media')) {
@@ -303,12 +208,10 @@ var buildRuleset = function buildRuleset(element, customSheet) {
           var _rule2 = '.' + newClassName + s + ' { ' + _declarations + ' }';
           stylesheet.insertRule(_rule2, stylesheet.cssRules.length);
         } else if (s.startsWith('@keyframes')) {
-          var keyframes = buildKeyframes(styles[s]);
-          var _rule3 = s + ' {\n ' + keyframes + ' \n}';
+          var _rule3 = s + ' {\n ' + buildKeyframes(styles[s]) + ' \n}';
           stylesheet.insertRule(_rule3, stylesheet.cssRules.length);
         } else if (s.startsWith('@font-face')) {
-          var fontface = buildFontface(styles[s]);
-          var _rule4 = s + ' { ' + fontface + ' }';
+          var _rule4 = s + ' { ' + buildFontface(styles[s]) + ' }';
           stylesheet.insertRule(_rule4, stylesheet.cssRules.length);
         } else {
           var _rule5 = '.' + newClassName + ' ' + s + ' { ' + _declarations + ' }';

@@ -11,7 +11,8 @@ const { vStyleSheet } = sheet;
 
 const prefix = (prop, vendors) => {
   let flattened = '';
-  vendors.forEach(v => flattened = flattened.concat(`${prop}: ${v};`));
+  vendors.forEach(v => flattened = flattened.concat(`${camelToHyphen(prop)}: ${v};`));
+
   return flattened;
 };
 
@@ -92,7 +93,7 @@ const buildRuleset = (element, customSheet) => {
       const rule = `.${newClassName} { ${declarations} }`;
       stylesheet.insertRule(rule, stylesheet.cssRules.length);
     }
-
+    
     // handle special cases (objects)
     Object.keys(styles).forEach(s => {
       if (typeof styles[s] === 'object') {
@@ -104,12 +105,10 @@ const buildRuleset = (element, customSheet) => {
           const rule = `.${newClassName}${s} { ${declarations} }`;
           stylesheet.insertRule(rule, stylesheet.cssRules.length);
         } else if (s.startsWith('@keyframes')) {
-          const keyframes = buildKeyframes(styles[s]);
-          const rule = `${s} {\n ${keyframes} \n}`;
+          const rule = `${s} {\n ${buildKeyframes(styles[s])} \n}`;
           stylesheet.insertRule(rule, stylesheet.cssRules.length);
         } else if (s.startsWith('@font-face')) {
-          const fontface = buildFontface(styles[s]);
-          const rule = `${s} { ${fontface} }`;
+          const rule = `${s} { ${buildFontface(styles[s])} }`;
           stylesheet.insertRule(rule, stylesheet.cssRules.length);
         } else {
           const rule = `.${newClassName} ${s} { ${declarations} }`;

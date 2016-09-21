@@ -39,6 +39,7 @@ class App extends Component {
         transition: 'color 2s ease',
         boxSizing: 'border-box',
         fontFamily: '"CalibreRegular", Times',
+        maxWidth: 'calc(100% - 300px)',
       },
       banner: {
         textAlign: 'center',
