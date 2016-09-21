@@ -23184,7 +23184,6 @@
 	    // e.g. display: [-webkit-box, -ms-flexbox, etc.]
 	    // this little bit flattens out those values
 	    if (Array.isArray(styles[s])) {
-	      console.log(styles[s]);
 	      declarations = declarations.concat(prefix(s, styles[s]));
 	    }
 	  });
