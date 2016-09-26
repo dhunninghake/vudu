@@ -2,13 +2,8 @@ import React, { Component } from 'react';
 import { render } from 'react-dom';
 import readme from '../README.md';
 import v from '../src/vudu';
+import { atomics as a } from '../src/atomics';
 import { ttf, woff, woff2, eot } from './fonts';
-
-
-const colors = {
-  grey: '#36363b',
-  yellow: '#eeb668',
-}
 
 v({
   calibre: {
@@ -32,22 +27,19 @@ class App extends Component {
     const name = 'circle';
     const styles = v({
       wrapper: {
-        color: colors.grey,
-        backgroundColor: colors.yellow,
-        boxShadow: `0 0 0 1rem ${colors.yellow}`,
         overflow: 'hidden',
-        transition: 'color 2s ease',
-        boxSizing: 'border-box',
         fontFamily: '"CalibreRegular", Times',
-        maxWidth: 'calc(100% - 300px)',
+        '@extend': [a.white, a.bgBlack]
       },
       banner: {
         textAlign: 'center',
         height: '50vh',
+        '@extend': [a.blue],
         'h1': {
           fontSize: '6rem',
           fontWeight: 'normal',
           margin: 0,
+          '@extend': [a.green],
         }
       },
       circle: {

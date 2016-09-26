@@ -1,5 +1,6 @@
 import { guid, deepEqual, camelToHyphen, } from './utils';
 import prefixer from 'inline-style-prefixer/static';
+import { atomics } from './atomics';
 import Cache from './cache';
 import Sheet from './sheet';
 
@@ -20,18 +21,20 @@ const prefix = (prop, vendors) => {
 const buildDeclarations = (styles={}) => {
   let declarations = '';
   Object.keys(styles).forEach(s => {
-    if (typeof styles[s] !== 'object') {
-      const needsPrefix = /[A-Z]/.test(s[0]);
-      const cssProperty = needsPrefix ? `-${camelToHyphen(s)}` : camelToHyphen(s);
-      const declaration = `${cssProperty}: ${styles[s]};`;
-      declarations = declarations.concat(declaration);
-    }
+    if (!s.startsWith('@')) {
+      if (typeof styles[s] !== 'object') {
+        const needsPrefix = /[A-Z]/.test(s[0]);
+        const cssProperty = needsPrefix ? `-${camelToHyphen(s)}` : camelToHyphen(s);
+        const declaration = `${cssProperty}: ${styles[s]};`;
+        declarations = declarations.concat(declaration);
+      }
 
-    // sometimes a property has an array of values
-    // e.g. display: [-webkit-box, -ms-flexbox, etc.]
-    // this little bit flattens out those values
-    if (Array.isArray(styles[s])) {
-      declarations = declarations.concat(prefix(s, styles[s]));
+      // sometimes a property has an array of values
+      // e.g. display: [-webkit-box, -ms-flexbox, etc.]
+      // this little bit flattens out those values
+      if (Array.isArray(styles[s])) {
+        declarations = declarations.concat(prefix(s, styles[s]));
+      }
     }
   });
 
@@ -77,6 +80,15 @@ const buildKeyframes = (keyframe={}) => {
 };
 
 
+const buildExtends = (atomicsArr=[]) => {
+  const atomicsObj = {};
+  atomicsArr.forEach(a => {
+    Object.assign(atomicsObj, a);
+  });
+  return atomicsObj;
+};
+
+
 const buildRuleset = (element, customSheet) => {
   const stylesheet = customSheet ? customSheet : vStyleSheet;
   const className = guid();
@@ -88,16 +100,12 @@ const buildRuleset = (element, customSheet) => {
     const prefixed = prefixer(styles);
 
     // build base level styles (strings)
-    const declarations = buildDeclarations(prefixed);
-    if (declarations.length > 0) {
-      const rule = `.${newClassName} { ${declarations} }`;
-      stylesheet.insertRule(rule, stylesheet.cssRules.length);
-    }
-    
+    let highDeclarations = buildDeclarations(prefixed);
+
     // handle special cases (objects)
     Object.keys(styles).forEach(s => {
       if (typeof styles[s] === 'object') {
-        const declarations = buildDeclarations(styles[s]);
+        let declarations = buildDeclarations(styles[s]);
         if (s.startsWith('@media')) {
           const rule = `${s} { .${newClassName} { ${declarations} } }`;
           stylesheet.insertRule(rule, stylesheet.cssRules.length);
@@ -105,17 +113,25 @@ const buildRuleset = (element, customSheet) => {
           const rule = `.${newClassName}${s} { ${declarations} }`;
           stylesheet.insertRule(rule, stylesheet.cssRules.length);
         } else if (s.startsWith('@keyframes')) {
-          const rule = `${s} {\n ${buildKeyframes(styles[s])} \n}`;
+          const rule = `${s} { ${buildKeyframes(styles[s])} }`;
           stylesheet.insertRule(rule, stylesheet.cssRules.length);
         } else if (s.startsWith('@font-face')) {
           const rule = `${s} { ${buildFontface(styles[s])} }`;
           stylesheet.insertRule(rule, stylesheet.cssRules.length);
+        } else if (s.startsWith('@extend')) {
+          const extendedDecs = buildDeclarations(buildExtends(styles[s]));
+          highDeclarations = highDeclarations.concat(extendedDecs);
         } else {
           const rule = `.${newClassName} ${s} { ${declarations} }`;
           stylesheet.insertRule(rule, stylesheet.cssRules.length);
         }
       }
     });
+
+    if (highDeclarations.length > 0) {
+      const rule = `.${newClassName} { ${highDeclarations} }`;
+      stylesheet.insertRule(rule, stylesheet.cssRules.length);
+    }
 
     classes[k] = newClassName;
   });
