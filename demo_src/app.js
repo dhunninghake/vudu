@@ -4,6 +4,7 @@ import readme from '../README.md';
 import v from '../src/vudu';
 import { e } from './styleguide';
 
+console.log(e);
 
 class App extends Component {
   render() {
@@ -12,7 +13,7 @@ class App extends Component {
       wrapper: {
         overflow: 'hidden',
         fontFamily: '"CalibreRegular", Times',
-        '@extend': [e.blue, e.bgSilver]
+        '@extend': [e.blue, e.bgWheat, e.py4]
       },
       banner: {
         textAlign: 'center',

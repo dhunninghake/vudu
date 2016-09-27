@@ -21,6 +21,7 @@ v({
 export const e = vuduExtends({
   colors: {
     red: 'red',
-    blue: 'blue'
+    blue: 'blue',
+    wheat: 'wheat'
   }
 });

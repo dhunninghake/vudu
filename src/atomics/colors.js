@@ -1,22 +1,30 @@
+/* defaults from clrs.cc/
+**************************************/
+
 const defaultColors = {
-  white:      '#ffffff',
-  snow:       '#F9FAFC',
-  snowDark:   '#EFF2F7',
-  snowXDark:  '#E5E9F2',
-  smoke:      '#E0E6ED',
-  smokeDark:  '#D3DCE6',
-  smokeXDark: '#C0CCDA',
-  silver:     '#8492A6',
-  slate:      '#3C4858',
-  steel:      '#273444',
-  black:      '#1F2D3D',
-  trueBlack:  '#000000',
+  white:   '#ffffff',
+  navy:    '#001f3f',
+  blue:    '#0074D9',
+  aqua:    '#7FDBFF',
+  teal:    '#39CCCC',
+  olive:   '#3D9970',
+  green:   '#2ECC40',
+  lime:    '#01FF70',
+  yellow:  '#FFDC00',
+  orange:  '#FF851B',
+  red:     '#FF4136',
+  maroon:  '#85144b',
+  fuchsia: '#F012BE',
+  purple:  '#B10DC9',
+  black:   '#111111',
+  gray:    '#AAAAAA',
+  silver:  '#DDDDDD',
 };
 
 
 export const buildColors = (options) => {
   const colorClasses = {};
-  const colors = options ? Object.assign({}, options.colors, defaultColors) : defaultColors;
+  const colors = options ? Object.assign({}, defaultColors, options.colors) : defaultColors;
   const capitalize = (s) => {
     return s.charAt(0).toUpperCase() + s.slice(1);
   };
