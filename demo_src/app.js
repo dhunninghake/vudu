@@ -11,15 +11,21 @@ class App extends Component {
     const name = 'circle';
     const styles = v({
       wrapper: {
-        overflow: 'hidden',
         fontFamily: '"CalibreRegular", Times',
-        '@extend': [e.blue, e.bgWheat, e.py4]
+        'extend': [
+          e.blue, 
+          e.bgWheat, 
+          e.py4, 
+          e.overflowHidden
+        ]
       },
       banner: {
-        textAlign: 'center',
         height: '50vh',
+        'extend': [
+          e.h0, 
+          e.center
+        ],
         'h1': {
-          fontSize: '6rem',
           fontWeight: 'normal',
           margin: 0,
         }

@@ -118,7 +118,7 @@ const buildRuleset = (element, customSheet) => {
         } else if (s.startsWith('@font-face')) {
           const rule = `${s} { ${buildFontface(styles[s])} }`;
           stylesheet.insertRule(rule, stylesheet.cssRules.length);
-        } else if (s.startsWith('@extend')) {
+        } else if (s.startsWith('extend')) {
           const extendedDecs = buildDeclarations(buildExtends(styles[s]));
           highDeclarations = highDeclarations.concat(extendedDecs);
         } else {
@@ -140,7 +140,7 @@ const buildRuleset = (element, customSheet) => {
 };
 
 
-let vFunction = function(el, customSheet) {
+const vFunction = (el, customSheet) => {
   // return cached styles
   for (let i = 0; i < cache.items.length; i++) {
     if (deepEqual(cache.items[i].element, el)) {

@@ -17,7 +17,7 @@ export const buildWhitespace = (options) => {
     whitespaceClasses[`pr${i}`] = { paddingRight: scale[i] };
     whitespaceClasses[`px${i}`] = { paddingRight: scale[i], paddingLeft: scale[i] };
     whitespaceClasses[`py${i}`] = { paddingTop: scale[i], paddingBottom: scale[i] };
-
+    
     whitespaceClasses[`m${i}`]  = { margin: scale[i] };
     whitespaceClasses[`mt${i}`] = { marginTop: scale[i] };
     whitespaceClasses[`mb${i}`] = { marginBottom: scale[i] };
@@ -25,8 +25,17 @@ export const buildWhitespace = (options) => {
     whitespaceClasses[`mr${i}`] = { marginRight: scale[i] };
     whitespaceClasses[`mx${i}`] = { marginRight: scale[i], marginLeft: scale[i] };
     whitespaceClasses[`my${i}`] = { marginTop: scale[i], marginBottom: scale[i] };
+
+    if (i > 0) {
+      whitespaceClasses[`mxn${i}`] = { marginRight: `-${scale[i]}`, marginLeft: `-${scale[i]}` };
+    }
+
     i++;
   }
+
+  whitespaceClasses['ml-auto'] = { marginLeft: 'auto' };
+  whitespaceClasses['mr-auto'] = { marginRight: 'auto' };
+  whitespaceClasses['mx-auto'] = { marginRight: 'auto', marginLeft: 'auto' };
 
   return whitespaceClasses;
 };

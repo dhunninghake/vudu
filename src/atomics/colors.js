@@ -1,6 +1,4 @@
-/* defaults from clrs.cc/
-**************************************/
-
+// defaults from clrs.cc
 const defaultColors = {
   white:   '#ffffff',
   navy:    '#001f3f',
