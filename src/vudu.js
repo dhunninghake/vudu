@@ -176,8 +176,6 @@ const vFunction = (el, customSheet) => {
   cacheItem.classes = classes;
   cache.addItem(cacheItem);
 
-  console.log(sheet.vStyleSheet);
-
   return classes;
 };
 

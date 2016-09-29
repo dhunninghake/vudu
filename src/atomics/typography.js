@@ -9,8 +9,8 @@ export const buildTypography = () => {
   typography['h5']          = { fontSize: '0.875rem' };
   typography['h6']          = { fontSize: '0.75rem' };
 
-  typography['bold']        = { fontStyle: 'bold' };
-  typography['regular']     = { fontStyle: 'regular' };
+  typography['bold']        = { fontWeight: 'bold' };
+  typography['normal']      = { fontWeight: 'normal' };
   typography['italic']      = { fontStyle: 'italic' };
   typography['caps']        = { textTransform: 'uppercase' };
   typography['center']      = { textAlign: 'center' };

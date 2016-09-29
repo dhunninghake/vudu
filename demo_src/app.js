@@ -8,11 +8,11 @@ class App extends Component {
   render() {
     const styles = v({
       wrapper: {
+        minHeight: 'calc(100vh - 16px)',
         fontFamily: '"CalibreRegular", Times',
         'extend': [
           e.blue, 
-          e.bgWheat, 
-          e.py4,
+          e.bgWheat,
         ]
       },
       floater: {
@@ -28,14 +28,15 @@ class App extends Component {
         ]
       },
       banner: {
-        height: '50vh',
         'extend': [
-          e.center
+          e.center,
+          e.py4,
         ]
       },
       title: {
         'extend': [
-          e.h0
+          e.h0,
+          e.normal
         ]
       }
     });
