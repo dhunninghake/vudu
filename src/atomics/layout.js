@@ -1,25 +1,25 @@
 export const buildLayout = () => {
-  const layoutClasses = {};
+  const layout = {};
 
-  layoutClasses['table']          = { display: 'table', width: '100%' };
-  layoutClasses['table-cell']     = { display: 'table-cell', verticalAlign: 'middle' };
-  layoutClasses['table-row']      = { display: 'table-row' };
-  layoutClasses['inline']         = { display: 'inline' };
-  layoutClasses['block']          = { display: 'block' };
-  layoutClasses['inlineBlock']    = { display: 'inline-block' };
-  layoutClasses['alignTop']       = { verticalAlign: 'top' };
-  layoutClasses['alignMiddle']    = { verticalAlign: 'middle' };
-  layoutClasses['alignBottom']    = { verticalAlign: 'bottom' };
-  layoutClasses['alignBaseline']  = { verticalAlign: 'baseline' };
+  layout['table']          = { display: 'table', width: '100%' };
+  layout['table-cell']     = { display: 'table-cell', verticalAlign: 'middle' };
+  layout['table-row']      = { display: 'table-row' };
+  layout['inline']         = { display: 'inline' };
+  layout['block']          = { display: 'block' };
+  layout['inlineBlock']    = { display: 'inline-block' };
+  layout['alignTop']       = { verticalAlign: 'top' };
+  layout['alignMiddle']    = { verticalAlign: 'middle' };
+  layout['alignBottom']    = { verticalAlign: 'bottom' };
+  layout['alignBaseline']  = { verticalAlign: 'baseline' };
 
-  layoutClasses['overflowHidden'] = { overflow: 'hidden' };
-  layoutClasses['overflowAuto']   = { overflow: 'auto' };
-  layoutClasses['overflowScroll'] = { overflow: 'scroll' };
+  layout['overflowHidden'] = { overflow: 'hidden' };
+  layout['overflowAuto']   = { overflow: 'auto' };
+  layout['overflowScroll'] = { overflow: 'scroll' };
 
-  layoutClasses['right']          = { float: 'right' };
-  layoutClasses['left']           = { float: 'left' };
+  layout['right']          = { float: 'right' };
+  layout['left']           = { float: 'left' };
 
-  layoutClasses['clearfix'] = {
+  layout['clearfix'] = {
     ':before': {
       content: '" "', 
       display: 'table'
@@ -31,6 +31,6 @@ export const buildLayout = () => {
     }
   };
 
-  return layoutClasses;
+  return layout;
 };
 

@@ -4,37 +4,51 @@ import readme from '../README.md';
 import v from '../src/vudu';
 import { e } from './styleguide';
 
-console.log(e);
-
 class App extends Component {
   render() {
-    const name = 'circle';
     const styles = v({
       wrapper: {
         fontFamily: '"CalibreRegular", Times',
         'extend': [
           e.blue, 
           e.bgWheat, 
-          e.py4, 
-          e.overflowHidden
+          e.py4,
+        ]
+      },
+      floater: {
+        'extend': [
+          e.left,
+          e.col6,
+          e.mdCol3
+        ]
+      },
+      clears: {
+        'extend': [
+          e.clearfix
         ]
       },
       banner: {
         height: '50vh',
         'extend': [
-          e.h0, 
           e.center
-        ],
-        'h1': {
-          fontWeight: 'normal',
-          margin: 0,
-        }
+        ]
+      },
+      title: {
+        'extend': [
+          e.h0
+        ]
       }
     });
     return (
       <div className={styles.wrapper}>
         <div className={styles.banner}>
-          <h1>Vudu</h1>
+          <h1 className={styles.title}>Vudu</h1>
+          <div className={styles.clears}>
+            <h2 className={styles.floater}>Cool1</h2>
+            <h2 className={styles.floater}>Cool1</h2>
+            <h2 className={styles.floater}>Cool1</h2>
+            <h2 className={styles.floater}>Cool1</h2>
+          </div>
         </div>
       </div>
     );

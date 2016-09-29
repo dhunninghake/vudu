@@ -1,4 +1,4 @@
-// defaults from clrs.cc
+// from clrs.cc
 const defaultColors = {
   white:   '#ffffff',
   navy:    '#001f3f',
@@ -21,19 +21,19 @@ const defaultColors = {
 
 
 export const buildColors = (options) => {
-  const colorClasses = {};
+  const color = {};
   const colors = options ? Object.assign({}, defaultColors, options.colors) : defaultColors;
   const capitalize = (s) => {
     return s.charAt(0).toUpperCase() + s.slice(1);
   };
 
   Object.keys(colors).forEach(c => {
-    colorClasses[c] = { color: colors[c] };
-    colorClasses[`bg${capitalize(c)}`] = { backgroundColor: colors[c] };
-    colorClasses[`border${capitalize(c)}`] = { borderColor: colors[c] };
-    colorClasses[`stroke${capitalize(c)}`] = { stroke: colors[c] };
-    colorClasses[`fill${capitalize(c)}`] = { fill: colors[c] };
+    color[c] = { color: colors[c] };
+    color[`bg${capitalize(c)}`] = { backgroundColor: colors[c] };
+    color[`border${capitalize(c)}`] = { borderColor: colors[c] };
+    color[`stroke${capitalize(c)}`] = { stroke: colors[c] };
+    color[`fill${capitalize(c)}`] = { fill: colors[c] };
   });  
 
-  return colorClasses;
+  return color;
 };

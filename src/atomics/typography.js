@@ -1,28 +1,28 @@
 export const buildTypography = () => {
-  const typographyClasses = {};
+  const typography = {};
 
-  typographyClasses['h0']          = { fontSize: '4rem' };
-  typographyClasses['h1']          = { fontSize: '2rem' };
-  typographyClasses['h2']          = { fontSize: '1.5rem' };
-  typographyClasses['h3']          = { fontSize: '1.25rem' };
-  typographyClasses['h4']          = { fontSize: '1rem' };
-  typographyClasses['h5']          = { fontSize: '0.875rem' };
-  typographyClasses['h6']          = { fontSize: '0.75rem' };
+  typography['h0']          = { fontSize: '4rem' };
+  typography['h1']          = { fontSize: '2rem' };
+  typography['h2']          = { fontSize: '1.5rem' };
+  typography['h3']          = { fontSize: '1.25rem' };
+  typography['h4']          = { fontSize: '1rem' };
+  typography['h5']          = { fontSize: '0.875rem' };
+  typography['h6']          = { fontSize: '0.75rem' };
 
-  typographyClasses['bold']        = { fontStyle: 'bold' };
-  typographyClasses['regular']     = { fontStyle: 'regular' };
-  typographyClasses['italic']      = { fontStyle: 'italic' };
-  typographyClasses['caps']        = { textTransform: 'uppercase' };
-  typographyClasses['center']      = { textAlign: 'center' };
-  typographyClasses['leftAlign']   = { textAlign: 'left' };
-  typographyClasses['rightAlign']  = { textAlign: 'right' };
-  typographyClasses['justify']     = { textAlign: 'justify' };
-  typographyClasses['noWrap']      = { whiteSpace: 'nowrap' };
-  typographyClasses['underline']   = { textDecoration: 'underline' };
-  typographyClasses['noUnderline'] = { textDecoration: 'none' };
-  typographyClasses['trackedOut']  = { letterSpacing: '0.1em' };
-  typographyClasses['listReset']   = { listStyle: 'none', paddingLeft: '0px' };
+  typography['bold']        = { fontStyle: 'bold' };
+  typography['regular']     = { fontStyle: 'regular' };
+  typography['italic']      = { fontStyle: 'italic' };
+  typography['caps']        = { textTransform: 'uppercase' };
+  typography['center']      = { textAlign: 'center' };
+  typography['leftAlign']   = { textAlign: 'left' };
+  typography['rightAlign']  = { textAlign: 'right' };
+  typography['justify']     = { textAlign: 'justify' };
+  typography['noWrap']      = { whiteSpace: 'nowrap' };
+  typography['underline']   = { textDecoration: 'underline' };
+  typography['noUnderline'] = { textDecoration: 'none' };
+  typography['trackedOut']  = { letterSpacing: '0.1em' };
+  typography['listReset']   = { listStyle: 'none', paddingLeft: '0px' };
 
-  return typographyClasses;
+  return typography;
 };
 

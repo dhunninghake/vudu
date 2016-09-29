@@ -21,7 +21,7 @@ const prefix = (prop, vendors) => {
 const buildDeclarations = (styles={}) => {
   let declarations = '';
   Object.keys(styles).forEach(s => {
-    if (!s.startsWith('@')) {
+    if (!s.startsWith('@') && !s.startsWith('extend')) {
       if (typeof styles[s] !== 'object') {
         const needsPrefix = /[A-Z]/.test(s[0]);
         const cssProperty = needsPrefix ? `-${camelToHyphen(s)}` : camelToHyphen(s);
@@ -80,60 +80,80 @@ const buildKeyframes = (keyframe={}) => {
 };
 
 
-const buildExtends = (atomicsArr=[]) => {
-  const atomicsObj = {};
-  atomicsArr.forEach(a => {
-    Object.assign(atomicsObj, a);
+function addToSheet(styles, className, stylesheet, addBaseStyles) {
+  const prefixed = prefixer(styles);
+
+  // build base level styles (strings)
+  let base = buildDeclarations(prefixed);
+
+  // handle special cases (objects)
+  Object.keys(styles).forEach(s => {
+    if (typeof styles[s] === 'object') {
+      const special = buildDeclarations(styles[s]);
+      if (s.startsWith(':')) {
+        const rule = `.${className}${s} { ${special} }`;
+        stylesheet.insertRule(rule, stylesheet.cssRules.length);
+      } else if (s.startsWith('@keyframes')) {
+        const rule = `${s} { ${buildKeyframes(styles[s])} }`;
+        stylesheet.insertRule(rule, stylesheet.cssRules.length);
+      } else if (s.startsWith('@font-face')) {
+        const rule = `${s} { ${buildFontface(styles[s])} }`;
+        stylesheet.insertRule(rule, stylesheet.cssRules.length);
+      } else if (s.startsWith('extend')) {
+        const baseAtomics = {};
+        const specialAtomics = {};
+        const parseAtomics = (atomics) => {
+          return new Promise((resolve, reject) => {
+            atomics.forEach((atomic, i) => {
+              Object.keys(atomic).forEach(k => {
+                if (typeof atomic[k] === 'object') {
+                  Object.assign(specialAtomics, atomic);
+                } else {
+                  Object.assign(baseAtomics, atomic);
+                }
+              });
+              if (i === atomics.length - 1) {
+                resolve();
+              }
+            });
+          });
+        };
+
+        parseAtomics(styles[s]).then(() => {
+          base = base.concat(buildDeclarations(baseAtomics));
+          const rule = `.${className} { ${base} }`;
+          stylesheet.insertRule(rule, stylesheet.cssRules.length);
+          addToSheet(specialAtomics, className, stylesheet, false);
+        });
+      } else if (s.startsWith('@media')) {
+        const rule = `${s} { .${className} { ${special} } }`;
+        stylesheet.insertRule(rule, stylesheet.cssRules.length);
+      } else {
+        const rule = `.${className} ${s} { ${special} }`;
+        stylesheet.insertRule(rule, stylesheet.cssRules.length);
+      }
+    }
   });
-  return atomicsObj;
-};
+
+  if (base.length > 0 && addBaseStyles) {
+    const rule = `.${className} { ${base} }`;
+    stylesheet.insertRule(rule, stylesheet.cssRules.length);
+  }
+}
 
 
 const buildRuleset = (element, customSheet) => {
   const stylesheet = customSheet ? customSheet : vStyleSheet;
-  const className = guid();
+  const uniqueId = guid();
   const classes = {};
 
   Object.keys(element).forEach(k => {
-    const newClassName = `${k}-${className}`;
+    const className = `${k}-${uniqueId}`;
     const styles = element[k];
-    const prefixed = prefixer(styles);
+    
+    addToSheet(styles, className, stylesheet, true);
 
-    // build base level styles (strings)
-    let highDeclarations = buildDeclarations(prefixed);
-
-    // handle special cases (objects)
-    Object.keys(styles).forEach(s => {
-      if (typeof styles[s] === 'object') {
-        let declarations = buildDeclarations(styles[s]);
-        if (s.startsWith('@media')) {
-          const rule = `${s} { .${newClassName} { ${declarations} } }`;
-          stylesheet.insertRule(rule, stylesheet.cssRules.length);
-        } else if (s.startsWith(':')) {
-          const rule = `.${newClassName}${s} { ${declarations} }`;
-          stylesheet.insertRule(rule, stylesheet.cssRules.length);
-        } else if (s.startsWith('@keyframes')) {
-          const rule = `${s} { ${buildKeyframes(styles[s])} }`;
-          stylesheet.insertRule(rule, stylesheet.cssRules.length);
-        } else if (s.startsWith('@font-face')) {
-          const rule = `${s} { ${buildFontface(styles[s])} }`;
-          stylesheet.insertRule(rule, stylesheet.cssRules.length);
-        } else if (s.startsWith('extend')) {
-          const extendedDecs = buildDeclarations(buildExtends(styles[s]));
-          highDeclarations = highDeclarations.concat(extendedDecs);
-        } else {
-          const rule = `.${newClassName} ${s} { ${declarations} }`;
-          stylesheet.insertRule(rule, stylesheet.cssRules.length);
-        }
-      }
-    });
-
-    if (highDeclarations.length > 0) {
-      const rule = `.${newClassName} { ${highDeclarations} }`;
-      stylesheet.insertRule(rule, stylesheet.cssRules.length);
-    }
-
-    classes[k] = newClassName;
+    classes[k] = className;
   });
 
   return classes;
@@ -155,6 +175,8 @@ const vFunction = (el, customSheet) => {
   cacheItem.element = el;
   cacheItem.classes = classes;
   cache.addItem(cacheItem);
+
+  console.log(sheet.vStyleSheet);
 
   return classes;
 };
