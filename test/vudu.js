@@ -1,5 +1,18 @@
 import test from 'ava';
-import v, { cache, sheet } from '../dist/vudu';
+import v, { cache, atomics } from '../dist/vudu';
+
+const createSheet = (id) => {
+  const existingSheet = document.getElementById(id);
+  if (existingSheet) {
+    return existingSheet.sheet;
+  } else {
+    let style = document.createElement('style');
+    style.appendChild(document.createTextNode(''));
+    style.setAttribute('id', id);
+    document.head.appendChild(style);
+    return style.sheet;
+  }
+};
 
 const guid = () => {
   return Math.random().toString(26).substring(2, 10) +
@@ -20,7 +33,7 @@ test.beforeEach(t => {
   const id = guid();
   cache.clearItems();
   t.context.id = id;
-  t.context.sheet = sheet.create(id);
+  t.context.sheet = createSheet(id);
 });
 
 
@@ -219,3 +232,57 @@ test('creates @font-face rule', t => {
 
   t.is(t.context.sheet.cssRules[0].style.length, 4);
 });
+
+
+test('extends atomic classes', async t => {
+  t.plan(1);
+  const styles = {
+    extend: {
+      textAlign: 'right',
+      '@extend': [
+        atomics.left,
+        atomics.py4,
+        atomics.purple
+      ]
+    }
+  };
+
+  const getExtends = () => {
+    return new Promise((resolve, reject) => {
+      v(styles, t.context.sheet);
+      setTimeout(() => {
+        resolve(t.context.sheet.cssRules[1].style.length);
+      });
+    });
+  };
+
+  // combines 5 declarations: 
+  // text-align, float, paddingTop, paddingBottom, color
+  t.is(await getExtends(), 5);
+});
+
+
+test('extends pseudo and media query atomics', async t => {
+  t.plan(1);
+  const styles = {
+    extendSomething: {
+      '@extend': [
+        atomics.col6,
+        atomics.mdCol4
+      ]
+    }
+  };
+
+  const getExtends = () => {
+    return new Promise((resolve, reject) => {
+      v(styles, t.context.sheet);
+      setTimeout(() => {
+        resolve(t.context.sheet.cssRules.length);
+      });
+    });
+  };
+
+  // One for col6, one for media query mdCol4
+  t.is(await getExtends(), 2);
+});
+
