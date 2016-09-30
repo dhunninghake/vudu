@@ -1,13 +1,7 @@
-import { guid, deepEqual, camelToHyphen, } from './utils';
+import { guid, deepEqual, camelToHyphen, createSheet } from './utils';
 import prefixer from 'inline-style-prefixer/static';
-import { atomics } from './atomics';
+import { atomicClasses, setupExtends } from './atomics';
 import Cache from './cache';
-import Sheet from './sheet';
-
-export let cache = new Cache();
-export let sheet = new Sheet();
-
-const { vStyleSheet } = sheet;
 
 
 const prefix = (prop, vendors) => {
@@ -21,7 +15,7 @@ const prefix = (prop, vendors) => {
 const buildDeclarations = (styles={}) => {
   let declarations = '';
   Object.keys(styles).forEach(s => {
-    if (!s.startsWith('@') && !s.startsWith('extend')) {
+    if (!s.startsWith('@')) {
       if (typeof styles[s] !== 'object') {
         const needsPrefix = /[A-Z]/.test(s[0]);
         const cssProperty = needsPrefix ? `-${camelToHyphen(s)}` : camelToHyphen(s);
@@ -80,26 +74,33 @@ const buildKeyframes = (keyframe={}) => {
 };
 
 
-function addToSheet(styles, className, stylesheet, addBaseStyles) {
+const addToSheet = (styles, className, sheet, addBaseStyles) => {
   const prefixed = prefixer(styles);
 
   // build base level styles (strings)
   let base = buildDeclarations(prefixed);
+  if (base.length > 0 && addBaseStyles) {
+    const rule = `.${className} { ${base} }`;
+    sheet.insertRule(rule, sheet.cssRules.length);
+  }
 
   // handle special cases (objects)
   Object.keys(styles).forEach(s => {
     if (typeof styles[s] === 'object') {
       const special = buildDeclarations(styles[s]);
-      if (s.startsWith(':')) {
+      if (s.startsWith('@media')) {
+        const rule = `${s} { .${className} { ${special} } }`;
+        sheet.insertRule(rule, sheet.cssRules.length);
+      } else if (s.startsWith(':')) {
         const rule = `.${className}${s} { ${special} }`;
-        stylesheet.insertRule(rule, stylesheet.cssRules.length);
+        sheet.insertRule(rule, sheet.cssRules.length);
       } else if (s.startsWith('@keyframes')) {
         const rule = `${s} { ${buildKeyframes(styles[s])} }`;
-        stylesheet.insertRule(rule, stylesheet.cssRules.length);
+        sheet.insertRule(rule, sheet.cssRules.length);
       } else if (s.startsWith('@font-face')) {
         const rule = `${s} { ${buildFontface(styles[s])} }`;
-        stylesheet.insertRule(rule, stylesheet.cssRules.length);
-      } else if (s.startsWith('extend')) {
+        sheet.insertRule(rule, sheet.cssRules.length);
+      } else if (s.startsWith('@extend')) {
         const baseAtomics = {};
         const specialAtomics = {};
         const parseAtomics = (atomics) => {
@@ -120,39 +121,28 @@ function addToSheet(styles, className, stylesheet, addBaseStyles) {
         };
 
         parseAtomics(styles[s]).then(() => {
-          base = base.concat(buildDeclarations(baseAtomics));
+          base = `${buildDeclarations(baseAtomics)} ${base}`;
           const rule = `.${className} { ${base} }`;
-          stylesheet.insertRule(rule, stylesheet.cssRules.length);
-          addToSheet(specialAtomics, className, stylesheet, false);
+          sheet.insertRule(rule, sheet.cssRules.length);
+          addToSheet(specialAtomics, className, sheet, false);
         });
-      } else if (s.startsWith('@media')) {
-        const rule = `${s} { .${className} { ${special} } }`;
-        stylesheet.insertRule(rule, stylesheet.cssRules.length);
       } else {
         const rule = `.${className} ${s} { ${special} }`;
-        stylesheet.insertRule(rule, stylesheet.cssRules.length);
+        sheet.insertRule(rule, sheet.cssRules.length);
       }
     }
   });
-
-  if (base.length > 0 && addBaseStyles) {
-    const rule = `.${className} { ${base} }`;
-    stylesheet.insertRule(rule, stylesheet.cssRules.length);
-  }
-}
+};
 
 
-const buildRuleset = (element, customSheet) => {
-  const stylesheet = customSheet ? customSheet : vStyleSheet;
+const buildRuleset = (element, sheet) => {
   const uniqueId = guid();
   const classes = {};
-
   Object.keys(element).forEach(k => {
     const className = `${k}-${uniqueId}`;
     const styles = element[k];
-    
-    addToSheet(styles, className, stylesheet, true);
 
+    addToSheet(styles, className, sheet, true);
     classes[k] = className;
   });
 
@@ -161,6 +151,8 @@ const buildRuleset = (element, customSheet) => {
 
 
 const vFunction = (el, customSheet) => {
+  const sheet = customSheet ? customSheet : createSheet('vStyleSheet');
+
   // return cached styles
   for (let i = 0; i < cache.items.length; i++) {
     if (deepEqual(cache.items[i].element, el)) {
@@ -170,7 +162,7 @@ const vFunction = (el, customSheet) => {
 
   // otherwise create new ones!
   const cacheItem = {};
-  const classes = buildRuleset(el, customSheet);
+  const classes = buildRuleset(el, sheet);
 
   cacheItem.element = el;
   cacheItem.classes = classes;
@@ -179,6 +171,9 @@ const vFunction = (el, customSheet) => {
   return classes;
 };
 
+export const cache = new Cache();
+export const atomics = atomicClasses;
+export const config = setupExtends;
 export const v = vFunction;
 export default vFunction;
 

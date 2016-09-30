@@ -9,13 +9,12 @@ const buildExtends = (options) => {
   return Object.assign({},
     buildColors(options),
     buildWhitespace(options),
+    buildGrid(options),
     buildPositioning(),
     buildTypography(),
     buildLayout(),
-    buildGrid(),
   );
 };
 
-export const atomics = buildExtends();
+export const atomicClasses = buildExtends();
 export const setupExtends = buildExtends;
-export default buildExtends;

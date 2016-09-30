@@ -3,40 +3,38 @@ const breakpoints = {
   md: '@media (min-width: 52em)',
   lg: '@media (min-width: 64em)',
   xl: '@media (min-width: 76em)',
-  xx: '@media (min-width: 88em)',
+  xx: '@media (min-width: 88em)'
 };
 
-export const buildGrid = () => {
-  const grid = [];
-  const columnCount = 12;
-  const columnClasses = {};
-  
-  const calculateWidth = (col) => {
-    return (col / columnCount * 100).toFixed(2);
-  };
+function setupGridValues(count) {
+  const gridArr = [];
+  for (let i = 1; i < count + 1; i++) {
+    gridArr.push(`${((i/count*100).toFixed(2))}%`);
+  }
+  return gridArr;
+}
 
-  const setupGridValues = (() => {
-    let count = 0;
-    while (count < columnCount) {
-      grid.push(`${calculateWidth(count)}%`);
-      count++;
-    }
-  })();
+function createColumns(grid) {
+  const columns = {};
+  grid.forEach((column, i) => columns[`col${i+1}`] = { width: column });
+  return columns;
+}
 
-  grid.forEach((column, i) => {
-    columnClasses[`col${i}`] = { width: column };
-  });
-
+function addBreakpoints(columns, count, grid) {
   Object.keys(breakpoints).forEach(b => {
-    let count = 1;
-    while (count < columnCount) {
+    for (let i = 0; i < count; i++) {
       let mediaQuery = {};
-      mediaQuery[breakpoints[b]] = { width: grid[count] };
-      columnClasses[`${b}Col${count}`] = mediaQuery;
-      count++;
+      mediaQuery[breakpoints[b]] = { width: grid[i] };
+      columns[`${b}Col${i+1}`] = mediaQuery;
     }
   });
+}
 
-  return columnClasses;
+export const buildGrid = (options) => {
+  const count = options && options.columns ? options.columns : 12;
+  const grid = setupGridValues(count);
+  const columns = createColumns(grid);
+  addBreakpoints(columns, count, grid);
+  return columns;
 };
 

@@ -7,6 +7,19 @@ export const guid = () => {
     Math.random().toString(26).substring(2, 10);
 };
 
+export const createSheet = (id) => {
+  const existingSheet = document.getElementById(id);
+  if (existingSheet) {
+    return existingSheet.sheet;
+  } else {
+    let style = document.createElement('style');
+    style.appendChild(document.createTextNode(''));
+    style.setAttribute('id', id);
+    document.head.appendChild(style);
+    return style.sheet;
+  }
+};
+
 export const deepEqual = (a, b) => {
   const isAobj = (typeof a === 'object');
   const isBobj = (typeof b === 'object');

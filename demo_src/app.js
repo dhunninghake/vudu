@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
 import readme from '../README.md';
-import v from '../src/vudu';
+import { v } from '../dist/vudu';
 import { e } from './styleguide';
 
 class App extends Component {
@@ -10,31 +10,31 @@ class App extends Component {
       wrapper: {
         minHeight: 'calc(100vh - 16px)',
         fontFamily: '"CalibreRegular", Times',
-        'extend': [
-          e.blue, 
+        '@extend': [
+          e.blue,
           e.bgWheat,
-        ]
+        ],
       },
       floater: {
-        'extend': [
+        '@extend': [
           e.left,
           e.col6,
           e.mdCol3
         ]
       },
       clears: {
-        'extend': [
+        '@extend': [
           e.clearfix
         ]
       },
       banner: {
-        'extend': [
+        '@extend': [
           e.center,
           e.py4,
         ]
       },
       title: {
-        'extend': [
+        '@extend': [
           e.h0,
           e.normal
         ]

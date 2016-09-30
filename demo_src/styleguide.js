@@ -1,5 +1,5 @@
 import v from '../src/vudu';
-import vuduExtends from '../src/atomics';
+import { config } from '../dist/vudu';
 import { ttf, woff, woff2, eot } from './fonts';
 
 v({
@@ -18,7 +18,7 @@ v({
   }
 });
 
-export const e = vuduExtends({
+export const e = config({
   colors: {
     red: 'red',
     blue: 'blue',
