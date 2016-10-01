@@ -92,6 +92,7 @@
 	      var styles = (0, _vudu.v)({
 	        wrapper: {
 	          minHeight: 'calc(100vh - 16px)',
+	          boxShadow: '0 0 0 10px ' + _styleguide.colors.wheat,
 	          fontFamily: '"CalibreRegular", Times',
 	          '@extend': [_styleguide.e.blue, _styleguide.e.bgWheat]
 	        },
@@ -24964,7 +24965,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.e = undefined;
+	exports.e = exports.colors = undefined;
 
 	var _vudu = __webpack_require__(258);
 
@@ -24981,12 +24982,14 @@
 	  }
 	});
 
+	var colors = exports.colors = {
+	  red: 'red',
+	  blue: 'blue',
+	  wheat: 'wheat'
+	};
+
 	var e = exports.e = (0, _vudu.config)({
-	  colors: {
-	    red: 'red',
-	    blue: 'blue',
-	    wheat: 'wheat'
-	  }
+	  colors: colors
 	});
 
 /***/ },
