@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
-import readme from '../README.md';
-import { v } from '../dist/vudu';
+import { v } from '../../dist/vudu';
 import { e } from './styleguide';
 
 class App extends Component {

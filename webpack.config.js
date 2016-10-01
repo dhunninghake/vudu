@@ -2,9 +2,9 @@ const webpack           = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-  entry: __dirname + '/demo_src/app.js',
+  entry: __dirname + '/demo/src/app.js',
   output: {
-    path: __dirname + '/demo_dist',
+    path: __dirname + '/demo/build',
     filename: 'bundle.js',
   },
   module: {
@@ -30,7 +30,7 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: __dirname + '/demo_src/index.html',
+      template: __dirname + '/demo/src/index.html',
       filename: 'index.html',
       inject: false
     })

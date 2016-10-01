@@ -1,5 +1,4 @@
-import v from '../src/vudu';
-import { config } from '../dist/vudu';
+import { v, config } from '../../dist/vudu';
 import { ttf, woff, woff2, eot } from './fonts';
 
 v({
