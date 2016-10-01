@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
 import { v } from '../../dist/vudu';
-import { e } from './styleguide';
+import { e, colors } from './styleguide';
 
 class App extends Component {
   render() {
     const styles = v({
       wrapper: {
         minHeight: 'calc(100vh - 16px)',
+        boxShadow: `0 0 0 10px ${colors.wheat}`,
         fontFamily: '"CalibreRegular", Times',
         '@extend': [
           e.blue,

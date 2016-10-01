@@ -17,10 +17,12 @@ v({
   }
 });
 
+export const colors = {
+  red: 'red',
+  blue: 'blue',
+  wheat: 'wheat'
+};
+
 export const e = config({
-  colors: {
-    red: 'red',
-    blue: 'blue',
-    wheat: 'wheat'
-  }
+  colors: colors
 });
