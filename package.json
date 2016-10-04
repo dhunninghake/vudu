@@ -38,6 +38,7 @@
     "rollup-plugin-babel": "^2.6.1",
     "rollup-plugin-commonjs": "^5.0.4",
     "rollup-plugin-node-resolve": "^2.0.0",
+    "rollup-plugin-uglify": "^1.0.1",
     "webpack": "^1.13.2",
     "webpack-dev-server": "^1.15.0"
   },
