@@ -144,19 +144,21 @@ v({
 ```
 
 If you have a Webpack build, install the `file-loader` npm package and import the actual files as paths.
-```
+```javascript
 // webpack.config.js
 module: {
-  loaders: [{
-    loader: 'file-loader',
-    test: /\.(ttf|eot|woff(2)?)(\?[a-z0-9=&.]+)?$/
-  }]
+  loaders: [
+    {
+      loader: 'file-loader',
+      test: /\.(ttf|eot|woff(2)?)(\?[a-z0-9=&.]+)?$/
+    }
+  ]
 }
 ```
 
 
 ## @keyframes
-```
+```javascript
 const keyframeExample = () => {
   const styles = v({
     myAnimation: {
@@ -169,7 +171,7 @@ const keyframeExample = () => {
       '@compose': {
         c.bgBlue, // { backgroundColor: 'blue' }
         c.circle  // { borderRadius: '50%' }
-      }
+      },
       ['@keyframes moveCircle']: {
         '0%': {
           transform: 'translateX(0px)'
@@ -189,7 +191,31 @@ const keyframeExample = () => {
     );
   }  
 };
+```
 
+## Targeting child elements
+Sometimes, in cases where HTML is generated dynamically, you want to select a particular element or classname:
+```javascript
+const styles = v({
+  targetChild: {
+
+    // By element type
+    'h1': {
+      color: 'red'
+    }
+
+    // By classname (must include element type, h1 in this case)
+    'h1.header': {
+      color: 'red'
+    }
+
+    // By pseudo class
+    'h1:hover': {
+      color: 'green'
+    }
+
+  }
+});
 ```
 
 <3
