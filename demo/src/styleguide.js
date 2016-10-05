@@ -18,9 +18,9 @@ v({
 });
 
 export const colors = {
-  red: 'red',
-  blue: 'blue',
-  wheat: 'wheat'
+  red:   '#EF3241',
+  smoke: '#232323',
+  snow:  '#F8F8F8'
 };
 
 export const e = config({

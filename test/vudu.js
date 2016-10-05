@@ -239,7 +239,7 @@ test('extends atomic classes', async t => {
   const styles = {
     extend: {
       textAlign: 'right',
-      '@extend': [
+      '@composes': [
         atomics.left,
         atomics.py4,
         atomics.purple
@@ -257,7 +257,7 @@ test('extends atomic classes', async t => {
   };
 
   // combines 5 declarations: 
-  // text-align, float, paddingTop, paddingBottom, color
+  // textAlign, float, paddingTop, paddingBottom, color
   t.is(await getExtends(), 5);
 });
 
@@ -266,7 +266,7 @@ test('extends pseudo and media query atomics', async t => {
   t.plan(1);
   const styles = {
     extendSomething: {
-      '@extend': [
+      '@composes': [
         atomics.col6,
         atomics.mdCol4
       ]

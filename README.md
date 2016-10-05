@@ -3,7 +3,7 @@ A CSS-in-JS solution focused on composability
 
 ## Features
 * Supports media queries
-* Supports all pseudo selectors `:hover`, `:active`, etc
+* Supports pseudo selectors `:hover`, `:active`, etc
 * Generates animation sequences with @keyframes
 * Provides configurable, immutable style utilities out of the box
 * Plays nice with or without popular frameworks like React, Ember, and Angular
@@ -13,12 +13,7 @@ A CSS-in-JS solution focused on composability
 * Lightweight (18kb minified, 6kb gzipped)
 * Only one dependency
 * Autoprefixes styles
-* Author dynamic styles with JS!
-  * Extend plain old objects
-  * Functions
-  * Conditionals
-  * Module imports
-  * **Stateful styling**
+* Author **dynamic** and **stateful** styles with JS!
 
 ## Getting Started
 ```bash
@@ -37,7 +32,7 @@ const exampleComponent = () => {
     whitespace: {
       padding: '2rem'
     },
-    grid: {
+    columns: {
       width: '100%',
       '@media (min-width: 40em)': {
         width: '50%'
@@ -50,21 +45,19 @@ const exampleComponent = () => {
       }
     }
   });
-  render() {
-    return(
-      <section>
-        <div className={styles.red}>
-          <p>{'This is red'}</p>
-        </div>
-        <div className={styles.whitespace}>
-          <p>{'This has a padding of 2rem around the outside'}</p>
-        </div>
-        <div className={styles.grid}>
-          <p>{'Full width on mobile, 1/2 width on small breakpoint, 1/3 on medium, 1/4 on large'}</p>
-        </div>
-      </section>
-    );
-  } 
+  return (
+    <section>
+      <div className={styles.red}>
+        <p>{'This is red'}</p>
+      </div>
+      <div className={styles.whitespace}>
+        <p>{'This has a padding of 2rem around the outside'}</p>
+      </div>
+      <div className={styles.columns}>
+        <p>{'Full width on mobile, 1/2 width on small breakpoint, 1/3 on medium, 1/4 on large'}</p>
+      </div>
+    </section>
+  );
 }
 ```
 
@@ -74,23 +67,21 @@ By default Vudu supports writing out full declarations for styles (like shown ab
 Using the example above, this is how it could ALSO be written:
 
 ```javascript
-// Import object of atomic styles
-import { atomics as a } from 'vudu';
-import { v } from 'vudu';
+import { v, atomics as c } from 'vudu';
 
 const styles = v({
   red: {
-    '@compose': [ a.red ]
+    '@composes': [ c.red ]
   },
   whitespace: {
-    '@compose': [ a.p2 ]
+    '@composes': [ c.p2 ]
   },
-  grid: {
-    '@compose': [ 
-      a.col12,
-      a.smCol6,
-      a.mdCol4,
-      a.lgCol3 
+  columns: {
+    '@composes': [ 
+      c.col12,
+      c.smCol6,
+      c.mdCol4,
+      c.lgCol3 
     ]
   }
 });
@@ -159,6 +150,8 @@ module: {
 
 ## @keyframes
 ```javascript
+import { v, atomics as c } from 'vudu';
+
 const keyframeExample = () => {
   const styles = v({
     myAnimation: {
@@ -168,11 +161,11 @@ const keyframeExample = () => {
       animationDuration: '4s',
       animationIterationCount: 'infinite',
       animationTimingFunction: 'linear',
-      '@compose': {
+      '@composes': {
         c.bgBlue, // { backgroundColor: 'blue' }
         c.circle  // { borderRadius: '50%' }
       },
-      ['@keyframes moveCircle']: {
+      '@keyframes moveCircle': {
         '0%': {
           transform: 'translateX(0px)'
         },
@@ -185,16 +178,14 @@ const keyframeExample = () => {
       }
     }  
   });
-  render() {
-    return (
-      <div className={styles.myAnimation}></div>
-    );
-  }  
+  return (
+    <div className={styles.myAnimation}></div>
+  );
 };
 ```
 
 ## Targeting child elements
-Sometimes, in cases where HTML is generated dynamically, you want to select a particular element or classname:
+Sometimes, in cases where HTML is generated dynamically, you want to select a particular element or class name:
 ```javascript
 const styles = v({
   targetChild: {
@@ -204,8 +195,8 @@ const styles = v({
       color: 'red'
     }
 
-    // By classname (must include element type, h1 in this case)
-    'h1.header': {
+    // By class name (must include element type, h1 in this case)
+    'h1.class-name': {
       color: 'red'
     }
 

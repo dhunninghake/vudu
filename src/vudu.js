@@ -100,7 +100,7 @@ const addToSheet = (styles, className, sheet, addBaseStyles) => {
       } else if (s.startsWith('@font-face')) {
         const rule = `${s} { ${buildFontface(styles[s])} }`;
         sheet.insertRule(rule, sheet.cssRules.length);
-      } else if (s.startsWith('@extend')) {
+      } else if (s.startsWith('@composes')) {
         const baseAtomics = {};
         const specialAtomics = {};
         const parseAtomics = (atomics) => {
