@@ -1,6 +1,6 @@
 {
   "name": "vudu",
-  "version": "1.7.6",
+  "version": "1.7.1",
   "description": "Lightweight CSS in JS solution",
   "main": "dist/vudu.js",
   "scripts": {
