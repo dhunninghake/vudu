@@ -251,13 +251,11 @@ test('extends atomic classes', async t => {
     return new Promise((resolve, reject) => {
       v(styles, t.context.sheet);
       setTimeout(() => {
-        resolve(t.context.sheet.cssRules[1].style.length);
+        resolve(t.context.sheet.cssRules[0].style.length);
       });
     });
   };
 
-  // combines 5 declarations: 
-  // textAlign, float, paddingTop, paddingBottom, color
   t.is(await getExtends(), 5);
 });
 
@@ -282,7 +280,6 @@ test('extends pseudo and media query atomics', async t => {
     });
   };
 
-  // One for col6, one for media query mdCol4
   t.is(await getExtends(), 2);
 });
 

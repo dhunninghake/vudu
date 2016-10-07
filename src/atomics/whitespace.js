@@ -33,9 +33,9 @@ export const buildWhitespace = (options) => {
     i++;
   }
 
-  whitespace['ml-auto'] = { marginLeft: 'auto' };
-  whitespace['mr-auto'] = { marginRight: 'auto' };
-  whitespace['mx-auto'] = { marginRight: 'auto', marginLeft: 'auto' };
+  whitespace['mlAuto'] = { marginLeft: 'auto' };
+  whitespace['mrAuto'] = { marginRight: 'auto' };
+  whitespace['mxAuto'] = { marginRight: 'auto', marginLeft: 'auto' };
 
   return whitespace;
 };

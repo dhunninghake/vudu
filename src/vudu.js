@@ -74,64 +74,80 @@ const buildKeyframes = (keyframe={}) => {
 };
 
 
+const parseComposes = (styles={}) => {
+  if (styles.hasOwnProperty('@composes')) {
+    const baseAtomics = {};
+    const specialAtomics = {};
+    styles['@composes'].forEach((c, i) => {
+      Object.keys(c).forEach(k => {
+        if (typeof c[k] === 'object') {
+          Object.assign(specialAtomics, c);
+        } else {
+          Object.assign(baseAtomics, c);
+        }
+      });
+    });
+    return {
+      baseAtomics,
+      specialAtomics
+    }
+  }
+};
+
+
 const addToSheet = (styles, className, sheet, addBaseStyles) => {
   const prefixed = prefixer(styles);
+  const declared = buildDeclarations(prefixed);
+  const composes = parseComposes(prefixed) || {};
+  const hasComposes = Object.keys(composes).length > 0;
+  const composed = hasComposes ? 
+    `${buildDeclarations(composes.baseAtomics)} ${declared}` :
+    `${declared}`;
 
-  // build base level styles (strings)
-  let base = buildDeclarations(prefixed);
-  if (base.length > 0 && addBaseStyles) {
-    const rule = `.${className} { ${base} }`;
+  if (composed.length > 0 && addBaseStyles) {
+    const rule = `.${className} { ${composed} }`;
     sheet.insertRule(rule, sheet.cssRules.length);
   }
 
   // handle special cases (objects)
   Object.keys(styles).forEach(s => {
     if (typeof styles[s] === 'object') {
-      const special = buildDeclarations(styles[s]);
-      if (s.startsWith('@media')) {
-        const rule = `${s} { .${className} { ${special} } }`;
-        sheet.insertRule(rule, sheet.cssRules.length);
-      } else if (s.startsWith(':')) {
-        const rule = `.${className}${s} { ${special} }`;
-        sheet.insertRule(rule, sheet.cssRules.length);
-      } else if (s.startsWith('@keyframes')) {
+      const sub_prefixed = prefixer(styles[s]);
+      const sub_declared = buildDeclarations(sub_prefixed);
+      const sub_composes = parseComposes(sub_prefixed) || {};
+      const sub_composed = Object.keys(sub_composes).length > 0 ? 
+        `${buildDeclarations(sub_composes.baseAtomics)} ${sub_declared}` :
+        `${sub_declared}`;
+
+      if (s.startsWith('@keyframes')) {
         const rule = `${s} { ${buildKeyframes(styles[s])} }`;
         sheet.insertRule(rule, sheet.cssRules.length);
       } else if (s.startsWith('@font-face')) {
         const rule = `${s} { ${buildFontface(styles[s])} }`;
         sheet.insertRule(rule, sheet.cssRules.length);
-      } else if (s.startsWith('@composes')) {
-        const baseAtomics = {};
-        const specialAtomics = {};
-        const parseAtomics = (atomics) => {
-          return new Promise((resolve, reject) => {
-            atomics.forEach((atomic, i) => {
-              Object.keys(atomic).forEach(k => {
-                if (typeof atomic[k] === 'object') {
-                  Object.assign(specialAtomics, atomic);
-                } else {
-                  Object.assign(baseAtomics, atomic);
-                }
-              });
-              if (i === atomics.length - 1) {
-                resolve();
-              }
-            });
-          });
-        };
-
-        parseAtomics(styles[s]).then(() => {
-          base = `${buildDeclarations(baseAtomics)} ${base}`;
-          const rule = `.${className} { ${base} }`;
+      } else if (s.startsWith('@media')) {
+        if (sub_composed.length > 0) {
+          const rule = `${s} { .${className} { ${sub_composed} } }`;
           sheet.insertRule(rule, sheet.cssRules.length);
-          addToSheet(specialAtomics, className, sheet, false);
-        });
+        }
+      } else if (s.startsWith(':')) {
+        if (sub_composed.length > 0) {
+          const rule = `.${className}${s} { ${sub_composed} }`;
+          sheet.insertRule(rule, sheet.cssRules.length);
+        }
       } else {
-        const rule = `.${className} ${s} { ${special} }`;
-        sheet.insertRule(rule, sheet.cssRules.length);
+        if (sub_composed.length > 0) {
+          const rule = `.${className} ${s} { ${sub_composed} }`;
+          sheet.insertRule(rule, sheet.cssRules.length);
+        }
       }
     }
   });
+
+  if (hasComposes) {
+    addToSheet(composes.specialAtomics, className, sheet, false);
+  }
+
 };
 
 
@@ -163,7 +179,6 @@ const vFunction = (el, customSheet) => {
   // otherwise create new ones!
   const cacheItem = {};
   const classes = buildRuleset(el, sheet);
-
   cacheItem.element = el;
   cacheItem.classes = classes;
   cache.addItem(cacheItem);
