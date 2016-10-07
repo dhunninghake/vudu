@@ -1,5 +1,5 @@
 # ✨Vudu
-A CSS-in-JS solution focused on composability
+A composable approach to writing styles in JavaScript
 
 ## Features
 * Supports media queries
