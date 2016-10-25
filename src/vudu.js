@@ -1,194 +1,143 @@
-import { guid, deepEqual, camelToHyphen, createSheet } from './utils';
 import prefixer from 'inline-style-prefixer/static';
-import { atomicClasses, setupExtends } from './atomics';
-import Cache from './cache';
+import { guid, deepEqual, createSheet } from './utils';
+import { atomics, config } from './atomics';
+
+export let cache = [];
+
+const vuduSheet = createSheet('vSheet');
+
+const hyphen = s => s.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
+
+const vendor = s => /[A-Z]/.test(s[0]) ? `-${hyphen(s)}` : hyphen(s);
 
 
-const prefix = (prop, vendors) => {
-  let flattened = '';
-  vendors.forEach(v => flattened = flattened.concat(`${camelToHyphen(prop)}: ${v};`));
-
-  return flattened;
+const attachRule = (rule, customSheet) => {
+  if (typeof document === 'undefined') { return; }
+  const sheet = customSheet || vuduSheet;
+  sheet.insertRule(rule, sheet.cssRules.length);
 };
 
 
-const buildDeclarations = (styles={}) => {
-  let declarations = '';
-  Object.keys(styles).forEach(s => {
-    if (!s.startsWith('@')) {
-      if (typeof styles[s] !== 'object') {
-        const needsPrefix = /[A-Z]/.test(s[0]);
-        const cssProperty = needsPrefix ? `-${camelToHyphen(s)}` : camelToHyphen(s);
-        const declaration = `${cssProperty}: ${styles[s]};`;
-        declarations = declarations.concat(declaration);
-      }
-
-      // sometimes a property has an array of values
-      // e.g. display: [-webkit-box, -ms-flexbox, etc.]
-      // this little bit flattens out those values
-      if (Array.isArray(styles[s])) {
-        declarations = declarations.concat(prefix(s, styles[s]));
-      }
-    }
-  });
-
-  return declarations;
-};
-
-
-const buildFontface = (styles={}) => {
-  let declarations = '';
-  Object.keys(styles).forEach(s => {
-    if (!Array.isArray(styles[s])) {
-      declarations = declarations.concat(`${camelToHyphen(s)}: ${styles[s]};`);
-    } else {
-      let sourceDecs = 'src: ';
-      styles[s].forEach((source, index) => {
-        if (source.format === 'embedded-opentype') {
-          const line = `url(${source.path}?#iefix) format('${source.format}'),`;
-          sourceDecs = `src: url(${source.path}); ${sourceDecs}`;
-          sourceDecs = sourceDecs.concat(line);
-        } else {
-          const comma = index < styles[s].length - 1 ? ',' : '';
-          const line = `url(${source.path}) format('${source.format}')${comma}`;
-          sourceDecs = sourceDecs.concat(line);
-        }
-      });
-      sourceDecs = sourceDecs.concat(';');
-      declarations = declarations.concat(sourceDecs);
-    }
-  });
-
-  return declarations;
-};
-
-
-const buildKeyframes = (keyframe={}) => {
-  let keyframes = '';
-  Object.keys(keyframe).forEach(kf => {
-    const declarations = buildDeclarations(keyframe[kf]);
-    keyframes = keyframes.concat(`${kf} { ${declarations} }\n`);
-  });
-
-  return keyframes;
-};
-
-
-const parseComposes = (styles={}) => {
-  if (styles.hasOwnProperty('@composes')) {
-    const baseAtomics = {};
-    const specialAtomics = {};
-    styles['@composes'].forEach((c, i) => {
-      Object.keys(c).forEach(k => {
-        if (typeof c[k] === 'object') {
-          Object.assign(specialAtomics, c);
-        } else {
-          Object.assign(baseAtomics, c);
-        }
-      });
-    });
-    return {
-      baseAtomics,
-      specialAtomics
-    }
-  }
-};
-
-
-const addToSheet = (styles, className, sheet, addBaseStyles) => {
+const formatRule = (styles={}) => {
   const prefixed = prefixer(styles);
-  const declared = buildDeclarations(prefixed);
-  const composes = parseComposes(prefixed) || {};
-  const hasComposes = Object.keys(composes).length > 0;
-  const composed = hasComposes ? 
-    `${buildDeclarations(composes.baseAtomics)} ${declared}` :
-    `${declared}`;
+  
+  const flatten = (arr) => {
+    return arr.reduce((a, b) => {
+      return a.concat(Array.isArray(b) ? flatten(b) : b)
+    },[])
+  };
 
-  if (composed.length > 0 && addBaseStyles) {
-    const rule = `.${className} { ${composed} }`;
-    sheet.insertRule(rule, sheet.cssRules.length);
-  }
-
-  // handle special cases (objects)
-  Object.keys(styles).forEach(s => {
-    if (typeof styles[s] === 'object') {
-      const sub_prefixed = prefixer(styles[s]);
-      const sub_declared = buildDeclarations(sub_prefixed);
-      const sub_composes = parseComposes(sub_prefixed) || {};
-      const sub_composed = Object.keys(sub_composes).length > 0 ? 
-        `${buildDeclarations(sub_composes.baseAtomics)} ${sub_declared}` :
-        `${sub_declared}`;
-
-      if (s.startsWith('@keyframes')) {
-        const rule = `${s} { ${buildKeyframes(styles[s])} }`;
-        sheet.insertRule(rule, sheet.cssRules.length);
-      } else if (s.startsWith('@font-face')) {
-        const rule = `${s} { ${buildFontface(styles[s])} }`;
-        sheet.insertRule(rule, sheet.cssRules.length);
-      } else if (s.startsWith('@media')) {
-        if (sub_composed.length > 0) {
-          const rule = `${s} { .${className} { ${sub_composed} } }`;
-          sheet.insertRule(rule, sheet.cssRules.length);
-        }
-      } else if (s.startsWith(':')) {
-        if (sub_composed.length > 0) {
-          const rule = `.${className}${s} { ${sub_composed} }`;
-          sheet.insertRule(rule, sheet.cssRules.length);
-        }
+  const assign = (dec={}) => {
+    const val = dec.value;
+    if (Array.isArray(val)) {
+      if (typeof val[0] === 'object') {
+        return val.map(v => Object.keys(v).map(k => ({key: vendor(k), value: v[k]})));
       } else {
-        if (sub_composed.length > 0) {
-          const rule = `.${className} ${s} { ${sub_composed} }`;
-          sheet.insertRule(rule, sheet.cssRules.length);
-        }
+        return val.map(v => ({key: dec.key, value: v}));
       }
     }
-  });
+    return dec;
+  };
 
-  if (hasComposes) {
-    addToSheet(composes.specialAtomics, className, sheet, false);
+  return flatten(Object.keys(prefixed)
+    .map(key => assign({key: key.startsWith('@keyframes') ? key : vendor(key), value: prefixed[key]})))
+    .map(dec => typeof dec.value === 'object' ? ({key: dec.key, value: formatRule(dec.value)}) : dec);
+};
+
+
+const addRule = (styles=[], classname, sheet, addBase) => {
+  const base = (style) => {
+    return style.filter(s => typeof s.value === 'string')
+      .map(s => `${s.key}: ${s.value}`).join(';');
+  };
+
+  if (addBase) {
+    // console.log(`.${classname} { ${base(styles)}; }`);
+    attachRule(`.${classname} { ${base(styles)}; }`, sheet);  
   }
 
-};
-
-
-const buildRuleset = (element, sheet) => {
-  const uniqueId = guid();
-  const classes = {};
-  Object.keys(element).forEach(k => {
-    const className = `${k}-${uniqueId}`;
-    const styles = element[k];
-
-    addToSheet(styles, className, sheet, true);
-    classes[k] = className;
-  });
-
-  return classes;
-};
-
-
-const vFunction = (el, customSheet) => {
-  const sheet = customSheet ? customSheet : createSheet('vStyleSheet');
-
-  // return cached styles
-  for (let i = 0; i < cache.items.length; i++) {
-    if (deepEqual(cache.items[i].element, el)) {
-      return cache.items[i].classes;
+  const specialCase = (s) => {
+    if (s.key.startsWith(':')) {
+      return {
+        classname: `${classname}${s.key}`,
+        rule: `.${classname}${s.key} { ${base(s.value)}; }`
+      };
+    } else if (s.key.startsWith('@media')) {
+      return {
+        classname: `${classname}`,
+        rule: `${s.key} { .${classname} { ${base(s.value)}; } }`
+      };
+    } else if (s.key.startsWith('@keyframes')) {
+      const dec = s.value.map(kf => `${kf.key} { ${base(kf.value)} }`).join(' ');
+      return {
+        classname: `${s.key}`,
+        rule: `${s.key} { ${dec}; }`
+      };
+    } else {
+      return {
+        classname: `${classname} ${s.key}`,
+        rule: `.${classname} ${s.key} { ${base(s.value)}; }`
+      };
     }
+  };
+
+  styles.filter(s => typeof s.value === 'object')
+    .forEach(s => {
+      // console.log(specialCase(s).rule);
+      attachRule(specialCase(s).rule, sheet);
+      if (!s.key.startsWith('@keyframes')) {
+        addRule(s.value, specialCase(s).classname, sheet, false);
+      }
+    });
+};
+
+
+const addFontFace = (font={}, customSheet) => {
+  const sheet = customSheet || vuduSheet;
+  const dec = formatRule(font).map(r => `${r.key}: ${r.value}`).join(';');
+  attachRule(`@font-face { ${dec}; }`, sheet);
+  return font.fontFamily.toString();
+};
+
+
+const buildRuleset = (group, sheet) => {
+  const rules = Object.keys(group).map(classname => {
+    return {
+      classname: classname, 
+      vuduClass: `${classname}-${guid()}`,
+      styles: group[classname]
+    }
+  });
+  rules.forEach(r => addRule(formatRule(r.styles), r.vuduClass, sheet, true));
+  return rules.reduce((a, b) => {
+    a[b.classname] = b.vuduClass; 
+    return a;
+  },{});
+};
+
+
+const v = (el, customSheet) => {
+  // return cached classes
+  const cachedItem = cache.find(item => deepEqual(item.element, el));
+  if (cachedItem) {
+    return cachedItem.classes;
   }
 
-  // otherwise create new ones!
-  const cacheItem = {};
+  // otherwise make and cache new ones
+  const sheet = customSheet || vuduSheet;
   const classes = buildRuleset(el, sheet);
+  const cacheItem = {};
   cacheItem.element = el;
   cacheItem.classes = classes;
-  cache.addItem(cacheItem);
+  cache.push(cacheItem);
 
+  // object
   return classes;
 };
 
-export const cache = new Cache();
-export const atomics = atomicClasses;
-export const config = setupExtends;
-export const v = vFunction;
-export default vFunction;
+v.addFontFace = addFontFace;
+v.atomics = atomics;
+v.config = config;
+
+export default v;
 

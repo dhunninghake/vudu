@@ -1,7 +1,18 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
-import { v } from '../../dist/vudu';
-import { e, colors } from './styleguide';
+import { ttf, woff, woff2 } from './fonts';
+import v from '../../dist/vudu';
+
+const e = v.atomics;
+
+const calibreRegular = v.addFontFace({  
+  fontFamily: 'CalibreRegular',
+  src: `url(${woff2}) format("woff2"),
+    url(${woff}) format("woff"),
+    url(${ttf}) format("truetype")`,
+  fontWeight: 'normal',
+  fontStyle: 'normal'
+});
 
 
 const Logo = () => {
@@ -12,7 +23,7 @@ const Logo = () => {
       animationIterationCount: 'infinite',
       animationTimingFunction: 'linear',
       transformOrigin: options.origin,
-      '@composes': [ e.fillRed ],
+      fill: 'currentColor',
       [`@keyframes ${options.name}`]: {
         '0%': {
           transform: options.start
@@ -24,6 +35,11 @@ const Logo = () => {
     };
   };
   const styles = v({
+    logoWrapper: {
+      '@composes': [ 
+        e.py3
+      ]
+    },
     logoOuter: {
       '@composes': [
         e.inlineBlock,
@@ -75,14 +91,35 @@ const Logo = () => {
     title: {
       fontSize: '2.5rem',
       '@composes': [
+        e.bgRed,
         e.normal,
         e.m0,
-        e.red
-      ]
+      ],
+      ':hover': {
+        '@composes': [
+          e.bgBlue
+        ],
+        'span': {
+          '@composes': [
+            e.green
+          ]
+        }
+      }
+    },
+    tagline: {
+      '@composes': [
+        e.col6,
+        e.mxAuto,
+        e.gray,
+        e.h5,
+        e.mt0,
+        e.pb2,
+        e.block
+      ],
     }
   });
   return (
-    <div>
+    <div className={styles.logoWrapper}>
       <svg className={styles.logoOuter} xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80">
         <g className={styles.starOneOuter}>
           <path className={styles.starOneInner} d="M40 60C40 49 31 40 20 40 31 40 40 31 40 20 40 31 49 40 60 40 49 40 40 49 40 60Z"/>
@@ -94,18 +131,20 @@ const Logo = () => {
           <path className={styles.starThreeInner} d="M40 60C40 49 31 40 20 40 31 40 40 31 40 20 40 31 49 40 60 40 49 40 40 49 40 60Z"/>
         </g>
       </svg>
-      <h1 className={styles.title}>Vudu</h1>
+      <h1 className={styles.title}>
+        <span>Vudu</span>
+      </h1>
+      <span className={styles.tagline}>{'A composable approach to writing styles in JavaScript'}</span>
     </div>
   );
 };
 
 
-const Sidebar = () => {
+const Sidebar = (props) => {
   const styles = v({
     container: {
       height: '100%',
       '@composes': [
-        e.py3,
         e.col3,
         e.fixed,
         e.top0,
@@ -114,75 +153,98 @@ const Sidebar = () => {
         e.bgWhite
       ]
     },
-    tagline: {
+    list: {
       '@composes': [
-        e.col6,
-        e.mxAuto,
-        e.gray,
-        e.h5,
-        e.mt0,
-        e.pb2
+        e.pt3,
+        e.pl0,
+        e.m0,
+        e.leftAlign,
       ],
     },
-    list: {
-      borderTop: '1px solid #eee',
+    listItem: {
+      top: '3px',
       '@composes': [
-        e.p0,
-        e.mt4,
-        e.leftAlign,
-        e.smoke
-      ],
-      'li': {
-        borderBottom: '1px solid #eee',
-        '@composes': [
-          e.px3
-        ]
-      },
-      'li h3': {
-        top: '3px',
-        '@composes': [
-          e.normal,
-          e.smoke,
-          e.my3,
-          e.relative
-        ]
-      }
+        e.normal,
+        e.py1,
+        e.px4,
+        e.relative,
+        e.block,
+        e.h2,
+        e.noUnderline,
+      ]
     }
   });
 
+  const renderListItems = () => {
+    const items = [
+      { name: 'Introduction', link: '#introduction' },
+      { name: 'Getting Started', link: '#getting-started' },
+      { name: 'Docs', link: '#docs' },
+      { name: 'Contribute', link: '#contribute' }
+    ];
+    return items.map((item, index) => {
+      const isActive = props.activeItem === item.name;
+      const activeStyles = v({
+        active: {
+          ':after': {
+            content: '" "',
+            borderRadius: '50%',
+            width: '8px',
+            height: '8px',
+            top: '50%',
+            transform: 'translateY(-5px)',
+            right: '-4px',
+            '@composes': [
+              e.absolute,
+              e.block,
+              e.z1
+            ]
+          }
+        }
+      });
+      return (
+        <li key={index} onClick={props.changeActiveItem.bind(this, item.name)}>
+          <a className={`${styles.listItem} ${isActive ? activeStyles.active : ''}`} href={item.link}>{item.name}</a>
+        </li>
+      );
+    });
+  };
   return (
     <div className={styles.container}>
       <Logo />
-      <p className={styles.tagline}>{'A composable approach to writing styles in JavaScript'}</p>
       <ul className={styles.list}>
-        <li>
-          <h3>Introduction</h3>
-        </li>
-        <li>
-          <h3>Getting Started</h3>
-        </li>
-        <li>
-          <h3>Docs</h3>
-        </li>
-        <li>
-          <h3>Contribute!</h3>
-        </li>
+        {renderListItems()}
       </ul>
     </div>
   );
 };
 
 class App extends Component {
+  
+  constructor(props) {
+    super(props);
+    this.state = {
+      activeItem: 'Introduction'
+    }
+  }
+
+  changeActiveItem(item) {
+    this.setState({
+      activeItem: item
+    });
+  }
+
   render() {
     const styles = v({
       wrapper: {
         minHeight: 'calc(100vh - 20px)',
-        boxShadow: `0 0 0 10px ${colors.snow}`,
-        fontFamily: '"CalibreRegular", Times',
-        '@composes': [
-          e.smoke,
-          e.bgSnow
-        ]
+        fontFamily: `${calibreRegular}, Times`,
+        'p': {
+          lineHeight: '1.4',
+          '@composes': [
+            e.h3
+          ]
+        }
       },
       clear: {
         '@composes': [
@@ -191,22 +253,32 @@ class App extends Component {
           e.clearfix
         ]
       },
-      floater: {
+      container: {
         '@composes': [
-          e.left,
-          e.col6,
-          e.mdCol3
+          e.mxAuto,
+          e.col12,
+          e.mdCol8,
+          e.pt5
         ]
-      }      
+      },
+      sectionHeader: {
+        fontSize: '2.5rem',
+        '@composes': [
+          e.normal
+        ]
+      }
     });
     return (
       <div className={styles.wrapper}>
-        <Sidebar />
+        <Sidebar 
+          activeItem={this.state.activeItem} 
+          changeActiveItem={this.changeActiveItem.bind(this)}
+        />
         <div className={styles.clear}>
-          <div className={styles.floater}>1</div>
-          <div className={styles.floater}>2</div>
-          <div className={styles.floater}>3</div>
-          <div className={styles.floater}>4</div>
+          <div className={styles.container}>
+            <h1 className={styles.sectionHeader}>Introduction</h1>
+            <p>Mr. Trump lol</p>
+          </div>
         </div>
       </div>
     );

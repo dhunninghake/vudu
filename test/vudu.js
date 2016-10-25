@@ -1,5 +1,7 @@
 import test from 'ava';
-import v, { cache, atomics } from '../dist/vudu';
+import v from '../dist/vudu';
+
+const atomics = v.atomics;
 
 const createSheet = (id) => {
   const existingSheet = document.getElementById(id);
@@ -31,7 +33,6 @@ const styles = {
 
 test.beforeEach(t => {
   const id = guid();
-  cache.clearItems();
   t.context.id = id;
   t.context.sheet = createSheet(id);
 });
@@ -61,13 +62,8 @@ test('returns an object of values with type string', t => {
 });
 
 
-test('adds to cache successfully', t => {
-  const style = v(styles);
-  t.is(cache.items.length, 1);
-});
-
-
-test('doesnt add to cache if deep equal', t => {
+test('only adds rule once if deep equal', t => {
+  t.plan(1);
   const style1 = {
     container: {
       color: 'red',
@@ -81,10 +77,10 @@ test('doesnt add to cache if deep equal', t => {
     }
   };
 
-  v(style1);
-  v(style2);
+  v(style1, t.context.sheet);
+  v(style2, t.context.sheet);
 
-  t.is(cache.items.length, 1);
+  t.is(t.context.sheet.cssRules.length, 1);
 });
 
 
@@ -206,29 +202,15 @@ test('adds vendor prefixes', t => {
 
 test('creates @font-face rule', t => {
   t.plan(1);
-  const paths = {
-    eot: 'df228136e3ffa29078f5e7bea378b384.eot',
-    woff2: '5de2bf0fc200189f0f574489addec42b.woff2',
-    woff: '9264697e1103c572c9d1dd7e3df81136.woff',
-    ttf: '125b49e0eabb42aeb9fb8ad0d2a1581b.ttf'
-  }
-  const styles = {
-    font: {
-      '@font-face': {
-        fontFamily: 'CalibreRegular',
-        sources: [
-          { path: paths.eot, format: 'embedded-opentype' },
-          { path: paths.woff2, format: 'woff2' },
-          { path: paths.woff, format: 'woff' },
-          { path: paths.ttf, format: 'truetype' },
-        ],
-        fontWeight: 'normal',
-        fontStyle: 'normal'
-      }
-    }
-  };
-
-  v(styles, t.context.sheet);
+  
+  v.addFontFace({  
+    fontFamily: 'CalibreRegular',
+    src: `url(blah.woff2) format("woff2"),
+      url(blah.woff) format("woff"),
+      url(balh.ttf) format("truetype")`,
+    fontWeight: 'normal',
+    fontStyle: 'normal'
+  }, t.context.sheet);
 
   t.is(t.context.sheet.cssRules[0].style.length, 4);
 });

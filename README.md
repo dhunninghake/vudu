@@ -27,7 +27,10 @@ import { v } from 'vudu';
 const exampleComponent = () => {
   const styles = v({
     red: {
-      color: 'red'
+      color: 'red',
+      ':hover': {
+        color: 'green'
+      }
     },
     whitespace: {
       padding: '2rem'
@@ -48,7 +51,7 @@ const exampleComponent = () => {
   return (
     <section>
       <div className={styles.red}>
-        <p>{'This is red'}</p>
+        <p>{'This is red and turns green on hover'}</p>
       </div>
       <div className={styles.whitespace}>
         <p>{'This has a padding of 2rem around the outside'}</p>
@@ -71,7 +74,10 @@ import { v, atomics as c } from 'vudu';
 
 const styles = v({
   red: {
-    '@composes': [ c.red ]
+    '@composes': [ c.red ],
+    ':hover': {
+      '@composes': [ c.green ]
+    }
   },
   whitespace: {
     '@composes': [ c.p2 ]
@@ -117,20 +123,14 @@ const newAtomicsObject = config({
 Use all formats for greatest compatibility, however it will work as long as at one source is declared. Keep in mind that the path to the file is relative to the HTML file where the stylesheet is loaded! 
 
 ```javascript
-v({
-  calibre: {
-    '@font-face': {
-      fontFamily: 'CalibreRegular',
-      sources: [
-        { path: '/path/to/file.eot', format: 'embedded-opentype' },
-        { path: '/path/to/file.woff2', format: 'woff2' },
-        { path: '/path/to/file.woff', format: 'woff' },
-        { path: '/path/to/file.ttf', format: 'truetype' },
-      ],
-      fontWeight: 'normal',
-      fontStyle: 'normal'
-    }
-  }
+const CalibreRegular = v.addFontFace({  
+  fontFamily: 'CalibreRegular',
+  src: `url(/path/to/file.woff2) format("woff2"),
+    url(/path/to/file.woff2) format("woff2"),
+    url(/path/to/file.woff) format("woff"),
+    url(/path/to/file.ttf) format("truetype")`,
+  fontWeight: 'normal',
+  fontStyle: 'normal'
 });
 ```
 
@@ -150,7 +150,9 @@ module: {
 
 ## @keyframes
 ```javascript
-import { v, atomics as c } from 'vudu';
+import v from 'vudu';
+
+const a = v.atomics;
 
 const keyframeExample = () => {
   const styles = v({
@@ -162,8 +164,8 @@ const keyframeExample = () => {
       animationIterationCount: 'infinite',
       animationTimingFunction: 'linear',
       '@composes': {
-        c.bgBlue, // { backgroundColor: 'blue' }
-        c.circle  // { borderRadius: '50%' }
+        a.bgBlue, // { backgroundColor: 'blue' }
+        a.circle  // { borderRadius: '50%' }
       },
       '@keyframes moveCircle': {
         '0%': {
@@ -195,7 +197,7 @@ const styles = v({
       color: 'red'
     }
 
-    // By class name (must include element type, h1 in this case)
+    // By class name
     'h1.class-name': {
       color: 'red'
     }
@@ -205,6 +207,23 @@ const styles = v({
       color: 'green'
     }
 
+  }
+});
+```
+
+## Nesting
+```javascript
+const styles = v({
+  nest: {
+    'h1': { // child of nest selector
+      color: 'red',
+      'span': { // child of h1
+        color: 'green',
+        '.child-of-span': { //child of span
+          color: 'yellow'
+        }
+      }
+    }
   }
 });
 ```

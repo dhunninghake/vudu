@@ -16,5 +16,5 @@ const buildExtends = (options) => {
   );
 };
 
-export const atomicClasses = buildExtends();
-export const setupExtends = buildExtends;
+export const atomics = buildExtends();
+export const config = buildExtends;
