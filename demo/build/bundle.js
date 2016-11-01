@@ -261,7 +261,7 @@
 	                null,
 	                _react2.default.createElement(
 	                  'a',
-	                  { href: '#composability' },
+	                  { href: '#composability-docs' },
 	                  'Layout'
 	                )
 	              ),
@@ -270,7 +270,7 @@
 	                null,
 	                _react2.default.createElement(
 	                  'a',
-	                  { href: '#composability' },
+	                  { href: '#composability-docs' },
 	                  'Positioning'
 	                )
 	              ),
@@ -279,7 +279,7 @@
 	                null,
 	                _react2.default.createElement(
 	                  'a',
-	                  { href: '#composability' },
+	                  { href: '#composability-docs' },
 	                  'Typography'
 	                )
 	              ),
@@ -288,7 +288,7 @@
 	                null,
 	                _react2.default.createElement(
 	                  'a',
-	                  { href: '#composability' },
+	                  { href: '#composability-docs' },
 	                  'Whitespace'
 	                )
 	              ),
@@ -297,7 +297,7 @@
 	                null,
 	                _react2.default.createElement(
 	                  'a',
-	                  { href: '#composability' },
+	                  { href: '#composability-docs' },
 	                  'Colors'
 	                )
 	              ),
@@ -306,7 +306,7 @@
 	                null,
 	                _react2.default.createElement(
 	                  'a',
-	                  { href: '#composability' },
+	                  { href: '#composability-docs' },
 	                  'Grid'
 	                )
 	              )
@@ -569,7 +569,7 @@
 	  });
 	  return _react2.default.createElement(
 	    'div',
-	    { id: 'composability', className: styles.container },
+	    { id: 'composability-docs', className: styles.container },
 	    _react2.default.createElement(
 	      'h2',
 	      null,
@@ -24158,8 +24158,8 @@
 	  };i && attachRule("." + n + " { " + o(t) + "; }", r);var a = function a(e) {
 	    if (e.key.startsWith(":")) return { classname: "" + n + e.key, rule: "." + n + e.key + " { " + o(e.value) + "; }" };if (e.key.startsWith("@media")) return { classname: "" + n, rule: e.key + " { ." + n + " { " + o(e.value) + " } }" };if (e.key.startsWith("@keyframes")) {
 	      var t = e.value.map(function (e) {
-	        return e.key + " { " + o(e.value) + " }";
-	      }).join(" ");return { classname: "" + e.key, rule: e.key + " { " + t + "; }" };
+	        return e.key + " { " + o(e.value) + "; }";
+	      }).join(" ");return { classname: "" + e.key, rule: e.key + " { " + t + " }" };
 	    }return { classname: n + " " + e.key, rule: "." + n + " " + e.key + " { " + o(e.value) + "; }" };
 	  };t.filter(function (e) {
 	    return "object" === _typeof(e.value);
@@ -24450,7 +24450,7 @@
 
 	module.exports = {
 		"name": "vudu",
-		"version": "1.8.2",
+		"version": "1.8.3",
 		"description": "A composable approach to writing styles in JavaScript",
 		"main": "dist/vudu.js",
 		"scripts": {
