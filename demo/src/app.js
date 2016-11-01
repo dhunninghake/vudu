@@ -140,12 +140,12 @@ const Header = () => {
               <div className={styles.navCol}>
                 <span className={shared.eyelash}>{'Composability'}</span>
                 <ul className={styles.navList}>
-                  <li><a href="#composability">Layout</a></li>
-                  <li><a href="#composability">Positioning</a></li>
-                  <li><a href="#composability">Typography</a></li>
-                  <li><a href="#composability">Whitespace</a></li>
-                  <li><a href="#composability">Colors</a></li>
-                  <li><a href="#composability">Grid</a></li>
+                  <li><a href="#composability-docs">Layout</a></li>
+                  <li><a href="#composability-docs">Positioning</a></li>
+                  <li><a href="#composability-docs">Typography</a></li>
+                  <li><a href="#composability-docs">Whitespace</a></li>
+                  <li><a href="#composability-docs">Colors</a></li>
+                  <li><a href="#composability-docs">Grid</a></li>
                 </ul>
               </div>
               <div className={styles.navCol}>
@@ -361,7 +361,7 @@ const Composability = () => {
     }
   });
   return (
-    <div id='composability' className={styles.container}>
+    <div id='composability-docs' className={styles.container}>
       <h2>{'Composability docs coming soon!'}</h2>
     </div>
   );

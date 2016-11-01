@@ -85,10 +85,10 @@ const addRule = (styles=[], classname, sheet, addBase) => {
         rule: `${s.key} { .${classname} { ${base(s.value)} } }`
       };
     } else if (s.key.startsWith('@keyframes')) {
-      const dec = s.value.map(kf => `${kf.key} { ${base(kf.value)} }`).join(' ');
+      const dec = s.value.map(kf => `${kf.key} { ${base(kf.value)}; }`).join(' ');
       return {
         classname: `${s.key}`,
-        rule: `${s.key} { ${dec}; }`
+        rule: `${s.key} { ${dec} }`
       };
     } else {
       return {
