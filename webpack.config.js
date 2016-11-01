@@ -25,6 +25,10 @@ module.exports = {
       { 
         loader: 'html!markdown',
         test: /\.md/ 
+      },
+      { 
+        loader: 'json',
+        test: /\.json$/
       }
     ]
   },

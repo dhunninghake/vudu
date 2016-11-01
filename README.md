@@ -22,7 +22,7 @@ npm install vudu -D
 ```javascript
 // UI component usage
 import React from 'react';
-import { v } from 'vudu';
+import v from 'vudu';
 
 const exampleComponent = () => {
   const styles = v({
@@ -70,7 +70,9 @@ By default Vudu supports writing out full declarations for styles (like shown ab
 Using the example above, this is how it could ALSO be written:
 
 ```javascript
-import { v, atomics as c } from 'vudu';
+import v from 'vudu';
+
+const c = v.atomics;
 
 const styles = v({
   red: {
@@ -125,7 +127,7 @@ Use all formats for greatest compatibility, however it will work as long as at o
 ```javascript
 const CalibreRegular = v.addFontFace({  
   fontFamily: 'CalibreRegular',
-  src: `url(/path/to/file.woff2) format("woff2"),
+  src: `url(/path/to/file.eot) format("eot"),
     url(/path/to/file.woff2) format("woff2"),
     url(/path/to/file.woff) format("woff"),
     url(/path/to/file.ttf) format("truetype")`,
@@ -141,7 +143,7 @@ module: {
   loaders: [
     {
       loader: 'file-loader',
-      test: /\.(ttf|eot|woff(2)?)(\?[a-z0-9=&.]+)?$/
+      test: /\.(ttf|eot|svg|woff(2)?)(\?[a-z0-9=&.]+)?$/
     }
   ]
 }
@@ -152,7 +154,7 @@ module: {
 ```javascript
 import v from 'vudu';
 
-const a = v.atomics;
+const c = v.atomics;
 
 const keyframeExample = () => {
   const styles = v({
@@ -164,8 +166,8 @@ const keyframeExample = () => {
       animationIterationCount: 'infinite',
       animationTimingFunction: 'linear',
       '@composes': {
-        a.bgBlue, // { backgroundColor: 'blue' }
-        a.circle  // { borderRadius: '50%' }
+        c.bgBlue, // { backgroundColor: 'blue' }
+        c.circle  // { borderRadius: '50%' }
       },
       '@keyframes moveCircle': {
         '0%': {

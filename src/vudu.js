@@ -39,21 +39,38 @@ const formatRule = (styles={}) => {
     return dec;
   };
 
-  return flatten(Object.keys(prefixed)
+  const formattedRule = flatten(Object.keys(prefixed)
     .map(key => assign({key: key.startsWith('@keyframes') ? key : vendor(key), value: prefixed[key]})))
     .map(dec => typeof dec.value === 'object' ? ({key: dec.key, value: formatRule(dec.value)}) : dec);
+
+  if (formattedRule.some(r => r.key.startsWith('@media'))) {
+    return formattedRule.map(r => {
+      if (typeof r.value === 'object') {
+        return {
+          key: r.key,
+          value: r.value.map(v => {
+            return typeof v.value === 'object' ? ({key: v.key, value: v.value, query: r.key}) : v;
+          })
+        };
+      } else {
+        return r;
+      }
+    });
+  }
+
+  return formattedRule;
 };
 
 
 const addRule = (styles=[], classname, sheet, addBase) => {
   const base = (style) => {
-    return style.filter(s => typeof s.value === 'string')
+    return style.filter(s => typeof s.value !== 'object')
       .map(s => `${s.key}: ${s.value}`).join(';');
   };
 
   if (addBase) {
     // console.log(`.${classname} { ${base(styles)}; }`);
-    attachRule(`.${classname} { ${base(styles)}; }`, sheet);  
+    attachRule(`.${classname} { ${base(styles)}; }`, sheet);
   }
 
   const specialCase = (s) => {
@@ -65,7 +82,7 @@ const addRule = (styles=[], classname, sheet, addBase) => {
     } else if (s.key.startsWith('@media')) {
       return {
         classname: `${classname}`,
-        rule: `${s.key} { .${classname} { ${base(s.value)}; } }`
+        rule: `${s.key} { .${classname} { ${base(s.value)} } }`
       };
     } else if (s.key.startsWith('@keyframes')) {
       const dec = s.value.map(kf => `${kf.key} { ${base(kf.value)} }`).join(' ');
@@ -83,8 +100,13 @@ const addRule = (styles=[], classname, sheet, addBase) => {
 
   styles.filter(s => typeof s.value === 'object')
     .forEach(s => {
-      // console.log(specialCase(s).rule);
-      attachRule(specialCase(s).rule, sheet);
+      if (s.query && s.query.startsWith('@media')) {
+        attachRule(`${s.query} { ${specialCase(s).rule} }`, sheet);
+      } else {
+        // console.log(specialCase(s).rule);
+        attachRule(specialCase(s).rule, sheet);  
+      }
+
       if (!s.key.startsWith('@keyframes')) {
         addRule(s.value, specialCase(s).classname, sheet, false);
       }

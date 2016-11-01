@@ -1,6 +1,6 @@
 {
   "name": "vudu",
-  "version": "1.8.1",
+  "version": "1.8.2",
   "description": "A composable approach to writing styles in JavaScript",
   "main": "dist/vudu.js",
   "scripts": {
@@ -30,6 +30,7 @@
     "html-loader": "^0.4.3",
     "html-webpack-plugin": "^2.22.0",
     "jsdom": "^9.5.0",
+    "json-loader": "^0.5.4",
     "markdown-loader": "^0.1.7",
     "react": "^15.3.1",
     "react-dom": "^15.3.1",

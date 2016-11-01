@@ -1,285 +1,399 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
-import { ttf, woff, woff2 } from './fonts';
+import { c_ttf, c_woff, c_woff2 } from './fonts';
+import { Logo, TwoColumn } from './components';
+import { sharedStyles as shared } from './styles/shared';
+import pkg from '../../package.json';
 import v from '../../dist/vudu';
+import { 
+  Introduction, 
+  Pseudos,
+  MediaQueries,
+  Keyframes,
+  FontFace,
+  Nesting } from './modules';
 
 const e = v.atomics;
 
 const calibreRegular = v.addFontFace({  
   fontFamily: 'CalibreRegular',
-  src: `url(${woff2}) format("woff2"),
-    url(${woff}) format("woff"),
-    url(${ttf}) format("truetype")`,
+  src: `url(${c_woff2}) format("woff2"),
+    url(${c_woff}) format("woff"),
+    url(${c_ttf}) format("truetype")`,
   fontWeight: 'normal',
   fontStyle: 'normal'
 });
 
+const tw = {
+  root: 'https://twitter.com/intent/tweet',
+  url:  'http://dhunninghake.com/vudu',
+  text: 'Vudu',
+};
 
-const Logo = () => {
-  const keyframe = (options) => {
-    return {
-      animationName: options.name,
-      animationDuration: options.duration,
-      animationIterationCount: 'infinite',
-      animationTimingFunction: 'linear',
-      transformOrigin: options.origin,
-      fill: 'currentColor',
-      [`@keyframes ${options.name}`]: {
-        '0%': {
-          transform: options.start
-        },
-        '100%': {
-          transform: options.finish
-        }
-      }
-    };
-  };
+const Wrapper = (props) => {
   const styles = v({
-    logoWrapper: {
+    wrapper: {
+      maxWidth: '64rem',
       '@composes': [ 
-        e.py3
-      ]
-    },
-    logoOuter: {
-      '@composes': [
-        e.inlineBlock,
-        e.relative
-      ]
-    },
-    starOneOuter: keyframe({
-      name: 'starOneOuter',
-      duration: '5s',
-      origin: '41px 41px',
-      start: 'rotateZ(0deg) translateY(7px) scale(.575)',
-      finish: 'rotateZ(-360deg) translateY(7px) scale(.575)'
-    }),
-    starOneInner: keyframe({
-      name: 'starOneInner',
-      duration: '2s',
-      origin: 'center',
-      start: 'rotateZ(0deg)',
-      finish: 'rotateZ(360deg)'
-    }),
-    starTwoOuter: keyframe({
-      name: 'starTwoOuter',
-      duration: '5s',
-      origin: '53px 53px',
-      start: 'rotateZ(0deg) translateY(3px) scale(.75)',
-      finish: 'rotateZ(-360deg) translateY(3px) scale(.75)'
-    }),
-    starTwoInner: keyframe({
-      name: 'starTwoInner',
-      duration: '8s',
-      origin: 'center',
-      start: 'rotateZ(0deg)',
-      finish: 'rotateZ(360deg)'
-    }),
-    starThreeOuter: keyframe({
-      name: 'starThreeOuter',
-      duration: '5s',
-      origin: '35px 35px',
-      start: 'rotateZ(0deg) translateY(13px) scale(.4)',
-      finish: 'rotateZ(360deg) translateY(13px) scale(.4)'
-    }),
-    starThreeInner: keyframe({
-      name: 'starThreeInner',
-      duration: '1s',
-      origin: 'center',
-      start: 'rotateZ(0deg)',
-      finish: 'rotateZ(-360deg)'
-    }),
-    title: {
-      fontSize: '2.5rem',
-      '@composes': [
-        e.bgRed,
-        e.normal,
-        e.m0,
+        e.col12, 
+        e.mxAuto, 
+        e.clearfix, 
+        e.px2 
       ],
-      ':hover': {
-        '@composes': [
-          e.bgBlue
-        ],
-        'span': {
-          '@composes': [
-            e.green
-          ]
-        }
+      '@media (min-width: 52em)': {
+        '@composes': [ e.p0 ]
       }
-    },
-    tagline: {
-      '@composes': [
-        e.col6,
-        e.mxAuto,
-        e.gray,
-        e.h5,
-        e.mt0,
-        e.pb2,
-        e.block
-      ],
     }
   });
   return (
-    <div className={styles.logoWrapper}>
-      <svg className={styles.logoOuter} xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80">
-        <g className={styles.starOneOuter}>
-          <path className={styles.starOneInner} d="M40 60C40 49 31 40 20 40 31 40 40 31 40 20 40 31 49 40 60 40 49 40 40 49 40 60Z"/>
-        </g>
-        <g className={styles.starTwoOuter}>
-          <path className={styles.starTwoInner} d="M40 60C40 49 31 40 20 40 31 40 40 31 40 20 40 31 49 40 60 40 49 40 40 49 40 60Z"/>
-        </g>
-        <g className={styles.starThreeOuter}>
-          <path className={styles.starThreeInner} d="M40 60C40 49 31 40 20 40 31 40 40 31 40 20 40 31 49 40 60 40 49 40 40 49 40 60Z"/>
-        </g>
-      </svg>
-      <h1 className={styles.title}>
-        <span>Vudu</span>
-      </h1>
-      <span className={styles.tagline}>{'A composable approach to writing styles in JavaScript'}</span>
+    <div className={`${styles.wrapper} ${props.styles}`}>
+      {props.children}
     </div>
   );
 };
 
 
-const Sidebar = (props) => {
+const Header = () => {
+  const styles = v({
+    header: {
+      backgroundColor: '#D4FD56',
+      boxShadow: '0 0 0 .5rem #D4FD56',
+      '@composes': [ 
+        e.pt4, 
+        e.pb3 
+      ]
+    },
+    top: {
+      '@composes': [ e.center ]
+    },
+    description: {
+      fontSize: '2.4rem',
+      lineHeight: '1.35',
+      '@composes': [ 
+        e.normal, 
+        e.m0, 
+        e.pb4 
+      ],
+      '@media (min-width: 52em)': {
+        '@composes': [ e.pb0 ]
+      }
+    },
+    nav: {
+      '@composes': [ e.pt1 ],
+      'ul': {
+        listStyleType: 'none',
+        '@composes': [ 
+          e.p0, 
+          e.m0 
+        ]
+      }
+    },
+    navCol: {
+      '@composes': [ 
+        e.left, 
+        e.col6, 
+        e.mdCol4 
+      ],
+      'li': {
+        '@composes': [ e.mb1 ],
+        'a': {
+          top: '2px',
+          cursor: 'pointer',
+          opacity: '1',
+          transition: '.2s opacity ease',
+          '@composes': [ 
+            e.black, 
+            e.relative 
+          ],
+          ':visited': {
+            '@composes': [ e.black ]  
+          },
+          ':hover': {
+            opacity: '.5'
+          },
+        }
+      }
+    }
+  });
+  return (
+    <div className={styles.header}>
+      <Wrapper>
+        <div className={styles.top}>
+          <Logo size={100} />
+        </div>
+        <TwoColumn
+          leftCol={(
+            <p className={styles.description}>{'Vudu is a composable approach to writing CSS in JavaScript.'}</p>  
+          )}
+          rightCol={(
+            <div className={styles.nav}>
+              <div className={styles.navCol}>
+                <span className={shared.eyelash}>{'Featureset'}</span>
+                <ul className={styles.navList}>
+                  <li><a href="#pseudo-selectors">Pseudo selectors</a></li>
+                  <li><a href="#media-queries">Media queries</a></li>
+                  <li><a href="#keyframes">@keyframes</a></li>
+                  <li><a href="#fontface">@font-face</a></li>
+                  <li><a href="#nesting">Nesting rules</a></li>
+                </ul>
+              </div>
+              <div className={styles.navCol}>
+                <span className={shared.eyelash}>{'Composability'}</span>
+                <ul className={styles.navList}>
+                  <li><a href="#composability">Layout</a></li>
+                  <li><a href="#composability">Positioning</a></li>
+                  <li><a href="#composability">Typography</a></li>
+                  <li><a href="#composability">Whitespace</a></li>
+                  <li><a href="#composability">Colors</a></li>
+                  <li><a href="#composability">Grid</a></li>
+                </ul>
+              </div>
+              <div className={styles.navCol}>
+                <span className={shared.eyelash}>{'Internet'}<span>&#8599;</span></span>
+                <ul className={styles.navList}>
+                  <li><a href='https://github.com/dhunninghake/vudu' target='_blank'>Github</a></li>
+                  <li><a href={`${tw.root}?text=${tw.text}&url=${tw.url}`} target='_blank'>Tweet</a></li>
+                  <li><a href='https://www.npmjs.com/package/vudu' target='_blank'>Npm</a></li>
+                </ul>
+              </div>
+            </div>
+          )}/>
+      </Wrapper>
+    </div>
+  );
+};
+
+
+const Footer = () => {
+  const middle = {
+    display: 'inline-block',
+    verticalAlign: 'middle'
+  };
+  const styles = v({
+    footer: {
+      backgroundColor: '#D4FD56',
+      boxShadow: '0 0 0 .5rem #D4FD56',
+      '@composes': [ 
+        e.py3, 
+        e.mt2 
+      ],
+      'a': {
+        opacity: '1',
+        transition: '.2s opacity ease',
+        '@composes': [ 
+          e.inlineBlock, 
+          e.underline,
+          e.mr1, 
+          e.black
+        ],
+        ':hover': {
+          opacity: '.5'
+        }
+      }
+    },
+    left: {
+      '@composes': [ 
+        middle, 
+        e.col12, 
+        e.mdCol6, 
+        e.center 
+      ],
+      '@media (min-width: 52em)': {
+        '@composes': [ e.leftAlign ]
+      }
+    },
+    right: {
+      '@composes': [ 
+        middle, 
+        e.col12, 
+        e.mdCol6, 
+        e.center
+      ],
+      '@media (min-width: 52em)': {
+        '@composes': [ e.rightAlign ]
+      }
+    },
+    logo: {
+      '@composes': [ middle, e.mr2 ]
+    },
+    text: {
+      '@composes': [ middle ],
+      'span': {
+        '@composes': [ 
+          e.inlineBlock, 
+          e.mr3 
+        ]
+      }
+    },
+  });
+  return (
+    <div className={styles.footer}>
+      <Wrapper>
+        <div className={styles.left}>
+          <div className={styles.logo}>
+            <Logo size={60} />
+          </div>
+          <div className={styles.text}>
+            <p>
+              <span>{`Vudu v${pkg.version}`}</span>
+              <a href='https://github.com/dhunninghake/vudu' target='_blank'>Github</a>
+              <a href={`${tw.root}?text=${tw.text}&url=${tw.url}`} target='_blank'>Tweet</a>
+              <a href='https://www.npmjs.com/package/vudu' target='_blank'>Npm</a>
+            </p>
+          </div>
+        </div>
+        <div className={styles.right}>
+          <p>Made by <a href="http://dhunninghake.com">dhunninghake</a></p>
+        </div>
+      </Wrapper>
+    </div>
+  );
+};
+
+
+const Contribute = () => {
   const styles = v({
     container: {
-      height: '100%',
-      '@composes': [
-        e.col3,
-        e.fixed,
-        e.top0,
-        e.left0,
-        e.center,
-        e.bgWhite
+      backgroundColor: '#f7f7f7',
+      boxShadow: '0 0 0 .5rem #f7f7f7',
+      color: '#888',
+      '@composes': [ 
+        e.py4, 
+        e.center 
       ]
     },
-    list: {
-      '@composes': [
-        e.pt3,
-        e.pl0,
-        e.m0,
-        e.leftAlign,
-      ],
+    text: {
+      '@composes': [ e.m0 ],
     },
-    listItem: {
-      top: '3px',
+    bit: {
       '@composes': [
-        e.normal,
-        e.py1,
-        e.px4,
-        e.relative,
         e.block,
-        e.h2,
-        e.noUnderline,
-      ]
+        e.my1
+      ],
+      '@media (min-width: 52em)': {
+        '@composes': [ e.inline ]
+      }
+    },
+    button: {
+      backgroundColor: '#888',
+      borderRadius: '9999em',
+      border: '0',
+      padding: '.75rem 2rem',
+      transition: 'background-color .2s ease',
+      '@composes': [ 
+        e.inlineBlock, 
+        e.noUnderline, 
+        e.white, 
+        e.ml0,
+        e.h4 
+      ],
+      '@media (min-width: 52em)': {
+        '@composes': [ e.ml3 ]
+      },
+      ':hover': {
+        backgroundColor: '#666'
+      }
     }
   });
-
-  const renderListItems = () => {
-    const items = [
-      { name: 'Introduction', link: '#introduction' },
-      { name: 'Getting Started', link: '#getting-started' },
-      { name: 'Docs', link: '#docs' },
-      { name: 'Contribute', link: '#contribute' }
-    ];
-    return items.map((item, index) => {
-      const isActive = props.activeItem === item.name;
-      const activeStyles = v({
-        active: {
-          ':after': {
-            content: '" "',
-            borderRadius: '50%',
-            width: '8px',
-            height: '8px',
-            top: '50%',
-            transform: 'translateY(-5px)',
-            right: '-4px',
-            '@composes': [
-              e.absolute,
-              e.block,
-              e.z1
-            ]
-          }
-        }
-      });
-      return (
-        <li key={index} onClick={props.changeActiveItem.bind(this, item.name)}>
-          <a className={`${styles.listItem} ${isActive ? activeStyles.active : ''}`} href={item.link}>{item.name}</a>
-        </li>
-      );
-    });
-  };
   return (
     <div className={styles.container}>
-      <Logo />
-      <ul className={styles.list}>
-        {renderListItems()}
-      </ul>
+      <p className={styles.text}>
+        <span className={styles.bit}>Want to peek under the hood?</span> <span className={styles.bit}>Check out the code on Github.</span>
+        <a href="https://github.com/dhunninghake/vudu" className={styles.button}>Contribute &rarr;</a>
+      </p>
     </div>
   );
 };
 
-class App extends Component {
-  
-  constructor(props) {
-    super(props);
-    this.state = {
-      activeItem: 'Introduction'
+
+const Callout = () => {
+  const styles = v({
+    container: {
+      backgroundColor: '#f7f7f7',
+      boxShadow: '0 0 0 .5rem #f7f7f7',
+      color: '#999',
+      '@composes': [ 
+        e.py2, 
+        e.center 
+      ]
+    },
+    tag: {
+      border: '1px solid #999',
+      borderRadius: '.5rem',
+      fontSize: '1.25rem',
+      color: '#888',
+      '@composes': [ 
+        e.inlineBlock, 
+        e.py1, 
+        e.px3 
+      ],
+      'span': {
+        top: '2px',
+        '@composes': [ e.relative ]
+      }
     }
-  }
+  });
+  return (
+    <div className={styles.container}>
+      <p className={styles.tag}>
+        <span>{'npm install vudu -D'}</span>
+      </p>
+    </div>
+  );
+};
 
-  changeActiveItem(item) {
-    this.setState({
-      activeItem: item
-    });
-  }
 
+const Composability = () => {
+  const styles = v({
+    container: {
+      border: '1px solid #ddd',
+      '@composes': [ 
+        e.my5, 
+        e.py5, 
+        e.center 
+      ],
+      'h2': {
+        '@composes': [ 
+          e.normal, 
+          e.m0 
+        ]
+      }
+    }
+  });
+  return (
+    <div id='composability' className={styles.container}>
+      <h2>{'Composability docs coming soon!'}</h2>
+    </div>
+  );
+};
+
+
+class App extends Component {
   render() {
     const styles = v({
-      wrapper: {
-        minHeight: 'calc(100vh - 20px)',
+      site: {
         fontFamily: `${calibreRegular}, Times`,
-        'p': {
-          lineHeight: '1.4',
-          '@composes': [
-            e.h3
-          ]
-        }
+        '*': { boxSizing: 'border-box' },
       },
-      clear: {
-        '@composes': [
-          e.col9,
-          e.right,
-          e.clearfix
-        ]
-      },
-      container: {
-        '@composes': [
-          e.mxAuto,
-          e.col12,
-          e.mdCol8,
-          e.pt5
-        ]
-      },
-      sectionHeader: {
-        fontSize: '2.5rem',
-        '@composes': [
-          e.normal
-        ]
+      wrapper: {
+        '@composes': [ e.py4 ]
       }
     });
     return (
-      <div className={styles.wrapper}>
-        <Sidebar 
-          activeItem={this.state.activeItem} 
-          changeActiveItem={this.changeActiveItem.bind(this)}
-        />
-        <div className={styles.clear}>
-          <div className={styles.container}>
-            <h1 className={styles.sectionHeader}>Introduction</h1>
-            <p>Mr. Trump lol</p>
-          </div>
-        </div>
+      <div className={styles.site}>
+        <Header />
+        <Callout />
+        <Wrapper styles={styles.wrapper}>
+          <Introduction />
+          <Pseudos />
+          <MediaQueries />
+          <Keyframes />
+          <FontFace />
+          <Nesting />
+          <Composability />
+        </Wrapper>
+        <Contribute />
+        <Footer />
       </div>
     );
   }
