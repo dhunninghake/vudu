@@ -2,8 +2,8 @@ export const buildLayout = () => {
   const layout = {};
 
   layout['table']          = { display: 'table', width: '100%' };
-  layout['table-cell']     = { display: 'table-cell', verticalAlign: 'middle' };
-  layout['table-row']      = { display: 'table-row' };
+  layout['tableCell']      = { display: 'table-cell', verticalAlign: 'middle' };
+  layout['tableRow']       = { display: 'table-row' };
   layout['inline']         = { display: 'inline' };
   layout['block']          = { display: 'block' };
   layout['inlineBlock']    = { display: 'inline-block' };

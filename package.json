@@ -1,6 +1,6 @@
 {
   "name": "vudu",
-  "version": "1.8.3",
+  "version": "1.8.4",
   "description": "A composable approach to writing styles in JavaScript",
   "main": "dist/vudu.js",
   "scripts": {
