@@ -230,6 +230,9 @@ const styles = v({
 });
 ```
 
+## Debugging
+Console log what’s getting added to the stylesheet with `vudu.showOutput()` at the end of your document. 
+
 <3
 
 MIT License

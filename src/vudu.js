@@ -157,7 +157,15 @@ const v = (el, customSheet) => {
   return classes;
 };
 
+
+const showOutput = () => {
+  const rules = vuduSheet.cssRules;
+  console.log(Object.keys(rules).map(r => rules[r].cssText).join('\n\n'));
+};
+
+
 v.addFontFace = addFontFace;
+v.showOutput = showOutput;
 v.atomics = atomics;
 v.config = config;
 
