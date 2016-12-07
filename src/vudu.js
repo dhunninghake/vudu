@@ -17,30 +17,37 @@ const attachRule = (rule, customSheet) => {
   sheet.insertRule(rule, sheet.cssRules.length);
 };
 
+const flatten = (arr) => {
+  return arr.reduce((a, b) => {
+    return a.concat(Array.isArray(b) ? flatten(b) : b)
+  },[])
+};
+
+const assign = (dec={}) => {
+  const val = dec.value;
+  if (Array.isArray(val)) {
+    if (typeof val[0] === 'object') {
+      return val.map(v => Object.keys(v).map(k => ({key: vendor(k), value: v[k]})));
+    } else {
+      return val.map(v => ({key: dec.key, value: v}));
+    }
+  }
+  return dec;
+};
+
+const splitRulesets = prefixed => {
+  return Object.keys(prefixed).map(key => {
+    return assign({
+      key: key.startsWith('@keyframes') ? key : vendor(key), 
+      value: prefixed[key]
+    });
+  });
+};
 
 const formatRule = (styles={}) => {
   const prefixed = prefixer(styles);
-  
-  const flatten = (arr) => {
-    return arr.reduce((a, b) => {
-      return a.concat(Array.isArray(b) ? flatten(b) : b)
-    },[])
-  };
 
-  const assign = (dec={}) => {
-    const val = dec.value;
-    if (Array.isArray(val)) {
-      if (typeof val[0] === 'object') {
-        return val.map(v => Object.keys(v).map(k => ({key: vendor(k), value: v[k]})));
-      } else {
-        return val.map(v => ({key: dec.key, value: v}));
-      }
-    }
-    return dec;
-  };
-
-  const formattedRule = flatten(Object.keys(prefixed)
-    .map(key => assign({key: key.startsWith('@keyframes') ? key : vendor(key), value: prefixed[key]})))
+  const formattedRule = flatten(splitRulesets(prefixed))
     .map(dec => typeof dec.value === 'object' ? ({key: dec.key, value: formatRule(dec.value)}) : dec);
 
   if (formattedRule.some(r => r.key.startsWith('@media'))) {
@@ -114,18 +121,17 @@ const addRule = (styles=[], classname, sheet, addBase) => {
 };
 
 
-const addFontFace = (font={}, customSheet) => {
-  const sheet = customSheet || vuduSheet;
-  const dec = formatRule(font).map(r => `${r.key}: ${r.value}`).join(';');
-  attachRule(`@font-face { ${dec}; }`, sheet);
-  return font.fontFamily.toString();
-};
 
-
-const buildRuleset = (group, sheet) => {
+/**
+ * buildRuleset does a few things:
+ * 1) Generates a unique vudu class for each rule
+ * 2) Sends the formatted style object to addRule to be added
+ * 3) Returns a new object of vudu classes for each added rule
+ */
+const buildRuleset = (group={}, sheet) => {
   const rules = Object.keys(group).map(classname => {
     return {
-      classname: classname, 
+      classname, 
       vuduClass: `${classname}-${guid()}`,
       styles: group[classname]
     }
@@ -138,14 +144,19 @@ const buildRuleset = (group, sheet) => {
 };
 
 
-const v = (el, customSheet) => {
-  // return cached classes
+
+/**
+ * This function (default export) kicks off adding a new rule.
+ * If the object coming in is not equal to any items in the cache,
+ * then return the cached classes that represent that object.
+ * Otherwise, create new ones!
+ */
+const v = (el={}, customSheet) => {
   const cachedItem = cache.find(item => deepEqual(item.element, el));
   if (cachedItem) {
     return cachedItem.classes;
   }
 
-  // otherwise make and cache new ones
   const sheet = customSheet || vuduSheet;
   const classes = buildRuleset(el, sheet);
   const cacheItem = {};
@@ -158,14 +169,25 @@ const v = (el, customSheet) => {
 };
 
 
-const showOutput = () => {
+
+/**
+ * PUBLIC METHODS 
+ */
+const addFontFace = (font={}, customSheet) => {
+  const sheet = customSheet || vuduSheet;
+  const dec = formatRule(font).map(r => `${r.key}: ${r.value}`).join(';');
+  attachRule(`@font-face { ${dec}; }`, sheet);
+  return font.fontFamily.toString();
+};
+
+const logOutput = () => {
   const rules = vuduSheet.cssRules;
   console.log(Object.keys(rules).map(r => rules[r].cssText).join('\n\n'));
 };
 
 
 v.addFontFace = addFontFace;
-v.showOutput = showOutput;
+v.logOutput = logOutput;
 v.atomics = atomics;
 v.config = config;
 
