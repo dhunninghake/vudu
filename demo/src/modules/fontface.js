@@ -4,7 +4,7 @@ import { TwoColumn } from '../components';
 import { sharedStyles as shared } from '../styles/shared';
 import { s_ttf, s_woff, s_woff2 } from '../fonts';
 
-const e = v.atomics;
+const e = v.composes;
 
 const rawCode = `import v from 'vudu';
 

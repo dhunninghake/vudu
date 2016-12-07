@@ -1,7 +1,7 @@
 import React from 'react';
 import v from '../../../dist/vudu';
 
-const e = v.atomics;
+const e = v.composes;
 
 export const Logo = (props) => {
   const keyframe = (options) => {

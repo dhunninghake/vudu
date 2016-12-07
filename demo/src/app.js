@@ -13,7 +13,9 @@ import {
   FontFace,
   Nesting } from './modules';
 
-const e = v.atomics;
+const e = v.composes;
+
+console.log(e);
 
 const calibreRegular = v.addFontFace({  
   fontFamily: 'CalibreRegular',

@@ -4,7 +4,7 @@ import introduction from './introduction.md';
 import { sharedStyles as shared } from '../styles/shared';
 import { TwoColumn } from '../components';
 
-const e = v.atomics;
+const e = v.composes;
 
 export const Introduction = () => {
   const styles = v({

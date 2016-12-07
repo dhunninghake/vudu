@@ -3,7 +3,7 @@ import v from '../../../dist/vudu';
 import { TwoColumn } from '../components';
 import { sharedStyles as shared } from '../styles/shared';
 
-const e = v.atomics;
+const e = v.composes;
 
 const rawCode = `import v from 'vudu';
 

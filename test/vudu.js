@@ -1,7 +1,7 @@
 import test from 'ava';
 import v from '../dist/vudu';
 
-const atomics = v.atomics;
+const c = v.composes;
 
 const createSheet = (id) => {
   const existingSheet = document.getElementById(id);
@@ -222,9 +222,9 @@ test('extends atomic classes', async t => {
     extend: {
       textAlign: 'right',
       '@composes': [
-        atomics.left,
-        atomics.py4,
-        atomics.purple
+        c.left,
+        c.py4,
+        c.purple
       ]
     }
   };
@@ -247,8 +247,8 @@ test('extends pseudo and media query atomics', async t => {
   const styles = {
     extendSomething: {
       '@composes': [
-        atomics.col6,
-        atomics.mdCol4
+        c.col6,
+        c.mdCol4
       ]
     }
   };

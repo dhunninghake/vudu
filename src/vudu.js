@@ -1,6 +1,6 @@
 import prefixer from 'inline-style-prefixer/static';
 import { guid, deepEqual, createSheet } from './utils';
-import { atomics, config } from './atomics';
+import { composes, config } from './composes';
 
 export let cache = [];
 
@@ -188,7 +188,7 @@ const logOutput = () => {
 
 v.addFontFace = addFontFace;
 v.logOutput = logOutput;
-v.atomics = atomics;
+v.composes = composes;
 v.config = config;
 
 export default v;

@@ -2,7 +2,7 @@ import React from 'react';
 import v from '../../../dist/vudu';
 import { i_ttf, i_woff, i_woff2 } from '../fonts';
 
-const e = v.atomics;
+const e = v.composes;
 
 const Inconsolata = v.addFontFace({  
   fontFamily: 'Inconsolata',

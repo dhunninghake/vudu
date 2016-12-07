@@ -72,7 +72,7 @@ Using the example above, this is how it could ALSO be written:
 ```javascript
 import v from 'vudu';
 
-const c = v.atomics;
+const c = v.composes;
 
 const styles = v({
   red: {
@@ -96,28 +96,17 @@ const styles = v({
 ```
 
 ### Configuring composable objects
-Still a WIP here, but here are a few ways to customize 
-
+This will give you an object for each color that you can easily compose.
 ```javascript
-import { config } from 'vudu';
+import v from 'vudu';
 
-const newAtomicsObject = config({
-  
-  // Defaults to 12 columns
-  columns: 16,
-
-  // Defaults to colors from clrs.cc
-  // Custom colors are appended to defaults
+const newObject = v.config({
+  // these are your custom colors
   colors: {
     brick: '#6D0404',
     slate: '#383943',
     wheat: '#E0C075'
-  },
-
-  // Scale means whitespace - margins and padding
-  // Defaults to [0, .5, 1, 1.5, 2, 4, 8] in rem
-  scale: [0, .25, .5, .75, 1, 2, 4]
-
+  }
 });
 ```
 
@@ -154,7 +143,7 @@ module: {
 ```javascript
 import v from 'vudu';
 
-const c = v.atomics;
+const c = v.composes;
 
 const keyframeExample = () => {
   const styles = v({
@@ -193,22 +182,15 @@ Sometimes, in cases where HTML is generated dynamically, you want to select a pa
 ```javascript
 const styles = v({
   targetChild: {
-
-    // By element type
-    'h1': {
+    'h1': { // By element type
       color: 'red'
     }
-
-    // By class name
-    'h1.class-name': {
+    'h1.class-name': { // By class name
       color: 'red'
     }
-
-    // By pseudo class
-    'h1:hover': {
+    'h1:hover': { // By pseudo class
       color: 'green'
     }
-
   }
 });
 ```
@@ -231,7 +213,7 @@ const styles = v({
 ```
 
 ## Debugging
-Console log what’s getting added to the stylesheet with `vudu.logOutput()` at the end of your document. 
+Console log what’s getting added to the stylesheet with `vudu.logOutput()`. 
 
 <3
 
