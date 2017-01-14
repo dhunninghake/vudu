@@ -3,7 +3,15 @@ export const guid = () => {
     Math.random().toString(26).substring(2, 10);
 };
 
-export const createSheet = (id) => {
+export const vendor = str => {
+  const kebab = s => s.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
+  if (!str.startsWith('@keyframes')) {
+    return /[A-Z]/.test(str[0]) ? `-${kebab(str)}` : kebab(str);
+  }
+  return str;
+};
+
+export const createSheet = id => {
   const existingSheet = document.getElementById(id);
   if (existingSheet) {
     return existingSheet.sheet;

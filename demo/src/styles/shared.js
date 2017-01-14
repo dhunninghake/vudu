@@ -14,6 +14,22 @@ const Inconsolata = v.addFontFace({
 });
 
 export const sharedStyles = v({
+  example: {
+    textAlign: 'right',
+    '@media (min-width: 40em)': {
+      textAlign: 'left',
+      ':hover': {
+        '@composes': [ e.caps ],
+        textAlign: 'center',
+        'span': {
+          textAlign: 'right'
+        }
+      }
+    },
+    'span': {
+      float: 'left'
+    }
+  },
   eyelash: {
     letterSpacing: '.2rem',
     '@composes': [ e.block, e.caps, e.h6, e.mb2 ],

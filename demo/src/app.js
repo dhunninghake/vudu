@@ -15,8 +15,6 @@ import {
 
 const e = v.composes;
 
-console.log(e);
-
 const calibreRegular = v.addFontFace({  
   fontFamily: 'CalibreRegular',
   src: `url(${c_woff2}) format("woff2"),
@@ -36,7 +34,7 @@ const Wrapper = (props) => {
   const styles = v({
     wrapper: {
       maxWidth: '64rem',
-      '@composes': [ 
+      '@composes': [
         e.col12, 
         e.mxAuto, 
         e.clearfix, 
@@ -58,12 +56,13 @@ const Wrapper = (props) => {
 const Header = () => {
   const styles = v({
     header: {
+      '@composes': [ 
+        e.pt4,
+        e.pb3,
+        e.bgRed
+      ],
       backgroundColor: '#D4FD56',
       boxShadow: '0 0 0 .5rem #D4FD56',
-      '@composes': [ 
-        e.pt4, 
-        e.pb3 
-      ]
     },
     top: {
       '@composes': [ e.center ]
@@ -168,8 +167,10 @@ const Header = () => {
 
 const Footer = () => {
   const middle = {
-    display: 'inline-block',
-    verticalAlign: 'middle'
+    '@composes': [
+      e.inlineBlock,
+      e.alignMiddle
+    ]
   };
   const styles = v({
     footer: {
@@ -216,7 +217,10 @@ const Footer = () => {
       }
     },
     logo: {
-      '@composes': [ middle, e.mr2 ]
+      '@composes': [ 
+        middle, 
+        e.mr2
+      ]
     },
     text: {
       '@composes': [ middle ],
@@ -338,7 +342,7 @@ const Callout = () => {
   return (
     <div className={styles.container}>
       <p className={styles.tag}>
-        <span>{'npm install vudu -D'}</span>
+        <span>{'npm install vudu --save'}</span>
       </p>
     </div>
   );
