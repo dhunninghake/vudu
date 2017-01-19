@@ -106,7 +106,7 @@ const styles = v({
       Button.large,
       this.props.disabled ? Button.grey : Button.blue // use it with props
     ],
-    'color': 'red', // If you need to override
+    'color': 'red', // to override composes
   }
 });
 ```
@@ -134,8 +134,6 @@ If you have a Webpack build, install the `file-loader` npm package and import th
 ## @keyframes
 ```javascript
 import v from 'vudu';
-
-const c = v.composes;
 
 const keyframeExample = () => {
   const styles = v({
