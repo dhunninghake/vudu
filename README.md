@@ -17,7 +17,7 @@ A composable approach to writing styles in JavaScript
 
 ## Getting Started
 ```bash
-npm install vudu -D
+npm install vudu --save
 ```
 ```javascript
 // UI component usage
@@ -72,8 +72,7 @@ One of the key features of Vudu is the ability to compose POJOs and use them wit
 ```javascript
 import v from 'vudu';
 
-// plain object
-const Button = {
+const buttonStyles = {
   base: {
     color: 'blue',
     height: '2.5em',
@@ -82,7 +81,7 @@ const Button = {
     display: 'inline-block',
     verticalAlign: 'middle',
     textDecoration: 'none',
-    // more declarations
+    // ...
   },
   large: {
     fontSize: '2em',
@@ -102,16 +101,16 @@ const Button = {
 const styles = v({
   button: {
     '@composes': [ 
-      Button.base,
-      Button.large,
-      this.props.disabled ? Button.grey : Button.blue // use it with props
+      buttonStyles.base,
+      buttonStyles.large,
+      this.props.disabled ? buttonStyles.grey : buttonStyles.blue
     ],
     'color': 'red', // to override composes
   }
 });
 ```
 
-Why call it @composes, you ask? It’s modelled CSS Modules, which you can read about [here](https://github.com/css-modules/css-modules#composition).
+Why call it @composes, you ask? It’s inspired by CSS Modules, which you can read about [here](https://github.com/css-modules/css-modules#composition).
 
 
 ## @font-face
