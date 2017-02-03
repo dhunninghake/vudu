@@ -58,8 +58,7 @@ const Header = () => {
     header: {
       '@composes': [ 
         e.pt4,
-        e.pb3,
-        e.bgRed
+        e.pb3
       ],
       backgroundColor: '#D4FD56',
       boxShadow: '0 0 0 .5rem #D4FD56',

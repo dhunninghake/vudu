@@ -20,10 +20,10 @@ const flattenArrays = arr => {
 const handleArrays = arr => {
   return arr.map(obj => {
     if (Array.isArray(obj.value)) {
-      if (typeof obj.value === 'object') {
-        return obj.value.map(v => handleArrays(splitDeclarations(v)));
-      } else {
+      if (obj.value.every(i => typeof i === 'string')) {
         return obj.value.map(v => ({ key: obj.key, value: v }));
+      } else {
+        return obj.value.map(v => handleArrays(splitDeclarations(v)));
       }
     }
     return obj;
