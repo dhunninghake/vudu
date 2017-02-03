@@ -5,7 +5,7 @@ const Format = x => {
   return {
     map: f => Format(f(x)),
     fold: f => f(x),
-    inspect: () => console.log(x)
+    log: () => console.log(x)
   };
 };
 
@@ -19,23 +19,24 @@ const flattenArrays = arr => {
 
 const handleArrays = arr => {
   return arr.map(obj => {
-    if (Array.isArray(obj.value)) {
-      if (obj.value.every(i => typeof i === 'string')) {
-        return obj.value.map(v => ({ key: obj.key, value: v }));
-      } else {
-        return obj.value.map(v => handleArrays(splitDeclarations(v)));
-      }
+    if (!Array.isArray(obj.value)) { return obj; }
+
+    if (obj.value.every(i => typeof i === 'string')) {
+      return obj.value.map(v => ({ key: obj.key, value: v }));
+    } else {
+      return obj.value.map(v => handleArrays(splitDeclarations(v)));
     }
-    return obj;
   });
 };
 
 const handleRecursion = arr => {
   return arr.map(obj => {
-    if (typeof obj.value === 'object') {
-      return { key: obj.key, value: formatRule(obj.value) };
-    }
-    return obj;
+    if (typeof obj.value !== 'object') { return obj; }
+    
+    return { 
+      key: obj.key, 
+      value: formatRule(obj.value) 
+    };
   });
 };
 
@@ -60,7 +61,8 @@ const handleMediaQueries = arr => {
 };
 
 export const formatRule = styles => {
-  return Format(prefixer(styles))
+  return Format(styles)
+    .map(prefixer)
     .map(splitDeclarations)
     .map(handleArrays)
     .map(flattenArrays)

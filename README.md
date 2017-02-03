@@ -7,7 +7,7 @@ A composable approach to writing styles in JavaScript
 * Generates animation sequences with @keyframes
 * Provides configurable, immutable style utilities out of the box
 * Plays nice with or without popular frameworks like React, Ember, and Angular
-* Generates necessary styles at runtime, no globals
+* Generates necessary styles at runtime
 * No external stylesheets to include, no duplicate rulesets
 * Can be used with server-side rendering
 * Lightweight (18kb minified, 6kb gzipped)
@@ -17,7 +17,7 @@ A composable approach to writing styles in JavaScript
 
 ## Getting Started
 ```bash
-npm install vudu -D
+npm install vudu --save
 ```
 ```javascript
 // UI component usage
@@ -26,16 +26,16 @@ import v from 'vudu';
 
 const exampleComponent = () => {
   const styles = v({
-    red: {
+    someColor: {
       color: 'red',
       ':hover': {
         color: 'green'
       }
     },
-    whitespace: {
+    somePadding: {
       padding: '2rem'
     },
-    columns: {
+    someColumns: {
       width: '100%',
       '@media (min-width: 40em)': {
         width: '50%'
@@ -50,13 +50,15 @@ const exampleComponent = () => {
   });
   return (
     <section>
-      <div className={styles.red}>
+      // v creates strings to be used as classnames
+      // that represent the objects above
+      <div className={styles.someColor}>
         <p>{'This is red and turns green on hover'}</p>
       </div>
-      <div className={styles.whitespace}>
+      <div className={styles.somePadding}>
         <p>{'This has a padding of 2rem around the outside'}</p>
       </div>
-      <div className={styles.columns}>
+      <div className={styles.someColumns}>
         <p>{'Full width on mobile, 1/2 width on small breakpoint, 1/3 on medium, 1/4 on large'}</p>
       </div>
     </section>
@@ -65,53 +67,54 @@ const exampleComponent = () => {
 ```
 
 ## Composability FTW!
-By default Vudu supports writing out full declarations for styles (like shown above). However, one of its key features is the ability to compose small, immutable, structured objects. These utility objects are available out of the box to be used as building blocks to create complex style structures.
-
-Using the example above, this is how it could ALSO be written:
+One of the key features of Vudu is the ability to compose POJOs and use them within the context of other objects. In other words, setup styles that can be used in multiple places, and then compose them wherever you want. Here’s what that might look like in practice:
 
 ```javascript
 import v from 'vudu';
 
-const c = v.composes;
+const buttonStyles = {
+  base: {
+    color: 'blue',
+    height: '2.5em',
+    padding: '1em 1.5em',
+    fontSize: '1.25rem',
+    display: 'inline-block',
+    verticalAlign: 'middle',
+    textDecoration: 'none',
+    // ...
+  },
+  large: {
+    fontSize: '2em',
+    padding: '1.5em 1em',
+    height: '3.25em'
+  },
+  grey: {
+    color: 'grey'
+  },
+  blue: {
+    color: 'blue'
+  },
 
+};
+
+// compose with the '@composes' key
 const styles = v({
-  red: {
-    '@composes': [ c.red ],
-    ':hover': {
-      '@composes': [ c.green ]
-    }
-  },
-  whitespace: {
-    '@composes': [ c.p2 ]
-  },
-  columns: {
+  button: {
     '@composes': [ 
-      c.col12,
-      c.smCol6,
-      c.mdCol4,
-      c.lgCol3 
-    ]
+      buttonStyles.base,
+      buttonStyles.large,
+      this.props.disabled ? buttonStyles.grey : buttonStyles.blue
+    ],
+    'color': 'red', // to override composes
   }
 });
 ```
 
-### Configuring composable objects
-This will give you an object for each color that you can easily compose.
-```javascript
-import v from 'vudu';
+Why call it @composes, you ask? It’s inspired by CSS Modules, which you can read about [here](https://github.com/css-modules/css-modules#composition).
 
-const newObject = v.config({
-  // these are your custom colors
-  colors: {
-    brick: '#6D0404',
-    slate: '#383943',
-    wheat: '#E0C075'
-  }
-});
-```
 
 ## @font-face
-Use all formats for greatest compatibility, however it will work as long as at one source is declared. Keep in mind that the path to the file is relative to the HTML file where the stylesheet is loaded! 
+Use all formats for greatest compatibility, however it will work as long as at least one source is declared. Keep in mind that the path to the file is relative to the HTML file where the stylesheet is loaded.
 
 ```javascript
 const CalibreRegular = v.addFontFace({  
@@ -126,42 +129,23 @@ const CalibreRegular = v.addFontFace({
 ```
 
 If you have a Webpack build, install the `file-loader` npm package and import the actual files as paths.
-```javascript
-// webpack.config.js
-module: {
-  loaders: [
-    {
-      loader: 'file-loader',
-      test: /\.(ttf|eot|svg|woff(2)?)(\?[a-z0-9=&.]+)?$/
-    }
-  ]
-}
-```
-
 
 ## @keyframes
 ```javascript
 import v from 'vudu';
-
-const c = v.composes;
 
 const keyframeExample = () => {
   const styles = v({
     myAnimation: {
       width: '10px',
       height: '10px', 
+      background: 'blue',
+      borderRadius: '50%',
       animationName: 'moveCircle',
       animationDuration: '4s',
       animationIterationCount: 'infinite',
       animationTimingFunction: 'linear',
-      '@composes': {
-        c.bgBlue, // { backgroundColor: 'blue' }
-        c.circle  // { borderRadius: '50%' }
-      },
       '@keyframes moveCircle': {
-        '0%': {
-          transform: 'translateX(0px)'
-        },
         '50%': {
           transform: 'translateX(50px)'
         },
@@ -182,13 +166,13 @@ Sometimes, in cases where HTML is generated dynamically, you want to select a pa
 ```javascript
 const styles = v({
   targetChild: {
-    'h1': { // By element type
+    'h1': { // by element type
       color: 'red'
     }
-    'h1.class-name': { // By class name
+    'h1.class-name': { // by classname
       color: 'red'
     }
-    'h1:hover': { // By pseudo class
+    'h1:hover': { // by pseudo class
       color: 'green'
     }
   }
@@ -203,8 +187,8 @@ const styles = v({
       color: 'red',
       'span': { // child of h1
         color: 'green',
-        '.child-of-span': { //child of span
-          color: 'yellow'
+        '.child-of-span': { // child of span
+          '@composes': [ someObject ] // composes works here too!
         }
       }
     }
@@ -213,7 +197,9 @@ const styles = v({
 ```
 
 ## Debugging
-Console log what’s getting added to the stylesheet with `vudu.logOutput()`. 
+Console log what’s getting added to the stylesheet anywhere in your code with the `logOutput()` method. 
+
+Note: since styles are added at runtime, it will only show ones added up to that point.
 
 <3
 
