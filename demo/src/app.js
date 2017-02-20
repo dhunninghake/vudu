@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
-import { c_ttf, c_woff, c_woff2 } from './fonts';
+import { ttf, woff, woff2 } from './fonts';
 import { Logo, TwoColumn } from './components';
 import { sharedStyles as shared } from './styles/shared';
+import { sharedObj } from './styles/shared';
 import pkg from '../../package.json';
 import v from '../../dist/vudu';
-import { 
-  Introduction, 
+import {
   Pseudos,
   MediaQueries,
   Keyframes,
@@ -17,9 +17,9 @@ const e = v.composes;
 
 const calibreRegular = v.addFontFace({  
   fontFamily: 'CalibreRegular',
-  src: `url(${c_woff2}) format("woff2"),
-    url(${c_woff}) format("woff"),
-    url(${c_ttf}) format("truetype")`,
+  src: `url(${woff2}) format("woff2"),
+    url(${woff}) format("woff"),
+    url(${ttf}) format("truetype")`,
   fontWeight: 'normal',
   fontStyle: 'normal'
 });
@@ -33,20 +33,17 @@ const tw = {
 const Wrapper = (props) => {
   const styles = v({
     wrapper: {
-      maxWidth: '64rem',
+      maxWidth: '82rem',
       '@composes': [
-        e.col12, 
+        e.col10, 
         e.mxAuto, 
         e.clearfix, 
-        e.px2 
-      ],
-      '@media (min-width: 52em)': {
-        '@composes': [ e.p0 ]
-      }
+        e.px2
+      ]
     }
   });
   return (
-    <div className={`${styles.wrapper} ${props.styles}`}>
+    <div className={styles.wrapper}>
       {props.children}
     </div>
   );
@@ -56,46 +53,25 @@ const Wrapper = (props) => {
 const Header = () => {
   const styles = v({
     header: {
-      '@composes': [ 
-        e.pt4,
-        e.pb3
-      ],
+      textAlign: 'center',
       backgroundColor: '#D4FD56',
       boxShadow: '0 0 0 .5rem #D4FD56',
     },
-    top: {
-      '@composes': [ e.center ]
-    },
-    description: {
-      fontSize: '2.4rem',
-      lineHeight: '1.35',
-      '@composes': [ 
-        e.normal, 
-        e.m0, 
-        e.pb4 
-      ],
-      '@media (min-width: 52em)': {
-        '@composes': [ e.pb0 ]
-      }
+    title: {
+      fontSize: '3.2rem',
+      maxWidth: '30rem',
+      lineHeight: '1.25',
+      '@composes': [
+        e.mxAuto,
+        e.normal,
+        e.mt1
+      ]
     },
     nav: {
-      '@composes': [ e.pt1 ],
-      'ul': {
-        listStyleType: 'none',
-        '@composes': [ 
-          e.p0, 
-          e.m0 
-        ]
-      }
-    },
-    navCol: {
-      '@composes': [ 
-        e.left, 
-        e.col6, 
-        e.mdCol4 
-      ],
+      listStyleType: 'none',
+      '@composes': [ e.pt2, e.m0, e.rightAlign ],
       'li': {
-        '@composes': [ e.mb1 ],
+        '@composes': [ e.mb1, e.inlineBlock, e.ml2 ],
         'a': {
           top: '2px',
           cursor: 'pointer',
@@ -118,59 +94,35 @@ const Header = () => {
   return (
     <div className={styles.header}>
       <Wrapper>
+        <ul className={styles.nav}>
+          <li><a href='https://github.com/dhunninghake/vudu' target='_blank'>Github</a></li>
+          <li><a href={`${tw.root}?text=${tw.text}&url=${tw.url}`} target='_blank'>Tweet</a></li>
+          <li><a href='https://www.npmjs.com/package/vudu' target='_blank'>Npm</a></li>
+        </ul>
         <div className={styles.top}>
           <Logo size={100} />
+          <h1 className={styles.title}>{'Vudu is a composable approach to writing CSS in JavaScript.'}</h1>
         </div>
-        <TwoColumn
-          leftCol={(
-            <p className={styles.description}>{'Vudu is a composable approach to writing CSS in JavaScript.'}</p>  
-          )}
-          rightCol={(
-            <div className={styles.nav}>
-              <div className={styles.navCol}>
-                <span className={shared.eyelash}>{'Featureset'}</span>
-                <ul className={styles.navList}>
-                  <li><a href="#pseudo-selectors">Pseudo selectors</a></li>
-                  <li><a href="#media-queries">Media queries</a></li>
-                  <li><a href="#keyframes">@keyframes</a></li>
-                  <li><a href="#fontface">@font-face</a></li>
-                  <li><a href="#nesting">Nesting rules</a></li>
-                </ul>
-              </div>
-              <div className={styles.navCol}>
-                <span className={shared.eyelash}>{'Composability'}</span>
-                <ul className={styles.navList}>
-                  <li><a href="#composability-docs">Layout</a></li>
-                  <li><a href="#composability-docs">Positioning</a></li>
-                  <li><a href="#composability-docs">Typography</a></li>
-                  <li><a href="#composability-docs">Whitespace</a></li>
-                  <li><a href="#composability-docs">Colors</a></li>
-                  <li><a href="#composability-docs">Grid</a></li>
-                </ul>
-              </div>
-              <div className={styles.navCol}>
-                <span className={shared.eyelash}>{'Internet'}<span>&#8599;</span></span>
-                <ul className={styles.navList}>
-                  <li><a href='https://github.com/dhunninghake/vudu' target='_blank'>Github</a></li>
-                  <li><a href={`${tw.root}?text=${tw.text}&url=${tw.url}`} target='_blank'>Tweet</a></li>
-                  <li><a href='https://www.npmjs.com/package/vudu' target='_blank'>Npm</a></li>
-                </ul>
-              </div>
-            </div>
-          )}/>
       </Wrapper>
     </div>
   );
 };
 
+// <div>
+//   <h3>Composability</h3>
+//   <p>Building blocks based on a styleguide that can be infinitely arranged</p>
+//   <h3>Awareness of State</h3>
+//   <p>Styles that adapt to data as it moves throughout the app</p>
+//   <h3>Expressiveness</h3>
+//   <p>Declarative styles that are intuitive and easy to reason about</p>
+//   <h3>Simple Interface</h3>
+//   <p>Minimal boilerplate and powerful out-of-the-box utilities</p>
+//   <h3>Light and Fast</h3>
+//   <p>Vudu is ~17kb minified and 6kb gzipped</p>
+// </div>
+
 
 const Footer = () => {
-  const middle = {
-    '@composes': [
-      e.inlineBlock,
-      e.alignMiddle
-    ]
-  };
   const styles = v({
     footer: {
       backgroundColor: '#D4FD56',
@@ -195,7 +147,7 @@ const Footer = () => {
     },
     left: {
       '@composes': [ 
-        middle, 
+        sharedObj.middle,
         e.col12, 
         e.mdCol6, 
         e.center 
@@ -206,7 +158,7 @@ const Footer = () => {
     },
     right: {
       '@composes': [ 
-        middle, 
+        sharedObj.middle,
         e.col12, 
         e.mdCol6, 
         e.center
@@ -217,12 +169,12 @@ const Footer = () => {
     },
     logo: {
       '@composes': [ 
-        middle, 
+        sharedObj.middle,
         e.mr2
       ]
     },
     text: {
-      '@composes': [ middle ],
+      '@composes': [ sharedObj.middle ],
       'span': {
         '@composes': [ 
           e.inlineBlock, 
@@ -314,64 +266,20 @@ const Contribute = () => {
 const Callout = () => {
   const styles = v({
     container: {
-      backgroundColor: '#f7f7f7',
-      boxShadow: '0 0 0 .5rem #f7f7f7',
-      color: '#999',
-      '@composes': [ 
-        e.py2, 
-        e.center 
-      ]
-    },
-    tag: {
-      border: '1px solid #999',
-      borderRadius: '.5rem',
-      fontSize: '1.25rem',
-      color: '#888',
-      '@composes': [ 
-        e.inlineBlock, 
-        e.py1, 
-        e.px3 
-      ],
-      'span': {
-        top: '2px',
-        '@composes': [ e.relative ]
+      borderLeft: '3px solid #ccc',
+      backgroundColor: '#f6f6f6',
+      '@composes': [ e.p3, e.mt4 ],
+      'h2': {
+        '@composes': [ e.normal, e.m0 ]
       }
     }
   });
   return (
     <div className={styles.container}>
-      <p className={styles.tag}>
-        <span>{'npm install vudu --save'}</span>
-      </p>
+      <h2>{'npm install vudu --save'}</h2>
     </div>
   );
 };
-
-
-const Composability = () => {
-  const styles = v({
-    container: {
-      border: '1px solid #ddd',
-      '@composes': [ 
-        e.my5, 
-        e.py5, 
-        e.center 
-      ],
-      'h2': {
-        '@composes': [ 
-          e.normal, 
-          e.m0 
-        ]
-      }
-    }
-  });
-  return (
-    <div id='composability-docs' className={styles.container}>
-      <h2>{'Composability docs coming soon!'}</h2>
-    </div>
-  );
-};
-
 
 class App extends Component {
   render() {
@@ -379,23 +287,18 @@ class App extends Component {
       site: {
         fontFamily: `${calibreRegular}, Times`,
         '*': { boxSizing: 'border-box' },
-      },
-      wrapper: {
-        '@composes': [ e.py4 ]
       }
     });
     return (
       <div className={styles.site}>
         <Header />
-        <Callout />
-        <Wrapper styles={styles.wrapper}>
-          <Introduction />
+        <Wrapper>
+          <Callout />
           <Pseudos />
           <MediaQueries />
           <Keyframes />
           <FontFace />
           <Nesting />
-          <Composability />
         </Wrapper>
         <Contribute />
         <Footer />

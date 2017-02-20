@@ -1,19 +1,9 @@
 import React from 'react';
 import v from '../../../dist/vudu';
-import { i_ttf, i_woff, i_woff2 } from '../fonts';
 
 const e = v.composes;
 
-const Inconsolata = v.addFontFace({  
-  fontFamily: 'Inconsolata',
-  src: `url(${i_woff2}) format("woff2"),
-    url(${i_woff}) format("woff"),
-    url(${i_ttf}) format("truetype")`,
-  fontWeight: 'normal',
-  fontStyle: 'normal'
-});
-
-export const sharedStyles = v({
+export const sharedObj = {
   eyelash: {
     letterSpacing: '.2rem',
     '@composes': [ e.block, e.caps, e.h6, e.mb2 ],
@@ -46,7 +36,7 @@ export const sharedStyles = v({
     'code': {
       lineHeight: '1.35',
       fontSize: '.7rem',
-      fontFamily: `${Inconsolata}, monospace`,
+      fontFamily: 'monospace',
     }
   },
   link: {
@@ -55,5 +45,13 @@ export const sharedStyles = v({
     ':hover': {
       opacity: '.5'
     }
+  },
+  middle: {
+    '@composes': [
+      e.inlineBlock,
+      e.alignMiddle
+    ]
   }
-});
+};
+
+export const sharedStyles = v(sharedObj);
