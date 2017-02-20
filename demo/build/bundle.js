@@ -74,27 +74,27 @@
 
 	var _fonts = __webpack_require__(258);
 
-	var _components = __webpack_require__(268);
+	var _components = __webpack_require__(262);
 
-	var _shared = __webpack_require__(283);
+	var _shared = __webpack_require__(277);
 
-	var _package = __webpack_require__(284);
+	var _package = __webpack_require__(278);
 
 	var _package2 = _interopRequireDefault(_package);
 
-	var _vudu = __webpack_require__(271);
+	var _vudu = __webpack_require__(265);
 
 	var _vudu2 = _interopRequireDefault(_vudu);
 
-	var _modules = __webpack_require__(285);
+	var _modules = __webpack_require__(279);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var e = _vudu2.default.atomics;
+	var e = _vudu2.default.composes;
 
 	var calibreRegular = _vudu2.default.addFontFace({
 	  fontFamily: 'CalibreRegular',
-	  src: 'url(' + _fonts.c_woff2 + ') format("woff2"),\n    url(' + _fonts.c_woff + ') format("woff"),\n    url(' + _fonts.c_ttf + ') format("truetype")',
+	  src: 'url(' + _fonts.woff2 + ') format("woff2"),\n    url(' + _fonts.woff + ') format("woff"),\n    url(' + _fonts.ttf + ') format("truetype")',
 	  fontWeight: 'normal',
 	  fontStyle: 'normal'
 	});
@@ -108,16 +108,13 @@
 	var Wrapper = function Wrapper(props) {
 	  var styles = (0, _vudu2.default)({
 	    wrapper: {
-	      maxWidth: '64rem',
-	      '@composes': [e.col12, e.mxAuto, e.clearfix, e.px2],
-	      '@media (min-width: 52em)': {
-	        '@composes': [e.p0]
-	      }
+	      maxWidth: '82rem',
+	      '@composes': [e.col10, e.mxAuto, e.clearfix, e.px2]
 	    }
 	  });
 	  return _react2.default.createElement(
 	    'div',
-	    { className: styles.wrapper + ' ' + props.styles },
+	    { className: styles.wrapper },
 	    props.children
 	  );
 	};
@@ -125,45 +122,21 @@
 	var Header = function Header() {
 	  var styles = (0, _vudu2.default)({
 	    header: {
+	      textAlign: 'center',
 	      backgroundColor: '#D4FD56',
-	      boxShadow: '0 0 0 .5rem #D4FD56',
-	      '@composes': [e.pt4, e.pb3]
+	      boxShadow: '0 0 0 .5rem #D4FD56'
 	    },
-	    top: {
-	      '@composes': [e.center]
-	    },
-	    description: {
-	      fontSize: '2.4rem',
-	      lineHeight: '1.35',
-	      '@composes': [e.normal, e.m0, e.pb4],
-	      '@media (min-width: 52em)': {
-	        '@composes': [e.pb0]
-	      }
+	    title: {
+	      fontSize: '3.2rem',
+	      maxWidth: '30rem',
+	      lineHeight: '1.25',
+	      '@composes': [e.mxAuto, e.normal, e.mt3]
 	    },
 	    nav: {
-	      '@composes': [e.pt1],
-	      'ul': {
-	        listStyleType: 'none',
-	        '@composes': [e.p0, e.m0]
-	      }
-	    },
-	    navCol: {
-	      '@composes': [e.left, e.col6, e.mdCol4],
+	      listStyleType: 'none',
+	      '@composes': [e.pt2, e.m0, e.rightAlign],
 	      'li': {
-	        '@composes': [e.mb1],
-	        'a': {
-	          top: '2px',
-	          cursor: 'pointer',
-	          opacity: '1',
-	          transition: '.2s opacity ease',
-	          '@composes': [e.black, e.relative],
-	          ':visited': {
-	            '@composes': [e.black]
-	          },
-	          ':hover': {
-	            opacity: '.5'
-	          }
-	        }
+	        '@composes': [e.mb1, e.inlineBlock, e.ml1]
 	      }
 	    }
 	  });
@@ -174,230 +147,88 @@
 	      Wrapper,
 	      null,
 	      _react2.default.createElement(
+	        'ul',
+	        { className: styles.nav },
+	        _react2.default.createElement(
+	          'li',
+	          null,
+	          _react2.default.createElement(
+	            'a',
+	            { href: 'https://github.com/dhunninghake/vudu', target: '_blank' },
+	            'Github'
+	          )
+	        ),
+	        _react2.default.createElement(
+	          'li',
+	          null,
+	          _react2.default.createElement(
+	            'a',
+	            { href: tw.root + '?text=' + tw.text + '&url=' + tw.url, target: '_blank' },
+	            'Tweet'
+	          )
+	        ),
+	        _react2.default.createElement(
+	          'li',
+	          null,
+	          _react2.default.createElement(
+	            'a',
+	            { href: 'https://www.npmjs.com/package/vudu', target: '_blank' },
+	            'Npm'
+	          )
+	        )
+	      ),
+	      _react2.default.createElement(
 	        'div',
 	        { className: styles.top },
-	        _react2.default.createElement(_components.Logo, { size: 100 })
-	      ),
-	      _react2.default.createElement(_components.TwoColumn, {
-	        leftCol: _react2.default.createElement(
-	          'p',
-	          { className: styles.description },
+	        _react2.default.createElement(_components.Logo, { size: 100 }),
+	        _react2.default.createElement(
+	          'h1',
+	          { className: styles.title },
 	          'Vudu is a composable approach to writing CSS in JavaScript.'
-	        ),
-	        rightCol: _react2.default.createElement(
-	          'div',
-	          { className: styles.nav },
-	          _react2.default.createElement(
-	            'div',
-	            { className: styles.navCol },
-	            _react2.default.createElement(
-	              'span',
-	              { className: _shared.sharedStyles.eyelash },
-	              'Featureset'
-	            ),
-	            _react2.default.createElement(
-	              'ul',
-	              { className: styles.navList },
-	              _react2.default.createElement(
-	                'li',
-	                null,
-	                _react2.default.createElement(
-	                  'a',
-	                  { href: '#pseudo-selectors' },
-	                  'Pseudo selectors'
-	                )
-	              ),
-	              _react2.default.createElement(
-	                'li',
-	                null,
-	                _react2.default.createElement(
-	                  'a',
-	                  { href: '#media-queries' },
-	                  'Media queries'
-	                )
-	              ),
-	              _react2.default.createElement(
-	                'li',
-	                null,
-	                _react2.default.createElement(
-	                  'a',
-	                  { href: '#keyframes' },
-	                  '@keyframes'
-	                )
-	              ),
-	              _react2.default.createElement(
-	                'li',
-	                null,
-	                _react2.default.createElement(
-	                  'a',
-	                  { href: '#fontface' },
-	                  '@font-face'
-	                )
-	              ),
-	              _react2.default.createElement(
-	                'li',
-	                null,
-	                _react2.default.createElement(
-	                  'a',
-	                  { href: '#nesting' },
-	                  'Nesting rules'
-	                )
-	              )
-	            )
-	          ),
-	          _react2.default.createElement(
-	            'div',
-	            { className: styles.navCol },
-	            _react2.default.createElement(
-	              'span',
-	              { className: _shared.sharedStyles.eyelash },
-	              'Composability'
-	            ),
-	            _react2.default.createElement(
-	              'ul',
-	              { className: styles.navList },
-	              _react2.default.createElement(
-	                'li',
-	                null,
-	                _react2.default.createElement(
-	                  'a',
-	                  { href: '#composability-docs' },
-	                  'Layout'
-	                )
-	              ),
-	              _react2.default.createElement(
-	                'li',
-	                null,
-	                _react2.default.createElement(
-	                  'a',
-	                  { href: '#composability-docs' },
-	                  'Positioning'
-	                )
-	              ),
-	              _react2.default.createElement(
-	                'li',
-	                null,
-	                _react2.default.createElement(
-	                  'a',
-	                  { href: '#composability-docs' },
-	                  'Typography'
-	                )
-	              ),
-	              _react2.default.createElement(
-	                'li',
-	                null,
-	                _react2.default.createElement(
-	                  'a',
-	                  { href: '#composability-docs' },
-	                  'Whitespace'
-	                )
-	              ),
-	              _react2.default.createElement(
-	                'li',
-	                null,
-	                _react2.default.createElement(
-	                  'a',
-	                  { href: '#composability-docs' },
-	                  'Colors'
-	                )
-	              ),
-	              _react2.default.createElement(
-	                'li',
-	                null,
-	                _react2.default.createElement(
-	                  'a',
-	                  { href: '#composability-docs' },
-	                  'Grid'
-	                )
-	              )
-	            )
-	          ),
-	          _react2.default.createElement(
-	            'div',
-	            { className: styles.navCol },
-	            _react2.default.createElement(
-	              'span',
-	              { className: _shared.sharedStyles.eyelash },
-	              'Internet',
-	              _react2.default.createElement(
-	                'span',
-	                null,
-	                '↗'
-	              )
-	            ),
-	            _react2.default.createElement(
-	              'ul',
-	              { className: styles.navList },
-	              _react2.default.createElement(
-	                'li',
-	                null,
-	                _react2.default.createElement(
-	                  'a',
-	                  { href: 'https://github.com/dhunninghake/vudu', target: '_blank' },
-	                  'Github'
-	                )
-	              ),
-	              _react2.default.createElement(
-	                'li',
-	                null,
-	                _react2.default.createElement(
-	                  'a',
-	                  { href: tw.root + '?text=' + tw.text + '&url=' + tw.url, target: '_blank' },
-	                  'Tweet'
-	                )
-	              ),
-	              _react2.default.createElement(
-	                'li',
-	                null,
-	                _react2.default.createElement(
-	                  'a',
-	                  { href: 'https://www.npmjs.com/package/vudu', target: '_blank' },
-	                  'Npm'
-	                )
-	              )
-	            )
-	          )
-	        ) })
+	        )
+	      )
 	    )
 	  );
 	};
 
+	// <div>
+	//   <h3>Composability</h3>
+	//   <p>Building blocks based on a styleguide that can be infinitely arranged</p>
+	//   <h3>Awareness of State</h3>
+	//   <p>Styles that adapt to data as it moves throughout the app</p>
+	//   <h3>Expressiveness</h3>
+	//   <p>Declarative styles that are intuitive and easy to reason about</p>
+	//   <h3>Simple Interface</h3>
+	//   <p>Minimal boilerplate and powerful out-of-the-box utilities</p>
+	//   <h3>Light and Fast</h3>
+	//   <p>Vudu is ~17kb minified and 6kb gzipped</p>
+	// </div>
+
+
 	var Footer = function Footer() {
-	  var middle = {
-	    display: 'inline-block',
-	    verticalAlign: 'middle'
-	  };
 	  var styles = (0, _vudu2.default)({
 	    footer: {
 	      backgroundColor: '#D4FD56',
 	      boxShadow: '0 0 0 .5rem #D4FD56',
-	      '@composes': [e.py3, e.mt2],
-	      'a': {
-	        opacity: '1',
-	        transition: '.2s opacity ease',
-	        '@composes': [e.inlineBlock, e.underline, e.mr1, e.black],
-	        ':hover': {
-	          opacity: '.5'
-	        }
-	      }
+	      '@composes': [e.py3, e.mt2]
 	    },
 	    left: {
-	      '@composes': [middle, e.col12, e.mdCol6, e.center],
+	      '@composes': [_shared.sharedObj.middle, e.col12, e.mdCol6, e.center],
 	      '@media (min-width: 52em)': {
 	        '@composes': [e.leftAlign]
 	      }
 	    },
 	    right: {
-	      '@composes': [middle, e.col12, e.mdCol6, e.center],
+	      '@composes': [_shared.sharedObj.middle, e.col12, e.mdCol6, e.center],
 	      '@media (min-width: 52em)': {
 	        '@composes': [e.rightAlign]
 	      }
 	    },
 	    logo: {
-	      '@composes': [middle, e.mr2]
+	      '@composes': [_shared.sharedObj.middle, e.mr2]
 	    },
 	    text: {
-	      '@composes': [middle],
+	      '@composes': [_shared.sharedObj.middle],
 	      'span': {
 	        '@composes': [e.inlineBlock, e.mr3]
 	      }
@@ -464,104 +295,12 @@
 	  );
 	};
 
-	var Contribute = function Contribute() {
-	  var styles = (0, _vudu2.default)({
-	    container: {
-	      backgroundColor: '#f7f7f7',
-	      boxShadow: '0 0 0 .5rem #f7f7f7',
-	      color: '#888',
-	      '@composes': [e.py4, e.center]
-	    },
-	    text: {
-	      '@composes': [e.m0]
-	    },
-	    bit: {
-	      '@composes': [e.block, e.my1],
-	      '@media (min-width: 52em)': {
-	        '@composes': [e.inline]
-	      }
-	    },
-	    button: {
-	      backgroundColor: '#888',
-	      borderRadius: '9999em',
-	      border: '0',
-	      padding: '.75rem 2rem',
-	      transition: 'background-color .2s ease',
-	      '@composes': [e.inlineBlock, e.noUnderline, e.white, e.ml0, e.h4],
-	      '@media (min-width: 52em)': {
-	        '@composes': [e.ml3]
-	      },
-	      ':hover': {
-	        backgroundColor: '#666'
-	      }
-	    }
-	  });
-	  return _react2.default.createElement(
-	    'div',
-	    { className: styles.container },
-	    _react2.default.createElement(
-	      'p',
-	      { className: styles.text },
-	      _react2.default.createElement(
-	        'span',
-	        { className: styles.bit },
-	        'Want to peek under the hood?'
-	      ),
-	      ' ',
-	      _react2.default.createElement(
-	        'span',
-	        { className: styles.bit },
-	        'Check out the code on Github.'
-	      ),
-	      _react2.default.createElement(
-	        'a',
-	        { href: 'https://github.com/dhunninghake/vudu', className: styles.button },
-	        'Contribute →'
-	      )
-	    )
-	  );
-	};
-
 	var Callout = function Callout() {
 	  var styles = (0, _vudu2.default)({
 	    container: {
-	      backgroundColor: '#f7f7f7',
-	      boxShadow: '0 0 0 .5rem #f7f7f7',
-	      color: '#999',
-	      '@composes': [e.py2, e.center]
-	    },
-	    tag: {
-	      border: '1px solid #999',
-	      borderRadius: '.5rem',
-	      fontSize: '1.25rem',
-	      color: '#888',
-	      '@composes': [e.inlineBlock, e.py1, e.px3],
-	      'span': {
-	        top: '2px',
-	        '@composes': [e.relative]
-	      }
-	    }
-	  });
-	  return _react2.default.createElement(
-	    'div',
-	    { className: styles.container },
-	    _react2.default.createElement(
-	      'p',
-	      { className: styles.tag },
-	      _react2.default.createElement(
-	        'span',
-	        null,
-	        'npm install vudu -D'
-	      )
-	    )
-	  );
-	};
-
-	var Composability = function Composability() {
-	  var styles = (0, _vudu2.default)({
-	    container: {
-	      border: '1px solid #ddd',
-	      '@composes': [e.my5, e.py5, e.center],
+	      borderLeft: '3px solid #ccc',
+	      backgroundColor: '#f6f6f6',
+	      '@composes': [e.p3, e.mt4],
 	      'h2': {
 	        '@composes': [e.normal, e.m0]
 	      }
@@ -569,11 +308,11 @@
 	  });
 	  return _react2.default.createElement(
 	    'div',
-	    { id: 'composability-docs', className: styles.container },
+	    { className: styles.container },
 	    _react2.default.createElement(
 	      'h2',
 	      null,
-	      'Composability docs coming soon!'
+	      'npm install vudu --save'
 	    )
 	  );
 	};
@@ -592,29 +331,27 @@
 	      var styles = (0, _vudu2.default)({
 	        site: {
 	          fontFamily: calibreRegular + ', Times',
-	          '*': { boxSizing: 'border-box' }
-	        },
-	        wrapper: {
-	          '@composes': [e.py4]
+	          '*': { boxSizing: 'border-box' },
+	          'a': {
+	            opacity: '1',
+	            transition: '.2s opacity ease',
+	            '@composes': [e.inlineBlock, e.underline, e.mr1, e.black],
+	            ':hover': {
+	              opacity: '.5'
+	            }
+	          }
 	        }
 	      });
 	      return _react2.default.createElement(
 	        'div',
 	        { className: styles.site },
 	        _react2.default.createElement(Header, null),
-	        _react2.default.createElement(Callout, null),
 	        _react2.default.createElement(
 	          Wrapper,
-	          { styles: styles.wrapper },
-	          _react2.default.createElement(_modules.Introduction, null),
-	          _react2.default.createElement(_modules.Pseudos, null),
-	          _react2.default.createElement(_modules.MediaQueries, null),
-	          _react2.default.createElement(_modules.Keyframes, null),
-	          _react2.default.createElement(_modules.FontFace, null),
-	          _react2.default.createElement(_modules.Nesting, null),
-	          _react2.default.createElement(Composability, null)
+	          null,
+	          _react2.default.createElement(Callout, null),
+	          _react2.default.createElement(_modules.Pseudos, null)
 	        ),
-	        _react2.default.createElement(Contribute, null),
 	        _react2.default.createElement(Footer, null)
 	      );
 	    }
@@ -23529,7 +23266,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.i_ttf = exports.i_woff = exports.i_woff2 = exports.s_ttf = exports.s_woff = exports.s_woff2 = exports.c_ttf = exports.c_woff = exports.c_woff2 = undefined;
+	exports.ttf = exports.woff = exports.woff2 = undefined;
 
 	var _CalibreRegular = __webpack_require__(259);
 
@@ -23543,41 +23280,11 @@
 
 	var _CalibreRegular6 = _interopRequireDefault(_CalibreRegular5);
 
-	var _SuezOneRegular = __webpack_require__(262);
-
-	var _SuezOneRegular2 = _interopRequireDefault(_SuezOneRegular);
-
-	var _SuezOneRegular3 = __webpack_require__(263);
-
-	var _SuezOneRegular4 = _interopRequireDefault(_SuezOneRegular3);
-
-	var _SuezOneRegular5 = __webpack_require__(264);
-
-	var _SuezOneRegular6 = _interopRequireDefault(_SuezOneRegular5);
-
-	var _InconsolataRegular = __webpack_require__(265);
-
-	var _InconsolataRegular2 = _interopRequireDefault(_InconsolataRegular);
-
-	var _InconsolataRegular3 = __webpack_require__(266);
-
-	var _InconsolataRegular4 = _interopRequireDefault(_InconsolataRegular3);
-
-	var _InconsolataRegular5 = __webpack_require__(267);
-
-	var _InconsolataRegular6 = _interopRequireDefault(_InconsolataRegular5);
-
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	exports.c_woff2 = _CalibreRegular2.default;
-	exports.c_woff = _CalibreRegular4.default;
-	exports.c_ttf = _CalibreRegular6.default;
-	exports.s_woff2 = _SuezOneRegular2.default;
-	exports.s_woff = _SuezOneRegular4.default;
-	exports.s_ttf = _SuezOneRegular6.default;
-	exports.i_woff2 = _InconsolataRegular2.default;
-	exports.i_woff = _InconsolataRegular4.default;
-	exports.i_ttf = _InconsolataRegular6.default;
+	exports.woff2 = _CalibreRegular2.default;
+	exports.woff = _CalibreRegular4.default;
+	exports.ttf = _CalibreRegular6.default;
 
 /***/ },
 /* 259 */
@@ -23601,49 +23308,13 @@
 /* 262 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "69462fad7ab5580b5e0dfdbd33486f35.woff2";
-
-/***/ },
-/* 263 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__.p + "ce73cc4fd9167a7ae183ffa8fd8e3a61.woff";
-
-/***/ },
-/* 264 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__.p + "b8fac4b8f8094df51beb20ff7e155a29.ttf";
-
-/***/ },
-/* 265 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__.p + "06f874ee0a0b24f34f84d5fc0a1039ce.woff2";
-
-/***/ },
-/* 266 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__.p + "5c570b08f2f06b1651cf647ef3dae5cd.woff";
-
-/***/ },
-/* 267 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__.p + "f6c7c1631ae0793b31d7cd1d20bf6877.ttf";
-
-/***/ },
-/* 268 */
-/***/ function(module, exports, __webpack_require__) {
-
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
 
-	var _Logo = __webpack_require__(269);
+	var _Logo = __webpack_require__(263);
 
 	Object.defineProperty(exports, 'Logo', {
 	  enumerable: true,
@@ -23652,7 +23323,7 @@
 	  }
 	});
 
-	var _TwoColumn = __webpack_require__(282);
+	var _TwoColumn = __webpack_require__(276);
 
 	Object.defineProperty(exports, 'TwoColumn', {
 	  enumerable: true,
@@ -23662,7 +23333,7 @@
 	});
 
 /***/ },
-/* 269 */
+/* 263 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -23672,7 +23343,7 @@
 	});
 	exports.Logo = undefined;
 
-	var _defineProperty2 = __webpack_require__(270);
+	var _defineProperty2 = __webpack_require__(264);
 
 	var _defineProperty3 = _interopRequireDefault(_defineProperty2);
 
@@ -23680,13 +23351,13 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _vudu = __webpack_require__(271);
+	var _vudu = __webpack_require__(265);
 
 	var _vudu2 = _interopRequireDefault(_vudu);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var e = _vudu2.default.atomics;
+	var e = _vudu2.default.composes;
 
 	var Logo = exports.Logo = function Logo(props) {
 	  var keyframe = function keyframe(options) {
@@ -23775,7 +23446,7 @@
 	};
 
 /***/ },
-/* 270 */
+/* 264 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -23804,12 +23475,16 @@
 	};
 
 /***/ },
-/* 271 */
+/* 265 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
-	var _assign = __webpack_require__(272);
+	var _defineProperty = __webpack_require__(29);
+
+	var _defineProperty2 = _interopRequireDefault(_defineProperty);
+
+	var _assign = __webpack_require__(266);
 
 	var _assign2 = _interopRequireDefault(_assign);
 
@@ -23817,7 +23492,7 @@
 
 	var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
 
-	var _getOwnPropertyDescriptor = __webpack_require__(276);
+	var _getOwnPropertyDescriptor = __webpack_require__(270);
 
 	var _getOwnPropertyDescriptor2 = _interopRequireDefault(_getOwnPropertyDescriptor);
 
@@ -23833,21 +23508,13 @@
 
 	var _symbol2 = _interopRequireDefault(_symbol);
 
-	var _defineProperty = __webpack_require__(29);
-
-	var _defineProperty2 = _interopRequireDefault(_defineProperty);
-
-	var _keys = __webpack_require__(279);
+	var _keys = __webpack_require__(273);
 
 	var _keys2 = _interopRequireDefault(_keys);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function createCommonjsModule(e, t) {
-	  return t = { exports: {} }, e(t, t.exports), t.exports;
-	}function hyphenateStyleName(e) {
-	  return e.replace(uppercasePattern, "-$&").toLowerCase().replace(msPattern, "-ms-");
-	}function setupGridValues(e) {
+	function setupGridValues(e) {
 	  for (var t = [], n = 1; n < e + 1; n++) {
 	    t.push((n / e * 100).toFixed(2) + "%");
 	  }return t;
@@ -23857,207 +23524,51 @@
 	  }), t;
 	}function addBreakpoints(e, t, n) {
 	  (0, _keys2.default)(breakpoints).forEach(function (r) {
-	    for (var i = 0; i < t; i++) {
-	      var o = {};o[breakpoints[r]] = { width: n[i] }, e[r + "Col" + (i + 1)] = o;
+	    for (var o = 0; o < t; o++) {
+	      var i = {};i[breakpoints[r]] = { width: n[o] }, e[r + "Col" + (o + 1)] = i;
 	    }
 	  });
-	}Object.defineProperty(exports, "__esModule", { value: !0 });var prefixProps = createCommonjsModule(function (e, t) {
-	  Object.defineProperty(t, "__esModule", { value: !0 }), t.default = { Webkit: { transform: !0, transformOrigin: !0, transformOriginX: !0, transformOriginY: !0, backfaceVisibility: !0, perspective: !0, perspectiveOrigin: !0, transformStyle: !0, transformOriginZ: !0, animation: !0, animationDelay: !0, animationDirection: !0, animationFillMode: !0, animationDuration: !0, animationIterationCount: !0, animationName: !0, animationPlayState: !0, animationTimingFunction: !0, appearance: !0, userSelect: !0, fontKerning: !0, textEmphasisPosition: !0, textEmphasis: !0, textEmphasisStyle: !0, textEmphasisColor: !0, boxDecorationBreak: !0, clipPath: !0, maskImage: !0, maskMode: !0, maskRepeat: !0, maskPosition: !0, maskClip: !0, maskOrigin: !0, maskSize: !0, maskComposite: !0, mask: !0, maskBorderSource: !0, maskBorderMode: !0, maskBorderSlice: !0, maskBorderWidth: !0, maskBorderOutset: !0, maskBorderRepeat: !0, maskBorder: !0, maskType: !0, textDecorationStyle: !0, textDecorationSkip: !0, textDecorationLine: !0, textDecorationColor: !0, filter: !0, fontFeatureSettings: !0, breakAfter: !0, breakBefore: !0, breakInside: !0, columnCount: !0, columnFill: !0, columnGap: !0, columnRule: !0, columnRuleColor: !0, columnRuleStyle: !0, columnRuleWidth: !0, columns: !0, columnSpan: !0, columnWidth: !0, flex: !0, flexBasis: !0, flexDirection: !0, flexGrow: !0, flexFlow: !0, flexShrink: !0, flexWrap: !0, alignContent: !0, alignItems: !0, alignSelf: !0, justifyContent: !0, order: !0, transition: !0, transitionDelay: !0, transitionDuration: !0, transitionProperty: !0, transitionTimingFunction: !0, backdropFilter: !0, scrollSnapType: !0, scrollSnapPointsX: !0, scrollSnapPointsY: !0, scrollSnapDestination: !0, scrollSnapCoordinate: !0, shapeImageThreshold: !0, shapeImageMargin: !0, shapeImageOutside: !0, hyphens: !0, flowInto: !0, flowFrom: !0, regionFragment: !0, textSizeAdjust: !0 }, Moz: { appearance: !0, userSelect: !0, boxSizing: !0, textAlignLast: !0, textDecorationStyle: !0, textDecorationSkip: !0, textDecorationLine: !0, textDecorationColor: !0, tabSize: !0, hyphens: !0, fontFeatureSettings: !0, breakAfter: !0, breakBefore: !0, breakInside: !0, columnCount: !0, columnFill: !0, columnGap: !0, columnRule: !0, columnRuleColor: !0, columnRuleStyle: !0, columnRuleWidth: !0, columns: !0, columnSpan: !0, columnWidth: !0 }, ms: { flex: !0, flexBasis: !1, flexDirection: !0, flexGrow: !1, flexFlow: !0, flexShrink: !1, flexWrap: !0, alignContent: !1, alignItems: !1, alignSelf: !1, justifyContent: !1, order: !1, transform: !0, transformOrigin: !0, transformOriginX: !0, transformOriginY: !0, userSelect: !0, wrapFlow: !0, wrapThrough: !0, wrapMargin: !0, scrollSnapType: !0, scrollSnapPointsX: !0, scrollSnapPointsY: !0, scrollSnapDestination: !0, scrollSnapCoordinate: !0, touchAction: !0, hyphens: !0, flowInto: !0, flowFrom: !0, breakBefore: !0, breakAfter: !0, breakInside: !0, regionFragment: !0, gridTemplateColumns: !0, gridTemplateRows: !0, gridTemplateAreas: !0, gridTemplate: !0, gridAutoColumns: !0, gridAutoRows: !0, gridAutoFlow: !0, grid: !0, gridRowStart: !0, gridColumnStart: !0, gridRowEnd: !0, gridRow: !0, gridColumn: !0, gridColumnEnd: !0, gridColumnGap: !0, gridRowGap: !0, gridArea: !0, gridGap: !0, textSizeAdjust: !0 } }, e.exports = t.default;
-	}),
-	    capitalizeString = createCommonjsModule(function (e, t) {
-	  Object.defineProperty(t, "__esModule", { value: !0 }), t.default = function (e) {
-	    return e.charAt(0).toUpperCase() + e.slice(1);
-	  }, e.exports = t.default;
-	}),
-	    joinPrefixedValue = createCommonjsModule(function (e, t) {
-	  function n(e, t, n) {
-	    return t in e ? (0, _defineProperty2.default)(e, t, { value: n, enumerable: !0, configurable: !0, writable: !0 }) : e[t] = n, e;
-	  }Object.defineProperty(t, "__esModule", { value: !0 }), t.default = function (e, t) {
-	    var r = arguments.length <= 2 || void 0 === arguments[2] ? function (e, t) {
-	      return e + t;
-	    } : arguments[2];return n({}, e, ["-webkit-", "-moz-", ""].map(function (e) {
-	      return r(e, t);
-	    }));
-	  }, e.exports = t.default;
-	}),
-	    isPrefixedValue = createCommonjsModule(function (e, t) {
-	  Object.defineProperty(t, "__esModule", { value: !0 }), t.default = function (e) {
-	    return Array.isArray(e) && (e = e.join(",")), null !== e.match(/-webkit-|-moz-|-ms-/);
-	  }, e.exports = t.default;
-	}),
-	    calc_1 = createCommonjsModule(function (e, t) {
-	  function n(e) {
-	    return e && e.__esModule ? e : { default: e };
-	  }function r(e, t) {
-	    if ("string" == typeof t && !(0, l.default)(t) && t.indexOf("calc(") > -1) return (0, o.default)(e, t, function (e, t) {
-	      return t.replace(/calc\(/g, e + "calc(");
-	    });
-	  }Object.defineProperty(t, "__esModule", { value: !0 }), t.default = r;var i = joinPrefixedValue,
-	      o = n(i),
-	      a = isPrefixedValue,
-	      l = n(a);e.exports = t.default;
-	}),
-	    cursor_1 = createCommonjsModule(function (e, t) {
-	  function n(e) {
-	    return e && e.__esModule ? e : { default: e };
-	  }function r(e, t) {
-	    if ("cursor" === e && a[t]) return (0, o.default)(e, t);
-	  }Object.defineProperty(t, "__esModule", { value: !0 }), t.default = r;var i = joinPrefixedValue,
-	      o = n(i),
-	      a = { "zoom-in": !0, "zoom-out": !0, grab: !0, grabbing: !0 };e.exports = t.default;
-	}),
-	    flex_1 = createCommonjsModule(function (e, t) {
-	  function n(e, t) {
-	    if ("display" === e && r[t]) return { display: ["-webkit-box", "-moz-box", "-ms-" + t + "box", "-webkit-" + t, t] };
-	  }Object.defineProperty(t, "__esModule", { value: !0 }), t.default = n;var r = { flex: !0, "inline-flex": !0 };e.exports = t.default;
-	}),
-	    sizing_1 = createCommonjsModule(function (e, t) {
-	  function n(e) {
-	    return e && e.__esModule ? e : { default: e };
-	  }function r(e, t) {
-	    if (a[e] && l[t]) return (0, o.default)(e, t);
-	  }Object.defineProperty(t, "__esModule", { value: !0 }), t.default = r;var i = joinPrefixedValue,
-	      o = n(i),
-	      a = { maxHeight: !0, maxWidth: !0, width: !0, height: !0, columnWidth: !0, minWidth: !0, minHeight: !0 },
-	      l = { "min-content": !0, "max-content": !0, "fill-available": !0, "fit-content": !0, "contain-floats": !0 };e.exports = t.default;
-	}),
-	    gradient_1 = createCommonjsModule(function (e, t) {
-	  function n(e) {
-	    return e && e.__esModule ? e : { default: e };
-	  }function r(e, t) {
-	    if ("string" == typeof t && !(0, l.default)(t) && null !== t.match(u)) return (0, o.default)(e, t);
-	  }Object.defineProperty(t, "__esModule", { value: !0 }), t.default = r;var i = joinPrefixedValue,
-	      o = n(i),
-	      a = isPrefixedValue,
-	      l = n(a),
-	      u = /linear-gradient|radial-gradient|repeating-linear-gradient|repeating-radial-gradient/;e.exports = t.default;
-	}),
-	    uppercasePattern = /[A-Z]/g,
-	    msPattern = /^ms-/,
-	    index = hyphenateStyleName,
-	    transition_1 = createCommonjsModule(function (e, t) {
-	  function n(e) {
-	    return e && e.__esModule ? e : { default: e };
-	  }function r(e, t, n) {
-	    return t in e ? (0, _defineProperty2.default)(e, t, { value: n, enumerable: !0, configurable: !0, writable: !0 }) : e[t] = n, e;
-	  }function i(e, t) {
-	    if ("string" == typeof t && p[e]) {
-	      var n,
-	          i = o(t),
-	          a = i.split(/,(?![^()]*(?:\([^()]*\))?\))/g).filter(function (e) {
-	        return null === e.match(/-moz-|-ms-/);
-	      }).join(",");return e.indexOf("Webkit") > -1 ? r({}, e, a) : (n = {}, r(n, "Webkit" + (0, f.default)(e), a), r(n, e, i), n);
-	    }
-	  }function o(e) {
-	    if ((0, s.default)(e)) return e;var t = e.split(/,(?![^()]*(?:\([^()]*\))?\))/g);return t.forEach(function (e, n) {
-	      t[n] = (0, _keys2.default)(m.default).reduce(function (t, n) {
-	        var r = "-" + n.toLowerCase() + "-";return (0, _keys2.default)(m.default[n]).forEach(function (n) {
-	          var i = (0, l.default)(n);e.indexOf(i) > -1 && "order" !== i && (t = e.replace(i, r + i) + "," + t);
-	        }), t;
-	      }, e);
-	    }), t.join(",");
-	  }Object.defineProperty(t, "__esModule", { value: !0 }), t.default = i;var a = index,
-	      l = n(a),
-	      u = capitalizeString,
-	      f = n(u),
-	      c = isPrefixedValue,
-	      s = n(c),
-	      d = prefixProps,
-	      m = n(d),
-	      p = { transition: !0, transitionProperty: !0, WebkitTransition: !0, WebkitTransitionProperty: !0 };e.exports = t.default;
-	}),
-	    flexboxIE_1 = createCommonjsModule(function (e, t) {
-	  function n(e, t, n) {
-	    return t in e ? (0, _defineProperty2.default)(e, t, { value: n, enumerable: !0, configurable: !0, writable: !0 }) : e[t] = n, e;
-	  }function r(e, t) {
-	    if (o[e]) return n({}, o[e], i[t] || t);
-	  }Object.defineProperty(t, "__esModule", { value: !0 }), t.default = r;var i = { "space-around": "distribute", "space-between": "justify", "flex-start": "start", "flex-end": "end" },
-	      o = { alignContent: "msFlexLinePack", alignSelf: "msFlexItemAlign", alignItems: "msFlexAlign", justifyContent: "msFlexPack", order: "msFlexOrder", flexGrow: "msFlexPositive", flexShrink: "msFlexNegative", flexBasis: "msPreferredSize" };e.exports = t.default;
-	}),
-	    flexboxOld_1 = createCommonjsModule(function (e, t) {
-	  function n(e, t, n) {
-	    return t in e ? (0, _defineProperty2.default)(e, t, { value: n, enumerable: !0, configurable: !0, writable: !0 }) : e[t] = n, e;
-	  }function r(e, t) {
-	    return "flexDirection" === e && "string" == typeof t ? { WebkitBoxOrient: t.indexOf("column") > -1 ? "vertical" : "horizontal", WebkitBoxDirection: t.indexOf("reverse") > -1 ? "reverse" : "normal" } : o[e] ? n({}, o[e], i[t] || t) : void 0;
-	  }Object.defineProperty(t, "__esModule", { value: !0 }), t.default = r;var i = { "space-around": "justify", "space-between": "justify", "flex-start": "start", "flex-end": "end", "wrap-reverse": "multiple", wrap: "multiple" },
-	      o = { alignItems: "WebkitBoxAlign", justifyContent: "WebkitBoxPack", flexWrap: "WebkitBoxLines" };e.exports = t.default;
-	}),
-	    prefixAll_1 = createCommonjsModule(function (e, t) {
-	  function n(e) {
-	    return e && e.__esModule ? e : { default: e };
-	  }function r(e) {
-	    return (0, _keys2.default)(e).forEach(function (t) {
-	      var n = e[t];n instanceof Object && !Array.isArray(n) ? e[t] = r(n) : (0, _keys2.default)(a.default).forEach(function (r) {
-	        var i = a.default[r];i[t] && (e[r + (0, u.default)(t)] = n);
-	      });
-	    }), (0, _keys2.default)(e).forEach(function (t) {
-	      [].concat(e[t]).forEach(function (n, r) {
-	        C.forEach(function (r) {
-	          return i(e, r(t, n));
-	        });
-	      });
-	    }), e;
-	  }function i(e) {
-	    var t = arguments.length <= 1 || void 0 === arguments[1] ? {} : arguments[1];(0, _keys2.default)(t).forEach(function (n) {
-	      var r = e[n];Array.isArray(r) ? [].concat(t[n]).forEach(function (t) {
-	        var i = r.indexOf(t);i > -1 && e[n].splice(i, 1), e[n].push(t);
-	      }) : e[n] = t[n];
-	    });
-	  }Object.defineProperty(t, "__esModule", { value: !0 }), t.default = r;var o = prefixProps,
-	      a = n(o),
-	      l = capitalizeString,
-	      u = n(l),
-	      f = calc_1,
-	      c = n(f),
-	      s = cursor_1,
-	      d = n(s),
-	      m = flex_1,
-	      p = n(m),
-	      g = sizing_1,
-	      y = n(g),
-	      b = gradient_1,
-	      v = n(b),
-	      h = transition_1,
-	      x = n(h),
-	      k = flexboxIE_1,
-	      j = n(k),
-	      S = flexboxOld_1,
-	      _ = n(S),
-	      C = [c.default, d.default, y.default, v.default, x.default, j.default, _.default, p.default];e.exports = t.default;
-	}),
-	    _static = prefixAll_1,
-	    _typeof = "function" == typeof _symbol2.default && "symbol" == (0, _typeof4.default)(_iterator2.default) ? function (e) {
+	}function createCommonjsModule(e, t) {
+	  return t = { exports: {} }, e(t, t.exports), t.exports;
+	}function hyphenateStyleName(e) {
+	  return e.replace(uppercasePattern, "-$&").toLowerCase().replace(msPattern, "-ms-");
+	}var _typeof = "function" == typeof _symbol2.default && "symbol" == (0, _typeof4.default)(_iterator2.default) ? function (e) {
 	  return typeof e === "undefined" ? "undefined" : (0, _typeof4.default)(e);
 	} : function (e) {
 	  return e && "function" == typeof _symbol2.default && e.constructor === _symbol2.default ? "symbol" : typeof e === "undefined" ? "undefined" : (0, _typeof4.default)(e);
 	},
 	    get = function e(t, n, r) {
-	  null === t && (t = Function.prototype);var i = (0, _getOwnPropertyDescriptor2.default)(t, n);if (void 0 === i) {
-	    var o = (0, _getPrototypeOf2.default)(t);return null === o ? void 0 : e(o, n, r);
-	  }if ("value" in i) return i.value;var a = i.get;if (void 0 !== a) return a.call(r);
+	  null === t && (t = Function.prototype);var o = (0, _getOwnPropertyDescriptor2.default)(t, n);if (void 0 === o) {
+	    var i = (0, _getPrototypeOf2.default)(t);return null === i ? void 0 : e(i, n, r);
+	  }if ("value" in o) return o.value;var a = o.get;if (void 0 !== a) return a.call(r);
 	},
-	    set = function e(t, n, r, i) {
-	  var o = (0, _getOwnPropertyDescriptor2.default)(t, n);if (void 0 === o) {
-	    var a = (0, _getPrototypeOf2.default)(t);null !== a && e(a, n, r, i);
-	  } else if ("value" in o && o.writable) o.value = r;else {
-	    var l = o.set;void 0 !== l && l.call(i, r);
+	    set = function e(t, n, r, o) {
+	  var i = (0, _getOwnPropertyDescriptor2.default)(t, n);if (void 0 === i) {
+	    var a = (0, _getPrototypeOf2.default)(t);null !== a && e(a, n, r, o);
+	  } else if ("value" in i && i.writable) i.value = r;else {
+	    var l = i.set;void 0 !== l && l.call(o, r);
 	  }return r;
 	},
 	    guid = function guid() {
 	  return Math.random().toString(26).substring(2, 10) + Math.random().toString(26).substring(2, 10);
+	},
+	    vendor = function vendor(e) {
+	  var t = function t(e) {
+	    return e.replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase();
+	  };return e.startsWith("@keyframes") ? e : /[A-Z]/.test(e[0]) ? "-" + t(e) : t(e);
 	},
 	    createSheet = function createSheet(e) {
 	  var t = document.getElementById(e);if (t) return t.sheet;var n = document.createElement("style");return n.setAttribute("id", e), document.head.appendChild(n), n.sheet;
 	},
 	    deepEqual = function e(t, n) {
 	  function r(r) {
-	    var i = void 0,
-	        o = void 0;for (i in r) {
-	      if (r.hasOwnProperty(i) && (o = e(t[i], n[i])), !o) break;
-	    }return o;
-	  }var i = "object" === ("undefined" == typeof t ? "undefined" : _typeof(t)),
-	      o = "object" === ("undefined" == typeof n ? "undefined" : _typeof(n)),
-	      a = i && o,
+	    var o = void 0,
+	        i = void 0;for (o in r) {
+	      if (r.hasOwnProperty(o) && (i = e(t[o], n[o])), !i) break;
+	    }return i;
+	  }var o = "object" === ("undefined" == typeof t ? "undefined" : _typeof(t)),
+	      i = "object" === ("undefined" == typeof n ? "undefined" : _typeof(n)),
+	      a = o && i,
 	      l = t === n;return t && n && a && !l && (l = r(t) && r(n)), l;
 	},
 	    defaultColors = { white: "#ffffff", navy: "#001f3f", blue: "#0074D9", aqua: "#7FDBFF", teal: "#39CCCC", olive: "#3D9970", green: "#2ECC40", lime: "#01FF70", yellow: "#FFDC00", orange: "#FF851B", red: "#FF4136", maroon: "#85144b", fuchsia: "#F012BE", purple: "#B10DC9", black: "#111111", gray: "#AAAAAA", silver: "#DDDDDD" },
@@ -24087,7 +23598,7 @@
 	  var e = {};return e.fixed = { position: "fixed", willChange: "transform" }, e.relative = { position: "relative" }, e.absolute = { position: "absolute" }, e.top0 = { top: 0 }, e.left0 = { left: 0 }, e.bottom0 = { bottom: 0 }, e.right0 = { right: 0 }, e.z1 = { zIndex: 1 }, e.z2 = { zIndex: 2 }, e.z3 = { zIndex: 3 }, e.z4 = { zIndex: 4 }, e;
 	},
 	    buildLayout = function buildLayout() {
-	  var e = {};return e.table = { display: "table", width: "100%" }, e["table-cell"] = { display: "table-cell", verticalAlign: "middle" }, e["table-row"] = { display: "table-row" }, e.inline = { display: "inline" }, e.block = { display: "block" }, e.inlineBlock = { display: "inline-block" }, e.alignTop = { verticalAlign: "top" }, e.alignMiddle = { verticalAlign: "middle" }, e.alignBottom = { verticalAlign: "bottom" }, e.alignBaseline = { verticalAlign: "baseline" }, e.overflowHidden = { overflow: "hidden" }, e.overflowAuto = { overflow: "auto" }, e.overflowScroll = { overflow: "scroll" }, e.right = { float: "right" }, e.left = { float: "left" }, e.clearfix = { ":before": { content: '" "', display: "table" }, ":after": { content: '" "', display: "table", clear: "both" } }, e;
+	  var e = {};return e.table = { display: "table", width: "100%" }, e.tableCell = { display: "table-cell", verticalAlign: "middle" }, e.tableRow = { display: "table-row" }, e.inline = { display: "inline" }, e.block = { display: "block" }, e.inlineBlock = { display: "inline-block" }, e.alignTop = { verticalAlign: "top" }, e.alignMiddle = { verticalAlign: "middle" }, e.alignBottom = { verticalAlign: "bottom" }, e.alignBaseline = { verticalAlign: "baseline" }, e.overflowHidden = { overflow: "hidden" }, e.overflowAuto = { overflow: "auto" }, e.overflowScroll = { overflow: "scroll" }, e.right = { float: "right" }, e.left = { float: "left" }, e.clearfix = { ":before": { content: '" "', display: "table" }, ":after": { content: '" "', display: "table", clear: "both" } }, e;
 	},
 	    breakpoints = { sm: "@media (min-width: 40em)", md: "@media (min-width: 52em)", lg: "@media (min-width: 64em)", xl: "@media (min-width: 76em)", xx: "@media (min-width: 88em)" },
 	    buildGrid = function buildGrid(e) {
@@ -24095,86 +23606,253 @@
 	      n = setupGridValues(t),
 	      r = createColumns(n);return addBreakpoints(r, t, n), r;
 	},
-	    buildExtends = function buildExtends(e) {
+	    buildComposes = function buildComposes(e) {
 	  return (0, _assign2.default)({}, buildColors(e), buildWhitespace(e), buildGrid(e), buildPositioning(), buildTypography(), buildLayout());
 	},
-	    atomics = buildExtends(),
-	    config = buildExtends,
-	    cache = [],
-	    vuduSheet = createSheet("vSheet"),
-	    hyphen = function hyphen(e) {
-	  return e.replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase();
+	    composes = buildComposes(),
+	    config = buildComposes,
+	    joinDeclarations = function joinDeclarations(e) {
+	  return e.filter(function (e) {
+	    return "object" !== _typeof(e.value);
+	  }).map(function (e) {
+	    return e.key + ": " + e.value;
+	  }).join(";");
 	},
-	    vendor = function vendor(e) {
-	  return (/[A-Z]/.test(e[0]) ? "-" + hyphen(e) : hyphen(e)
-	  );
+	    buildRule = function buildRule(e, t) {
+	  if (e.key.startsWith(":")) return { classname: "" + t + e.key, rule: "." + t + e.key + " { " + joinDeclarations(e.value) + "; }" };if (e.key.startsWith("@media")) return { classname: "" + t, rule: e.key + " { ." + t + " { " + joinDeclarations(e.value) + " } }" };if (e.key.startsWith("@keyframes")) {
+	    var n = e.value.map(function (e) {
+	      return e.key + " { " + joinDeclarations(e.value) + "; }";
+	    }).join(" ");return { classname: "" + e.key, rule: e.key + " { " + n + " }" };
+	  }return { classname: t + " " + e.key, rule: "." + t + " " + e.key + " { " + joinDeclarations(e.value) + "; }" };
 	},
 	    attachRule = function attachRule(e, t) {
-	  if ("undefined" != typeof document) {
-	    var n = t || vuduSheet;n.insertRule(e, n.cssRules.length);
-	  }
+	  "undefined" != typeof document && t.insertRule(e, t.cssRules.length);
 	},
-	    formatRule = function e() {
-	  var t = arguments.length <= 0 || void 0 === arguments[0] ? {} : arguments[0],
-	      n = _static(t),
-	      r = function e(t) {
-	    return t.reduce(function (t, n) {
-	      return t.concat(Array.isArray(n) ? e(n) : n);
-	    }, []);
-	  },
-	      i = function i() {
-	    var e = arguments.length <= 0 || void 0 === arguments[0] ? {} : arguments[0],
-	        t = e.value;return Array.isArray(t) ? "object" === _typeof(t[0]) ? t.map(function (e) {
-	      return (0, _keys2.default)(e).map(function (t) {
-	        return { key: vendor(t), value: e[t] };
-	      });
-	    }) : t.map(function (t) {
-	      return { key: e.key, value: t };
-	    }) : e;
-	  },
-	      o = r((0, _keys2.default)(n).map(function (e) {
-	    return i({ key: e.startsWith("@keyframes") ? e : vendor(e), value: n[e] });
-	  })).map(function (t) {
-	    return "object" === _typeof(t.value) ? { key: t.key, value: e(t.value) } : t;
-	  });return o.some(function (e) {
-	    return e.key.startsWith("@media");
-	  }) ? o.map(function (e) {
-	    return "object" === _typeof(e.value) ? { key: e.key, value: e.value.map(function (t) {
-	        return "object" === _typeof(t.value) ? { key: t.key, value: t.value, query: e.key } : t;
-	      }) } : e;
-	  }) : o;
-	},
-	    addRule = function e() {
-	  var t = arguments.length <= 0 || void 0 === arguments[0] ? [] : arguments[0],
-	      n = arguments[1],
-	      r = arguments[2],
-	      i = arguments[3],
-	      o = function o(e) {
-	    return e.filter(function (e) {
-	      return "object" !== _typeof(e.value);
-	    }).map(function (e) {
-	      return e.key + ": " + e.value;
-	    }).join(";");
-	  };i && attachRule("." + n + " { " + o(t) + "; }", r);var a = function a(e) {
-	    if (e.key.startsWith(":")) return { classname: "" + n + e.key, rule: "." + n + e.key + " { " + o(e.value) + "; }" };if (e.key.startsWith("@media")) return { classname: "" + n, rule: e.key + " { ." + n + " { " + o(e.value) + " } }" };if (e.key.startsWith("@keyframes")) {
-	      var t = e.value.map(function (e) {
-	        return e.key + " { " + o(e.value) + "; }";
-	      }).join(" ");return { classname: "" + e.key, rule: e.key + " { " + t + " }" };
-	    }return { classname: n + " " + e.key, rule: "." + n + " " + e.key + " { " + o(e.value) + "; }" };
-	  };t.filter(function (e) {
+	    addRule = function e(t, n, r, o) {
+	  var i = joinDeclarations(t);o && i.length && attachRule("." + n + " { " + i + "; }", r), t.filter(function (e) {
 	    return "object" === _typeof(e.value);
 	  }).forEach(function (t) {
-	    t.query && t.query.startsWith("@media") ? attachRule(t.query + " { " + a(t).rule + " }", r) : attachRule(a(t).rule, r), t.key.startsWith("@keyframes") || e(t.value, a(t).classname, r, !1);
+	    var o = buildRule(t, n);t.query ? attachRule(t.query + " { " + o.rule + " }", r) : attachRule(o.rule, r), t.key.startsWith("@keyframes") || e(t.value, o.classname, r, !1);
 	  });
 	},
-	    addFontFace = function addFontFace() {
-	  var e = arguments.length <= 0 || void 0 === arguments[0] ? {} : arguments[0],
-	      t = arguments[1],
-	      n = t || vuduSheet,
-	      r = formatRule(e).map(function (e) {
-	    return e.key + ": " + e.value;
-	  }).join(";");return attachRule("@font-face { " + r + "; }", n), e.fontFamily.toString();
+	    prefixProps = createCommonjsModule(function (e, t) {
+	  Object.defineProperty(t, "__esModule", { value: !0 }), t.default = { Webkit: { transform: !0, transformOrigin: !0, transformOriginX: !0, transformOriginY: !0, backfaceVisibility: !0, perspective: !0, perspectiveOrigin: !0, transformStyle: !0, transformOriginZ: !0, animation: !0, animationDelay: !0, animationDirection: !0, animationFillMode: !0, animationDuration: !0, animationIterationCount: !0, animationName: !0, animationPlayState: !0, animationTimingFunction: !0, appearance: !0, userSelect: !0, fontKerning: !0, textEmphasisPosition: !0, textEmphasis: !0, textEmphasisStyle: !0, textEmphasisColor: !0, boxDecorationBreak: !0, clipPath: !0, maskImage: !0, maskMode: !0, maskRepeat: !0, maskPosition: !0, maskClip: !0, maskOrigin: !0, maskSize: !0, maskComposite: !0, mask: !0, maskBorderSource: !0, maskBorderMode: !0, maskBorderSlice: !0, maskBorderWidth: !0, maskBorderOutset: !0, maskBorderRepeat: !0, maskBorder: !0, maskType: !0, textDecorationStyle: !0, textDecorationSkip: !0, textDecorationLine: !0, textDecorationColor: !0, filter: !0, fontFeatureSettings: !0, breakAfter: !0, breakBefore: !0, breakInside: !0, columnCount: !0, columnFill: !0, columnGap: !0, columnRule: !0, columnRuleColor: !0, columnRuleStyle: !0, columnRuleWidth: !0, columns: !0, columnSpan: !0, columnWidth: !0, flex: !0, flexBasis: !0, flexDirection: !0, flexGrow: !0, flexFlow: !0, flexShrink: !0, flexWrap: !0, alignContent: !0, alignItems: !0, alignSelf: !0, justifyContent: !0, order: !0, transition: !0, transitionDelay: !0, transitionDuration: !0, transitionProperty: !0, transitionTimingFunction: !0, backdropFilter: !0, scrollSnapType: !0, scrollSnapPointsX: !0, scrollSnapPointsY: !0, scrollSnapDestination: !0, scrollSnapCoordinate: !0, shapeImageThreshold: !0, shapeImageMargin: !0, shapeImageOutside: !0, hyphens: !0, flowInto: !0, flowFrom: !0, regionFragment: !0, textSizeAdjust: !0 }, Moz: { appearance: !0, userSelect: !0, boxSizing: !0, textAlignLast: !0, textDecorationStyle: !0, textDecorationSkip: !0, textDecorationLine: !0, textDecorationColor: !0, tabSize: !0, hyphens: !0, fontFeatureSettings: !0, breakAfter: !0, breakBefore: !0, breakInside: !0, columnCount: !0, columnFill: !0, columnGap: !0, columnRule: !0, columnRuleColor: !0, columnRuleStyle: !0, columnRuleWidth: !0, columns: !0, columnSpan: !0, columnWidth: !0 }, ms: { flex: !0, flexBasis: !1, flexDirection: !0, flexGrow: !1, flexFlow: !0, flexShrink: !1, flexWrap: !0, alignContent: !1, alignItems: !1, alignSelf: !1, justifyContent: !1, order: !1, transform: !0, transformOrigin: !0, transformOriginX: !0, transformOriginY: !0, userSelect: !0, wrapFlow: !0, wrapThrough: !0, wrapMargin: !0, scrollSnapType: !0, scrollSnapPointsX: !0, scrollSnapPointsY: !0, scrollSnapDestination: !0, scrollSnapCoordinate: !0, touchAction: !0, hyphens: !0, flowInto: !0, flowFrom: !0, breakBefore: !0, breakAfter: !0, breakInside: !0, regionFragment: !0, gridTemplateColumns: !0, gridTemplateRows: !0, gridTemplateAreas: !0, gridTemplate: !0, gridAutoColumns: !0, gridAutoRows: !0, gridAutoFlow: !0, grid: !0, gridRowStart: !0, gridColumnStart: !0, gridRowEnd: !0, gridRow: !0, gridColumn: !0, gridColumnEnd: !0, gridColumnGap: !0, gridRowGap: !0, gridArea: !0, gridGap: !0, textSizeAdjust: !0 } }, e.exports = t.default;
+	}),
+	    capitalizeString = createCommonjsModule(function (e, t) {
+	  Object.defineProperty(t, "__esModule", { value: !0 }), t.default = function (e) {
+	    return e.charAt(0).toUpperCase() + e.slice(1);
+	  }, e.exports = t.default;
+	}),
+	    joinPrefixedValue = createCommonjsModule(function (e, t) {
+	  function n(e, t, n) {
+	    return t in e ? (0, _defineProperty2.default)(e, t, { value: n, enumerable: !0, configurable: !0, writable: !0 }) : e[t] = n, e;
+	  }Object.defineProperty(t, "__esModule", { value: !0 }), t.default = function (e, t) {
+	    var r = arguments.length <= 2 || void 0 === arguments[2] ? function (e, t) {
+	      return e + t;
+	    } : arguments[2];return n({}, e, ["-webkit-", "-moz-", ""].map(function (e) {
+	      return r(e, t);
+	    }));
+	  }, e.exports = t.default;
+	}),
+	    isPrefixedValue = createCommonjsModule(function (e, t) {
+	  Object.defineProperty(t, "__esModule", { value: !0 }), t.default = function (e) {
+	    return Array.isArray(e) && (e = e.join(",")), null !== e.match(/-webkit-|-moz-|-ms-/);
+	  }, e.exports = t.default;
+	}),
+	    calc_1 = createCommonjsModule(function (e, t) {
+	  function n(e) {
+	    return e && e.__esModule ? e : { default: e };
+	  }function r(e, t) {
+	    if ("string" == typeof t && !(0, l.default)(t) && t.indexOf("calc(") > -1) return (0, i.default)(e, t, function (e, t) {
+	      return t.replace(/calc\(/g, e + "calc(");
+	    });
+	  }Object.defineProperty(t, "__esModule", { value: !0 }), t.default = r;var o = joinPrefixedValue,
+	      i = n(o),
+	      a = isPrefixedValue,
+	      l = n(a);e.exports = t.default;
+	}),
+	    cursor_1 = createCommonjsModule(function (e, t) {
+	  function n(e) {
+	    return e && e.__esModule ? e : { default: e };
+	  }function r(e, t) {
+	    if ("cursor" === e && a[t]) return (0, i.default)(e, t);
+	  }Object.defineProperty(t, "__esModule", { value: !0 }), t.default = r;var o = joinPrefixedValue,
+	      i = n(o),
+	      a = { "zoom-in": !0, "zoom-out": !0, grab: !0, grabbing: !0 };e.exports = t.default;
+	}),
+	    flex_1 = createCommonjsModule(function (e, t) {
+	  function n(e, t) {
+	    if ("display" === e && r[t]) return { display: ["-webkit-box", "-moz-box", "-ms-" + t + "box", "-webkit-" + t, t] };
+	  }Object.defineProperty(t, "__esModule", { value: !0 }), t.default = n;var r = { flex: !0, "inline-flex": !0 };e.exports = t.default;
+	}),
+	    sizing_1 = createCommonjsModule(function (e, t) {
+	  function n(e) {
+	    return e && e.__esModule ? e : { default: e };
+	  }function r(e, t) {
+	    if (a[e] && l[t]) return (0, i.default)(e, t);
+	  }Object.defineProperty(t, "__esModule", { value: !0 }), t.default = r;var o = joinPrefixedValue,
+	      i = n(o),
+	      a = { maxHeight: !0, maxWidth: !0, width: !0, height: !0, columnWidth: !0, minWidth: !0, minHeight: !0 },
+	      l = { "min-content": !0, "max-content": !0, "fill-available": !0, "fit-content": !0, "contain-floats": !0 };e.exports = t.default;
+	}),
+	    gradient_1 = createCommonjsModule(function (e, t) {
+	  function n(e) {
+	    return e && e.__esModule ? e : { default: e };
+	  }function r(e, t) {
+	    if ("string" == typeof t && !(0, l.default)(t) && null !== t.match(u)) return (0, i.default)(e, t);
+	  }Object.defineProperty(t, "__esModule", { value: !0 }), t.default = r;var o = joinPrefixedValue,
+	      i = n(o),
+	      a = isPrefixedValue,
+	      l = n(a),
+	      u = /linear-gradient|radial-gradient|repeating-linear-gradient|repeating-radial-gradient/;e.exports = t.default;
+	}),
+	    uppercasePattern = /[A-Z]/g,
+	    msPattern = /^ms-/,
+	    index = hyphenateStyleName,
+	    transition_1 = createCommonjsModule(function (e, t) {
+	  function n(e) {
+	    return e && e.__esModule ? e : { default: e };
+	  }function r(e, t, n) {
+	    return t in e ? (0, _defineProperty2.default)(e, t, { value: n, enumerable: !0, configurable: !0, writable: !0 }) : e[t] = n, e;
+	  }function o(e, t) {
+	    if ("string" == typeof t && p[e]) {
+	      var n,
+	          o = i(t),
+	          a = o.split(/,(?![^()]*(?:\([^()]*\))?\))/g).filter(function (e) {
+	        return null === e.match(/-moz-|-ms-/);
+	      }).join(",");return e.indexOf("Webkit") > -1 ? r({}, e, a) : (n = {}, r(n, "Webkit" + (0, f.default)(e), a), r(n, e, o), n);
+	    }
+	  }function i(e) {
+	    if ((0, c.default)(e)) return e;var t = e.split(/,(?![^()]*(?:\([^()]*\))?\))/g);return t.forEach(function (e, n) {
+	      t[n] = (0, _keys2.default)(m.default).reduce(function (t, n) {
+	        var r = "-" + n.toLowerCase() + "-";return (0, _keys2.default)(m.default[n]).forEach(function (n) {
+	          var o = (0, l.default)(n);e.indexOf(o) > -1 && "order" !== o && (t = e.replace(o, r + o) + "," + t);
+	        }), t;
+	      }, e);
+	    }), t.join(",");
+	  }Object.defineProperty(t, "__esModule", { value: !0 }), t.default = o;var a = index,
+	      l = n(a),
+	      u = capitalizeString,
+	      f = n(u),
+	      s = isPrefixedValue,
+	      c = n(s),
+	      d = prefixProps,
+	      m = n(d),
+	      p = { transition: !0, transitionProperty: !0, WebkitTransition: !0, WebkitTransitionProperty: !0 };e.exports = t.default;
+	}),
+	    flexboxIE_1 = createCommonjsModule(function (e, t) {
+	  function n(e, t, n) {
+	    return t in e ? (0, _defineProperty2.default)(e, t, { value: n, enumerable: !0, configurable: !0, writable: !0 }) : e[t] = n, e;
+	  }function r(e, t) {
+	    if (i[e]) return n({}, i[e], o[t] || t);
+	  }Object.defineProperty(t, "__esModule", { value: !0 }), t.default = r;var o = { "space-around": "distribute", "space-between": "justify", "flex-start": "start", "flex-end": "end" },
+	      i = { alignContent: "msFlexLinePack", alignSelf: "msFlexItemAlign", alignItems: "msFlexAlign", justifyContent: "msFlexPack", order: "msFlexOrder", flexGrow: "msFlexPositive", flexShrink: "msFlexNegative", flexBasis: "msPreferredSize" };e.exports = t.default;
+	}),
+	    flexboxOld_1 = createCommonjsModule(function (e, t) {
+	  function n(e, t, n) {
+	    return t in e ? (0, _defineProperty2.default)(e, t, { value: n, enumerable: !0, configurable: !0, writable: !0 }) : e[t] = n, e;
+	  }function r(e, t) {
+	    return "flexDirection" === e && "string" == typeof t ? { WebkitBoxOrient: t.indexOf("column") > -1 ? "vertical" : "horizontal", WebkitBoxDirection: t.indexOf("reverse") > -1 ? "reverse" : "normal" } : i[e] ? n({}, i[e], o[t] || t) : void 0;
+	  }Object.defineProperty(t, "__esModule", { value: !0 }), t.default = r;var o = { "space-around": "justify", "space-between": "justify", "flex-start": "start", "flex-end": "end", "wrap-reverse": "multiple", wrap: "multiple" },
+	      i = { alignItems: "WebkitBoxAlign", justifyContent: "WebkitBoxPack", flexWrap: "WebkitBoxLines" };e.exports = t.default;
+	}),
+	    prefixAll_1 = createCommonjsModule(function (e, t) {
+	  function n(e) {
+	    return e && e.__esModule ? e : { default: e };
+	  }function r(e) {
+	    return (0, _keys2.default)(e).forEach(function (t) {
+	      var n = e[t];n instanceof Object && !Array.isArray(n) ? e[t] = r(n) : (0, _keys2.default)(a.default).forEach(function (r) {
+	        var o = a.default[r];o[t] && (e[r + (0, u.default)(t)] = n);
+	      });
+	    }), (0, _keys2.default)(e).forEach(function (t) {
+	      [].concat(e[t]).forEach(function (n, r) {
+	        O.forEach(function (r) {
+	          return o(e, r(t, n));
+	        });
+	      });
+	    }), e;
+	  }function o(e) {
+	    var t = arguments.length <= 1 || void 0 === arguments[1] ? {} : arguments[1];(0, _keys2.default)(t).forEach(function (n) {
+	      var r = e[n];Array.isArray(r) ? [].concat(t[n]).forEach(function (t) {
+	        var o = r.indexOf(t);o > -1 && e[n].splice(o, 1), e[n].push(t);
+	      }) : e[n] = t[n];
+	    });
+	  }Object.defineProperty(t, "__esModule", { value: !0 }), t.default = r;var i = prefixProps,
+	      a = n(i),
+	      l = capitalizeString,
+	      u = n(l),
+	      f = calc_1,
+	      s = n(f),
+	      c = cursor_1,
+	      d = n(c),
+	      m = flex_1,
+	      p = n(m),
+	      g = sizing_1,
+	      y = n(g),
+	      b = gradient_1,
+	      v = n(b),
+	      h = transition_1,
+	      x = n(h),
+	      k = flexboxIE_1,
+	      j = n(k),
+	      S = flexboxOld_1,
+	      C = n(S),
+	      O = [s.default, d.default, y.default, v.default, x.default, j.default, C.default, p.default];e.exports = t.default;
+	}),
+	    _static = prefixAll_1,
+	    Format = function e(t) {
+	  return { map: function map(n) {
+	      return e(n(t));
+	    }, fold: function fold(e) {
+	      return e(t);
+	    }, log: function log() {
+	      return console.log(t);
+	    } };
 	},
+	    splitDeclarations = function splitDeclarations(e) {
+	  return (0, _keys2.default)(e).map(function (t) {
+	    return { key: vendor(t), value: e[t] };
+	  });
+	},
+	    flattenArrays = function e(t) {
+	  return t.reduce(function (t, n) {
+	    return t.concat(Array.isArray(n) ? e(n) : n);
+	  }, []);
+	},
+	    handleArrays = function e(t) {
+	  return t.map(function (t) {
+	    return Array.isArray(t.value) ? t.value.every(function (e) {
+	      return "string" == typeof e;
+	    }) ? t.value.map(function (e) {
+	      return { key: t.key, value: e };
+	    }) : t.value.map(function (t) {
+	      return e(splitDeclarations(t));
+	    }) : t;
+	  });
+	},
+	    handleRecursion = function handleRecursion(e) {
+	  return e.map(function (e) {
+	    return "object" !== _typeof(e.value) ? e : { key: e.key, value: formatRule(e.value) };
+	  });
+	},
+	    handleMediaQueries = function handleMediaQueries(e) {
+	  var t = function t(e) {
+	    return e.startsWith("@media");
+	  };return e.some(function (e) {
+	    return t(e.key);
+	  }) ? e.map(function (e) {
+	    if (!t(e.key)) return e;var n = function t(n) {
+	      return n.map(function (n) {
+	        return "object" === _typeof(n.value) ? { key: n.key, value: t(n.value), query: e.key } : n;
+	      });
+	    };return { key: e.key, value: n(e.value) };
+	  }) : e;
+	},
+	    formatRule = function formatRule(e) {
+	  return Format(e).map(_static).map(splitDeclarations).map(handleArrays).map(flattenArrays).map(handleRecursion).fold(handleMediaQueries);
+	},
+	    cache = [],
+	    vuduSheet = createSheet("vSheet"),
 	    buildRuleset = function buildRuleset(e, t) {
 	  var n = (0, _keys2.default)(e).map(function (t) {
 	    return { classname: t, vuduClass: t + "-" + guid(), styles: e[t] };
@@ -24188,34 +23866,45 @@
 	  var n = cache.find(function (t) {
 	    return deepEqual(t.element, e);
 	  });if (n) return n.classes;var r = t || vuduSheet,
-	      i = buildRuleset(e, r),
-	      o = {};return o.element = e, o.classes = i, cache.push(o), i;
-	};v.addFontFace = addFontFace, v.atomics = atomics, v.config = config, exports.cache = cache, exports.default = v;
+	      o = buildRuleset(e, r),
+	      i = {};return i.element = e, i.classes = o, cache.push(i), o;
+	},
+	    addFontFace = function addFontFace(e, t) {
+	  var n = t || vuduSheet,
+	      r = formatRule(e).map(function (e) {
+	    return e.key + ": " + e.value;
+	  }).join(";");return attachRule("@font-face { " + r + "; }", n), e.fontFamily.toString();
+	},
+	    logOutput = function logOutput() {
+	  var e = vuduSheet.cssRules;console.log((0, _keys2.default)(e).map(function (t) {
+	    return e[t].cssText;
+	  }).join("\n\n"));
+	};v.addFontFace = addFontFace, v.logOutput = logOutput, v.composes = composes, v.config = config, v.v = v, module.exports = v;
 
 /***/ },
-/* 272 */
+/* 266 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = { "default": __webpack_require__(273), __esModule: true };
+	module.exports = { "default": __webpack_require__(267), __esModule: true };
 
 /***/ },
-/* 273 */
+/* 267 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(274);
+	__webpack_require__(268);
 	module.exports = __webpack_require__(14).Object.assign;
 
 /***/ },
-/* 274 */
+/* 268 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// 19.1.3.1 Object.assign(target, source)
 	var $export = __webpack_require__(13);
 
-	$export($export.S + $export.F, 'Object', {assign: __webpack_require__(275)});
+	$export($export.S + $export.F, 'Object', {assign: __webpack_require__(269)});
 
 /***/ },
-/* 275 */
+/* 269 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24253,23 +23942,23 @@
 	} : $assign;
 
 /***/ },
-/* 276 */
+/* 270 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = { "default": __webpack_require__(277), __esModule: true };
+	module.exports = { "default": __webpack_require__(271), __esModule: true };
 
 /***/ },
-/* 277 */
+/* 271 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(278);
+	__webpack_require__(272);
 	var $Object = __webpack_require__(14).Object;
 	module.exports = function getOwnPropertyDescriptor(it, key){
 	  return $Object.getOwnPropertyDescriptor(it, key);
 	};
 
 /***/ },
-/* 278 */
+/* 272 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// 19.1.2.6 Object.getOwnPropertyDescriptor(O, P)
@@ -24283,20 +23972,20 @@
 	});
 
 /***/ },
-/* 279 */
+/* 273 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = { "default": __webpack_require__(280), __esModule: true };
+	module.exports = { "default": __webpack_require__(274), __esModule: true };
 
 /***/ },
-/* 280 */
+/* 274 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(281);
+	__webpack_require__(275);
 	module.exports = __webpack_require__(14).Object.keys;
 
 /***/ },
-/* 281 */
+/* 275 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// 19.1.2.14 Object.keys(O)
@@ -24310,7 +23999,7 @@
 	});
 
 /***/ },
-/* 282 */
+/* 276 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24324,13 +24013,13 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _vudu = __webpack_require__(271);
+	var _vudu = __webpack_require__(265);
 
 	var _vudu2 = _interopRequireDefault(_vudu);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var e = _vudu2.default.atomics;
+	var e = _vudu2.default.composes;
 
 	var TwoColumn = exports.TwoColumn = function TwoColumn(props) {
 	  var styles = (0, _vudu2.default)({
@@ -24368,7 +24057,7 @@
 	};
 
 /***/ },
-/* 283 */
+/* 277 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24376,30 +24065,21 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.sharedStyles = undefined;
+	exports.sharedStyles = exports.sharedObj = undefined;
 
 	var _react = __webpack_require__(87);
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _vudu = __webpack_require__(271);
+	var _vudu = __webpack_require__(265);
 
 	var _vudu2 = _interopRequireDefault(_vudu);
 
-	var _fonts = __webpack_require__(258);
-
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var e = _vudu2.default.atomics;
+	var e = _vudu2.default.composes;
 
-	var Inconsolata = _vudu2.default.addFontFace({
-	  fontFamily: 'Inconsolata',
-	  src: 'url(' + _fonts.i_woff2 + ') format("woff2"),\n    url(' + _fonts.i_woff + ') format("woff"),\n    url(' + _fonts.i_ttf + ') format("truetype")',
-	  fontWeight: 'normal',
-	  fontStyle: 'normal'
-	});
-
-	var sharedStyles = exports.sharedStyles = (0, _vudu2.default)({
+	var sharedObj = exports.sharedObj = {
 	  eyelash: {
 	    letterSpacing: '.2rem',
 	    '@composes': [e.block, e.caps, e.h6, e.mb2],
@@ -24432,7 +24112,7 @@
 	    'code': {
 	      lineHeight: '1.35',
 	      fontSize: '.7rem',
-	      fontFamily: Inconsolata + ', monospace'
+	      fontFamily: 'monospace'
 	    }
 	  },
 	  link: {
@@ -24441,16 +24121,21 @@
 	    ':hover': {
 	      opacity: '.5'
 	    }
+	  },
+	  middle: {
+	    '@composes': [e.inlineBlock, e.alignMiddle]
 	  }
-	});
+	};
+
+	var sharedStyles = exports.sharedStyles = (0, _vudu2.default)(sharedObj);
 
 /***/ },
-/* 284 */
+/* 278 */
 /***/ function(module, exports) {
 
 	module.exports = {
 		"name": "vudu",
-		"version": "1.8.3",
+		"version": "1.8.9",
 		"description": "A composable approach to writing styles in JavaScript",
 		"main": "dist/vudu.js",
 		"scripts": {
@@ -24472,7 +24157,7 @@
 			"babel-plugin-transform-runtime": "^6.15.0",
 			"babel-polyfill": "^6.13.0",
 			"babel-preset-es2015": "^6.14.0",
-			"babel-preset-es2015-rollup": "^1.2.0",
+			"babel-preset-es2015-rollup": "^3.0.0",
 			"babel-preset-react": "^6.11.1",
 			"babel-preset-stage-0": "^6.5.0",
 			"babel-runtime": "^6.11.6",
@@ -24522,7 +24207,7 @@
 	};
 
 /***/ },
-/* 285 */
+/* 279 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24531,16 +24216,7 @@
 	  value: true
 	});
 
-	var _introduction = __webpack_require__(286);
-
-	Object.defineProperty(exports, 'Introduction', {
-	  enumerable: true,
-	  get: function get() {
-	    return _introduction.Introduction;
-	  }
-	});
-
-	var _media_queries = __webpack_require__(288);
+	var _media_queries = __webpack_require__(280);
 
 	Object.defineProperty(exports, 'MediaQueries', {
 	  enumerable: true,
@@ -24549,7 +24225,7 @@
 	  }
 	});
 
-	var _keyframes = __webpack_require__(289);
+	var _keyframes = __webpack_require__(281);
 
 	Object.defineProperty(exports, 'Keyframes', {
 	  enumerable: true,
@@ -24558,7 +24234,7 @@
 	  }
 	});
 
-	var _fontface = __webpack_require__(290);
+	var _fontface = __webpack_require__(282);
 
 	Object.defineProperty(exports, 'FontFace', {
 	  enumerable: true,
@@ -24567,7 +24243,7 @@
 	  }
 	});
 
-	var _nesting = __webpack_require__(291);
+	var _nesting = __webpack_require__(283);
 
 	Object.defineProperty(exports, 'Nesting', {
 	  enumerable: true,
@@ -24576,7 +24252,7 @@
 	  }
 	});
 
-	var _pseudos = __webpack_require__(292);
+	var _pseudos = __webpack_require__(284);
 
 	Object.defineProperty(exports, 'Pseudos', {
 	  enumerable: true,
@@ -24586,81 +24262,7 @@
 	});
 
 /***/ },
-/* 286 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.Introduction = undefined;
-
-	var _react = __webpack_require__(87);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _vudu = __webpack_require__(271);
-
-	var _vudu2 = _interopRequireDefault(_vudu);
-
-	var _introduction = __webpack_require__(287);
-
-	var _introduction2 = _interopRequireDefault(_introduction);
-
-	var _shared = __webpack_require__(283);
-
-	var _components = __webpack_require__(268);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var e = _vudu2.default.atomics;
-
-	var Introduction = exports.Introduction = function Introduction() {
-	  var styles = (0, _vudu2.default)({
-	    intro: {
-	      'p:first-child': {
-	        borderBottom: '1px solid #ddd',
-	        '@composes': [e.pb4]
-	      },
-	      'p:not(:first-child)': {
-	        borderBottom: '1px solid #ddd',
-	        '@composes': [e.pb2, e.h4]
-	      },
-	      'h3': {
-	        left: '-1.1rem',
-	        '@composes': [e.normal, e.relative, e.m0, e.pt1, e.h3],
-	        ':before': {
-	          content: '"♦"',
-	          fontSize: '.4rem',
-	          marginRight: '.5rem',
-	          top: '-2px',
-	          '@composes': [e.inlineBlock, e.relative]
-	        }
-	      }
-	    }
-	  });
-	  return _react2.default.createElement(_components.TwoColumn, {
-	    leftCol: _react2.default.createElement(
-	      'span',
-	      { className: _shared.sharedStyles.eyelash },
-	      'Introduction'
-	    ),
-	    rightCol: _react2.default.createElement(
-	      'div',
-	      { className: styles.codeBlock },
-	      _react2.default.createElement('div', { className: styles.intro, dangerouslySetInnerHTML: { __html: _introduction2.default } })
-	    ) });
-	};
-
-/***/ },
-/* 287 */
-/***/ function(module, exports) {
-
-	module.exports = "<p>CSS has come a long way the past couple years. The movement toward atomic design has given us front-enders a renewed freedom to build experiences that are consistent, modular and extensible, with less focus on pages and more focus on systems. But, as the web transitions to a component-based architecture whereby data flows and updates with the motions of the user, how do we handle styling in a way that is similarly dynamic? Vudu exists to explore these challenges by generating CSS with JavaScript at runtime. Unlike other similar solutions, it also provides utilities out of the box for composing common styles. Here are the primary goals with this approach:</p>\n<h3 id=\"composability\">Composability</h3>\n<p>Building blocks based on a styleguide that can be infinitely arranged </p>\n<h3 id=\"awareness-of-state\">Awareness of State</h3>\n<p>Styles that adapt to data as it moves throughout the app</p>\n<h3 id=\"expressiveness\">Expressiveness</h3>\n<p>Declarative styles that are intuitive and easy to reason about</p>\n<h3 id=\"simple-interface\">Simple Interface</h3>\n<p>Minimal boilerplate and powerful out-of-the-box utilities</p>\n<h3 id=\"light-and-fast\">Light and Fast</h3>\n<p>Vudu is ~17kb minified and 6kb gzipped</p>\n";
-
-/***/ },
-/* 288 */
+/* 280 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24674,17 +24276,17 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _vudu = __webpack_require__(271);
+	var _vudu = __webpack_require__(265);
 
 	var _vudu2 = _interopRequireDefault(_vudu);
 
-	var _components = __webpack_require__(268);
+	var _components = __webpack_require__(262);
 
-	var _shared = __webpack_require__(283);
+	var _shared = __webpack_require__(277);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var e = _vudu2.default.atomics;
+	var e = _vudu2.default.composes;
 
 	var rawCode = 'import v from \'vudu\';\n\nconst component = () = {\n  const styles = v({\n    column: {\n      \':before\': {\n        content: \'"Mobile (default)"\'\n      },\n      \'@media (min-width: 48em)\': {\n        \':before\': {\n          content: \'"Small (min-width: 48em)"\'\n        }\n      },\n      \'@media (min-width: 60em)\': {\n        \':before\': {\n          content: \'"Medium (min-width: 60em)"\'\n        }\n      },\n      \'@media (min-width: 72em)\': {\n        \':before\': {\n          content: \'"Large (min-width: 72em)"\'\n        }\n      }\n    }\n  });\n  return (\n    <div className={styles.column}></div>\n  );  \n};';
 
@@ -24756,7 +24358,7 @@
 	};
 
 /***/ },
-/* 289 */
+/* 281 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24770,17 +24372,17 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _vudu = __webpack_require__(271);
+	var _vudu = __webpack_require__(265);
 
 	var _vudu2 = _interopRequireDefault(_vudu);
 
-	var _components = __webpack_require__(268);
+	var _components = __webpack_require__(262);
 
-	var _shared = __webpack_require__(283);
+	var _shared = __webpack_require__(277);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var e = _vudu2.default.atomics;
+	var e = _vudu2.default.composes;
 
 	var rawCode = 'import v from \'vudu\';\n\nconst component = () = {\n  const styles = v({\n    keyframe: {\n      width: \'1rem\',\n      height: \'1rem\',\n      borderRadius: \'50%\',\n      display: \'inline-block\',\n      backgroundColor: \'#D4FD56\',\n      animationName: \'moveCircle\',\n      animationDuration: \'3s\',\n      animationIterationCount: \'infinite\',\n      animationTimingFunction: \'linear\',\n      \'@keyframes moveCircle\': {\n        \'50%\': {\n          marginLeft: \'100px\'\n        },\n        \'100%\': {\n          marginLeft: \'0px\'\n        }\n      }\n    }\n  });\n  return (\n    <span className={styles.keyframe}></span>\n  );  \n};';
 
@@ -24841,7 +24443,7 @@
 	};
 
 /***/ },
-/* 290 */
+/* 282 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24855,29 +24457,23 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _vudu = __webpack_require__(271);
+	var _vudu = __webpack_require__(265);
 
 	var _vudu2 = _interopRequireDefault(_vudu);
 
-	var _components = __webpack_require__(268);
+	var _components = __webpack_require__(262);
 
-	var _shared = __webpack_require__(283);
+	var _shared = __webpack_require__(277);
 
 	var _fonts = __webpack_require__(258);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var e = _vudu2.default.atomics;
+	var e = _vudu2.default.composes;
 
 	var rawCode = 'import v from \'vudu\';\n\nconst component = () = {\n  const SuezOne = v.addFontFace({  \n    fontFamily: \'SuezOne\',\n    src: `url(/path/to/file.eot) format("eot"),\n      url(/path/to/file.woff2) format("woff2"),\n      url(/path/to/file.woff) format("woff"),\n      url(/path/to/file.ttf) format("truetype")`,\n    fontWeight: \'normal\',\n    fontStyle: \'normal\'\n  });\n  const styles = v({\n    typeface: {\n      fontFamily: `${SuezOne}, serif`\n    }\n  });\n  return (\n    <p className={styles.keyframe}>Vudu supports @font-face!</p>\n  );  \n};';
 
 	var FontFace = exports.FontFace = function FontFace() {
-	  var SuezOne = _vudu2.default.addFontFace({
-	    fontFamily: 'SuezOne',
-	    src: 'url(' + _fonts.s_woff2 + ') format("woff2"),\n      url(' + _fonts.s_woff + ') format("woff"),\n      url(' + _fonts.s_ttf + ') format("truetype")',
-	    fontWeight: 'normal',
-	    fontStyle: 'normal'
-	  });
 	  var styles = (0, _vudu2.default)({
 	    fontface: {
 	      'ol': {
@@ -24886,9 +24482,6 @@
 	          '@composes': [e.mb2]
 	        }
 	      }
-	    },
-	    typeface: {
-	      fontFamily: SuezOne + ', serif'
 	    }
 	  });
 	  return _react2.default.createElement(
@@ -24958,18 +24551,13 @@
 	              )
 	            )
 	          )
-	        ),
-	        _react2.default.createElement(
-	          'p',
-	          null,
-	          'Font above is “Suez One” by Michal Sahar.'
 	        )
 	      ) })
 	  );
 	};
 
 /***/ },
-/* 291 */
+/* 283 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24983,17 +24571,17 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _vudu = __webpack_require__(271);
+	var _vudu = __webpack_require__(265);
 
 	var _vudu2 = _interopRequireDefault(_vudu);
 
-	var _components = __webpack_require__(268);
+	var _components = __webpack_require__(262);
 
-	var _shared = __webpack_require__(283);
+	var _shared = __webpack_require__(277);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var e = _vudu2.default.atomics;
+	var e = _vudu2.default.composes;
 
 	var rawCode = 'import v from \'vudu\';\n\nconst component = () = {\n  const styles = v({\n    list: {\n      \'li\': {\n        color: \'blue\'\n      },\n      \'li:last-child\': {\n        color: \'green\',\n        \'span\': {\n          color: \'fuchsia\',\n          \':hover\': {\n            color: \'purple\'\n          }\n        }\n      }\n    }\n  });\n  return (\n    <ul className={styles.list}>\n      <li>First item</li>\n      <li>Second item</li>\n      <li>Third item <span>span</span></li>\n    </ul>\n  );  \n};';
 
@@ -25082,7 +24670,7 @@
 	};
 
 /***/ },
-/* 292 */
+/* 284 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -25096,17 +24684,17 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _vudu = __webpack_require__(271);
+	var _vudu = __webpack_require__(265);
 
 	var _vudu2 = _interopRequireDefault(_vudu);
 
-	var _components = __webpack_require__(268);
+	var _components = __webpack_require__(262);
 
-	var _shared = __webpack_require__(283);
+	var _shared = __webpack_require__(277);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var e = _vudu2.default.atomics;
+	var e = _vudu2.default.composes;
 
 	var rawCode = 'import v from \'vudu\';\n\nconst component = () = {\n  const styles = v({\n    hover: {\n      \':hover\': {\n        color: \'red\'\n      }\n    },\n    before: {\n      \':before\': {\n        content: \'"☺"\'\n      }\n    },\n    active: {\n      \':active\': {\n        color: \'green\'\n      }\n    }\n  });\n  return (\n    <div>\n      <p className={styles.hover}>:hover</p>\n      <p className={styles.before}>:before</p>\n      <p className={styles.active}>:active</p>\n    </div>\n  );  \n};';
 
