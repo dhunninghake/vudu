@@ -64,30 +64,14 @@ const Header = () => {
       '@composes': [
         e.mxAuto,
         e.normal,
-        e.mt1
+        e.mt3
       ]
     },
     nav: {
       listStyleType: 'none',
       '@composes': [ e.pt2, e.m0, e.rightAlign ],
       'li': {
-        '@composes': [ e.mb1, e.inlineBlock, e.ml2 ],
-        'a': {
-          top: '2px',
-          cursor: 'pointer',
-          opacity: '1',
-          transition: '.2s opacity ease',
-          '@composes': [ 
-            e.black, 
-            e.relative 
-          ],
-          ':visited': {
-            '@composes': [ e.black ]  
-          },
-          ':hover': {
-            opacity: '.5'
-          },
-        }
+        '@composes': [ e.mb1, e.inlineBlock, e.ml1 ]
       }
     }
   });
@@ -131,19 +115,6 @@ const Footer = () => {
         e.py3, 
         e.mt2 
       ],
-      'a': {
-        opacity: '1',
-        transition: '.2s opacity ease',
-        '@composes': [ 
-          e.inlineBlock, 
-          e.underline,
-          e.mr1, 
-          e.black
-        ],
-        ':hover': {
-          opacity: '.5'
-        }
-      }
     },
     left: {
       '@composes': [ 
@@ -208,61 +179,6 @@ const Footer = () => {
 };
 
 
-const Contribute = () => {
-  const styles = v({
-    container: {
-      backgroundColor: '#f7f7f7',
-      boxShadow: '0 0 0 .5rem #f7f7f7',
-      color: '#888',
-      '@composes': [ 
-        e.py4, 
-        e.center 
-      ]
-    },
-    text: {
-      '@composes': [ e.m0 ],
-    },
-    bit: {
-      '@composes': [
-        e.block,
-        e.my1
-      ],
-      '@media (min-width: 52em)': {
-        '@composes': [ e.inline ]
-      }
-    },
-    button: {
-      backgroundColor: '#888',
-      borderRadius: '9999em',
-      border: '0',
-      padding: '.75rem 2rem',
-      transition: 'background-color .2s ease',
-      '@composes': [ 
-        e.inlineBlock, 
-        e.noUnderline, 
-        e.white, 
-        e.ml0,
-        e.h4 
-      ],
-      '@media (min-width: 52em)': {
-        '@composes': [ e.ml3 ]
-      },
-      ':hover': {
-        backgroundColor: '#666'
-      }
-    }
-  });
-  return (
-    <div className={styles.container}>
-      <p className={styles.text}>
-        <span className={styles.bit}>Want to peek under the hood?</span> <span className={styles.bit}>Check out the code on Github.</span>
-        <a href="https://github.com/dhunninghake/vudu" className={styles.button}>Contribute &rarr;</a>
-      </p>
-    </div>
-  );
-};
-
-
 const Callout = () => {
   const styles = v({
     container: {
@@ -287,6 +203,19 @@ class App extends Component {
       site: {
         fontFamily: `${calibreRegular}, Times`,
         '*': { boxSizing: 'border-box' },
+        'a': {
+          opacity: '1',
+          transition: '.2s opacity ease',
+          '@composes': [ 
+            e.inlineBlock, 
+            e.underline,
+            e.mr1, 
+            e.black
+          ],
+          ':hover': {
+            opacity: '.5'
+          }
+        }
       }
     });
     return (
@@ -295,12 +224,7 @@ class App extends Component {
         <Wrapper>
           <Callout />
           <Pseudos />
-          <MediaQueries />
-          <Keyframes />
-          <FontFace />
-          <Nesting />
         </Wrapper>
-        <Contribute />
         <Footer />
       </div>
     );
