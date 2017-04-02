@@ -29,14 +29,6 @@ const component = () = {
 };`;
 
 export const FontFace = () => {
-  const SuezOne = v.addFontFace({  
-    fontFamily: 'SuezOne',
-    src: `url(${s_woff2}) format("woff2"),
-      url(${s_woff}) format("woff"),
-      url(${s_ttf}) format("truetype")`,
-    fontWeight: 'normal',
-    fontStyle: 'normal'
-  });
   const styles = v({
     fontface: {
       'ol': {
@@ -45,9 +37,6 @@ export const FontFace = () => {
           '@composes': [ e.mb2 ]
         }
       }
-    },
-    typeface: {
-      fontFamily: `${SuezOne}, serif`
     }
   });
   return (
@@ -74,7 +63,6 @@ export const FontFace = () => {
                 </pre>
               </div>
             </div>
-            <p>Font above is “Suez One” by Michal Sahar.</p>
           </div>
         )}/>
     </div>
