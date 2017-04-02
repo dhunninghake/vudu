@@ -10,10 +10,10 @@ let vuduSheet = createSheet('vSheet');
 
 
 /**
- * buildRuleset does a few things:
- * 1) Generates a unique vudu class for each rule
- * 2) Sends the formatted style object to addRule to be added
- * 3) Returns an object of vudu classes corresponding to rules added
+ * buildRuleset:
+ * 1) Generates unique vudu classes
+ * 2) Adds formatted rules to the sheet
+ * 3) Returns an object of vudu classes
  *
  * @param {Object} group
  * @param {Object} sheet
