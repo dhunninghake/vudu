@@ -32,7 +32,11 @@ const buildRule = (s, classname) => {
 
 export const attachRule = (rule, sheet) => {
   if (typeof document === 'undefined') { return; }
-  sheet.insertRule(rule, sheet.cssRules.length);
+  try {
+    sheet.insertRule(rule, sheet.cssRules.length);
+  } catch (e) {
+    console.warn('Vudu: Failed to insert rule:', rule, e);
+  }
 };
 
 
