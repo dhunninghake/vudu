@@ -1,25 +1,18 @@
-const kebab = s => s.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
-
-export const guid = () => {
-  return (
-    Math.random()
-      .toString(26)
-      .substring(2, 10) +
-    Math.random()
-      .toString(26)
-      .substring(2, 10)
-  );
-};
+const kebabCase = s => s.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
+const camelCase = s => s.replace(/-([a-z])/g, (m, w) => w.toUpperCase());
 
 export const vendor = str => {
   if (str.startsWith('@keyframes')) {
     return str;
   }
 
-  const vendored = /[A-Z]/.test(str[0]) ? `-${kebab(str)}` : kebab(str);
+  const isFirstLetterCapitalized = /[A-Z]/.test(str[0]);
+  const vendored = isFirstLetterCapitalized
+    ? `-${kebabCase(str)}`
+    : kebabCase(str);
 
-  return vendored.replace(/\[(.+?)\]/g, (string, first) => {
-    return '[' + first.replace(/-([a-z])/g, (m, w) => w.toUpperCase()) + ']';
+  return vendored.replace(/\[(.+?)\]/g, insideBrackets => {
+    return camelCase(insideBrackets);
   });
 };
 

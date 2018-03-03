@@ -1,5 +1,6 @@
 import deepEqual from 'deep-equal';
-import { guid, createSheet } from './utils';
+import uniqueId from 'lodash.uniqueid';
+import { createSheet } from './utils';
 import { composes, config } from './composes';
 import { attachRule, addRule } from './attach';
 import { formatRule } from './format';
@@ -22,7 +23,7 @@ const buildRuleset = (group, sheet) => {
   const rules = Object.keys(group).map(classname => {
     return {
       classname,
-      vuduClass: `${classname}-${guid()}`,
+      vuduClass: `${classname}-${uniqueId()}`,
       styles: group[classname]
     };
   });
