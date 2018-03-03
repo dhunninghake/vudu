@@ -32,10 +32,10 @@ const handleArrays = arr => {
 const handleRecursion = arr => {
   return arr.map(obj => {
     if (typeof obj.value !== 'object') { return obj; }
-    
-    return { 
-      key: obj.key, 
-      value: formatRule(obj.value) 
+
+    return {
+      key: obj.key,
+      value: formatRule(obj.value)
     };
   });
 };
@@ -69,4 +69,3 @@ export const formatRule = styles => {
     .map(handleRecursion)
     .fold(handleMediaQueries);
 };
-

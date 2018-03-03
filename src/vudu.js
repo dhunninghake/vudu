@@ -1,4 +1,5 @@
-import { guid, deepEqual, createSheet } from './utils';
+import isEqual from 'lodash.isequal';
+import { guid, createSheet } from './utils';
 import { composes, config } from './composes';
 import { attachRule, addRule } from './attach';
 import { formatRule } from './format';
@@ -6,8 +7,6 @@ import { formatRule } from './format';
 let cache = [];
 
 let vuduSheet = createSheet('vSheet');
-
-
 
 /**
  * buildRuleset:
@@ -22,19 +21,17 @@ let vuduSheet = createSheet('vSheet');
 const buildRuleset = (group, sheet) => {
   const rules = Object.keys(group).map(classname => {
     return {
-      classname, 
+      classname,
       vuduClass: `${classname}-${guid()}`,
       styles: group[classname]
     };
   });
   rules.forEach(r => addRule(formatRule(r.styles), r.vuduClass, sheet, true));
   return rules.reduce((a, b) => {
-    a[b.classname] = b.vuduClass; 
+    a[b.classname] = b.vuduClass;
     return a;
   },{});
 };
-
-
 
 /**
  * V kicks off adding a new rule.
@@ -44,7 +41,7 @@ const buildRuleset = (group, sheet) => {
  * @returns {Object}
  */
 const v = (el, customSheet) => {
-  const cachedItem = cache.find(item => deepEqual(item.element, el));
+  const cachedItem = cache.find(item => isEqual(item.element, el));
   if (cachedItem) {
     return cachedItem.classes;
   }
@@ -59,10 +56,8 @@ const v = (el, customSheet) => {
   return classes;
 };
 
-
-
 /**
- * PUBLIC METHODS 
+ * PUBLIC METHODS
  */
 const addFontFace = (font, customSheet) => {
   const sheet = customSheet || vuduSheet;
@@ -76,7 +71,6 @@ const logOutput = () => {
   console.log(Object.keys(rules).map(r => rules[r].cssText).join('\n\n'));
 };
 
-
 v.addFontFace = addFontFace;
 v.logOutput = logOutput;
 v.composes = composes;
@@ -84,4 +78,3 @@ v.config = config;
 v.v = v;
 
 export default v;
-
