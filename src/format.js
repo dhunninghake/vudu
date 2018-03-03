@@ -1,14 +1,6 @@
 import prefixer from 'inline-style-prefixer/static';
 import { vendor } from './utils';
 
-const Format = x => {
-  return {
-    map: f => Format(f(x)),
-    fold: f => f(x),
-    log: () => console.log(x)
-  };
-};
-
 const splitDeclarations = obj => {
   return Object.keys(obj).map(k => ({ key: vendor(k), value: obj[k] }));
 };
@@ -61,11 +53,10 @@ const handleMediaQueries = arr => {
 };
 
 export const formatRule = styles => {
-  return Format(styles)
-    .map(prefixer)
+  return [prefixer(styles)]
     .map(splitDeclarations)
     .map(handleArrays)
     .map(flattenArrays)
     .map(handleRecursion)
-    .fold(handleMediaQueries);
+    .map(handleMediaQueries)[0];
 };
