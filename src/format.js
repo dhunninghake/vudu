@@ -41,7 +41,7 @@ const handleRecursion = arr => {
 
 const handleMediaQueries = arr => {
   const isMediaQuery = str => str.startsWith('@media');
-  if (!arr.some(r => isMQ(r.key))) {
+  if (!arr.some(r => isMediaQuery(r.key))) {
     return arr;
   }
 
