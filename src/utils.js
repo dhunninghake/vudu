@@ -1,6 +1,8 @@
 const kebabCase = s => s.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
 const camelCase = s => s.replace(/-([a-z])/g, (m, w) => w.toUpperCase());
 
+export const isArray = obj => obj.constructor === Array;
+
 export const vendor = str => {
   if (str.startsWith('@keyframes')) {
     return str;

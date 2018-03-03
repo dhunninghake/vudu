@@ -1,20 +1,17 @@
 import prefixer from 'inline-style-prefixer/static';
-import { vendor } from './utils';
+import { isArray, vendor } from './utils';
 
 const splitDeclarations = obj => {
   return Object.keys(obj).map(k => ({ key: vendor(k), value: obj[k] }));
 };
 
 const flattenArrays = arr => {
-  return arr.reduce(
-    (a, b) => a.concat(Array.isArray(b) ? flattenArrays(b) : b),
-    []
-  );
+  return arr.reduce((a, b) => a.concat(isArray(b) ? flattenArrays(b) : b), []);
 };
 
 const handleArrays = arr => {
   return arr.map(obj => {
-    if (!Array.isArray(obj.value)) {
+    if (!isArray(obj.value)) {
       return obj;
     }
 
