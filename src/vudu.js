@@ -1,4 +1,4 @@
-import isEqual from 'lodash.isequal';
+import deepEqual from 'deep-equal';
 import { guid, createSheet } from './utils';
 import { composes, config } from './composes';
 import { attachRule, addRule } from './attach';
@@ -41,7 +41,7 @@ const buildRuleset = (group, sheet) => {
  * @returns {Object}
  */
 const v = (el, customSheet) => {
-  const cachedItem = cache.find(item => isEqual(item.element, el));
+  const cachedItem = cache.find(item => deepEqual(item.element, el));
   if (cachedItem) {
     return cachedItem.classes;
   }

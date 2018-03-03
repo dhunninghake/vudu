@@ -7,7 +7,9 @@ export default {
   entry: 'src/vudu.js',
   format: 'cjs',
   plugins: [
-    babel(),
+    babel({
+      exclude: 'node_modules/**'
+    }),
     uglify(),
     nodeResolve({
       module: true,
