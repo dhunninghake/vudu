@@ -5,17 +5,17 @@ import { buildPositioning } from './positioning';
 import { buildLayout } from './layout';
 import { buildGrid } from './grid';
 
-const buildComposes = (options) => {
-  return Object.assign({},
+const buildComposes = options => {
+  return Object.assign(
+    {},
     buildColors(options),
     buildWhitespace(options),
     buildGrid(options),
     buildPositioning(),
     buildTypography(),
-    buildLayout(),
+    buildLayout()
   );
 };
 
 export const composes = buildComposes();
 export const config = buildComposes;
-

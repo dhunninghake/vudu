@@ -1,6 +1,6 @@
 const defaultScale = [0, 0.5, 1, 1.5, 2, 4, 8];
 
-export const buildWhitespace = (options) => {
+export const buildWhitespace = options => {
   let i = 0;
   let whitespace = {};
   let scale = options && options.scale ? options.scale : defaultScale;
@@ -10,7 +10,7 @@ export const buildWhitespace = (options) => {
   });
 
   while (i < scale.length) {
-    whitespace[`p${i}`]  = { padding: scale[i] };
+    whitespace[`p${i}`] = { padding: scale[i] };
     whitespace[`pt${i}`] = { paddingTop: scale[i] };
     whitespace[`pb${i}`] = { paddingBottom: scale[i] };
     whitespace[`pl${i}`] = { paddingLeft: scale[i] };
@@ -18,7 +18,7 @@ export const buildWhitespace = (options) => {
     whitespace[`px${i}`] = { paddingRight: scale[i], paddingLeft: scale[i] };
     whitespace[`py${i}`] = { paddingTop: scale[i], paddingBottom: scale[i] };
 
-    whitespace[`m${i}`]  = { margin: scale[i] };
+    whitespace[`m${i}`] = { margin: scale[i] };
     whitespace[`mt${i}`] = { marginTop: scale[i] };
     whitespace[`mb${i}`] = { marginBottom: scale[i] };
     whitespace[`ml${i}`] = { marginLeft: scale[i] };
@@ -27,7 +27,10 @@ export const buildWhitespace = (options) => {
     whitespace[`my${i}`] = { marginTop: scale[i], marginBottom: scale[i] };
 
     if (i > 0) {
-      whitespace[`mxn${i}`] = { marginRight: `-${scale[i]}`, marginLeft: `-${scale[i]}` };
+      whitespace[`mxn${i}`] = {
+        marginRight: `-${scale[i]}`,
+        marginLeft: `-${scale[i]}`
+      };
     }
 
     i++;
@@ -39,4 +42,3 @@ export const buildWhitespace = (options) => {
 
   return whitespace;
 };
-

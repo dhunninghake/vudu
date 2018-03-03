@@ -30,7 +30,7 @@ const buildRuleset = (group, sheet) => {
   return rules.reduce((a, b) => {
     a[b.classname] = b.vuduClass;
     return a;
-  },{});
+  }, {});
 };
 
 /**
@@ -61,14 +61,20 @@ const v = (el, customSheet) => {
  */
 const addFontFace = (font, customSheet) => {
   const sheet = customSheet || vuduSheet;
-  const dec = formatRule(font).map(r => `${r.key}: ${r.value}`).join(';');
+  const dec = formatRule(font)
+    .map(r => `${r.key}: ${r.value}`)
+    .join(';');
   attachRule(`@font-face { ${dec}; }`, sheet);
   return font.fontFamily.toString();
 };
 
 const logOutput = () => {
   const rules = vuduSheet.cssRules;
-  console.log(Object.keys(rules).map(r => rules[r].cssText).join('\n\n'));
+  console.log(
+    Object.keys(rules)
+      .map(r => rules[r].cssText)
+      .join('\n\n')
+  );
 };
 
 v.addFontFace = addFontFace;

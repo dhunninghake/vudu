@@ -6,12 +6,17 @@ const splitDeclarations = obj => {
 };
 
 const flattenArrays = arr => {
-  return arr.reduce((a, b) => a.concat(Array.isArray(b) ? flattenArrays(b) : b),[]);
+  return arr.reduce(
+    (a, b) => a.concat(Array.isArray(b) ? flattenArrays(b) : b),
+    []
+  );
 };
 
 const handleArrays = arr => {
   return arr.map(obj => {
-    if (!Array.isArray(obj.value)) { return obj; }
+    if (!Array.isArray(obj.value)) {
+      return obj;
+    }
 
     if (obj.value.every(i => typeof i === 'string')) {
       return obj.value.map(v => ({ key: obj.key, value: v }));
@@ -23,7 +28,9 @@ const handleArrays = arr => {
 
 const handleRecursion = arr => {
   return arr.map(obj => {
-    if (typeof obj.value !== 'object') { return obj; }
+    if (typeof obj.value !== 'object') {
+      return obj;
+    }
 
     return {
       key: obj.key,
@@ -33,15 +40,25 @@ const handleRecursion = arr => {
 };
 
 const handleMediaQueries = arr => {
-  const isMQ = str => str.startsWith('@media');
-  if (!arr.some(r => isMQ(r.key))) { return arr; }
+  const isMediaQuery = str => str.startsWith('@media');
+  if (!arr.some(r => isMQ(r.key))) {
+    return arr;
+  }
 
   return arr.map(r => {
-    if (!isMQ(r.key)) { return r; }
+    if (!isMediaQuery(r.key)) {
+      return r;
+    }
 
     const recurse = val => {
       return val.map(v => {
-        return typeof v.value === 'object' ? ({key: v.key, value: recurse(v.value), query: r.key}) : v;
+        return typeof v.value === 'object'
+          ? {
+              key: v.key,
+              value: recurse(v.value),
+              query: r.key
+            }
+          : v;
       });
     };
 
@@ -53,7 +70,8 @@ const handleMediaQueries = arr => {
 };
 
 export const formatRule = styles => {
-  return [prefixer(styles)]
+  return [styles]
+    .map(prefixer)
     .map(splitDeclarations)
     .map(handleArrays)
     .map(flattenArrays)
