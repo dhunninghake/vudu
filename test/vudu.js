@@ -3,7 +3,7 @@ import v from '../dist/vudu';
 
 const c = v.composes;
 
-const createSheet = (id) => {
+const createSheet = id => {
   const existingSheet = document.getElementById(id);
   if (existingSheet) {
     return existingSheet.sheet;
@@ -17,19 +17,24 @@ const createSheet = (id) => {
 };
 
 const guid = () => {
-  return Math.random().toString(26).substring(2, 10) +
-    Math.random().toString(26).substring(2, 10);
+  return (
+    Math.random()
+      .toString(26)
+      .substring(2, 10) +
+    Math.random()
+      .toString(26)
+      .substring(2, 10)
+  );
 };
 
 const styles = {
   container: {
-    color: 'chartreuse',
+    color: 'chartreuse'
   },
   heading: {
     fontSize: '2rem'
   }
 };
-
 
 test.beforeEach(t => {
   const id = guid();
@@ -37,22 +42,20 @@ test.beforeEach(t => {
   t.context.sheet = createSheet(id);
 });
 
-
 test('doesnt throw an error', t => {
   t.notThrows(() => {
     v(styles);
   });
 });
 
-
 test('attaches a style tag', t => {
   t.plan(1);
-  return Promise.resolve(document.getElementById(t.context.id).tagName)
-    .then(tag => {
+  return Promise.resolve(document.getElementById(t.context.id).tagName).then(
+    tag => {
       t.is(tag, 'STYLE');
-    });
+    }
+  );
 });
-
 
 test('returns an object of values with type string', t => {
   t.plan(2);
@@ -60,7 +63,6 @@ test('returns an object of values with type string', t => {
   t.is(typeof style, 'object');
   t.is(typeof style.container, 'string');
 });
-
 
 test('only adds rule once if deep equal', t => {
   t.plan(1);
@@ -83,7 +85,6 @@ test('only adds rule once if deep equal', t => {
   t.is(t.context.sheet.cssRules.length, 1);
 });
 
-
 test('creates @media query rules', t => {
   t.plan(1);
   const styles = {
@@ -100,7 +101,6 @@ test('creates @media query rules', t => {
   const mediaRule = t.context.sheet.cssRules[1];
   t.true(mediaRule.hasOwnProperty('media'));
 });
-
 
 test('creates @media rules in the correct order', t => {
   t.plan(3);
@@ -120,7 +120,7 @@ test('creates @media rules in the correct order', t => {
       },
       [`@media ${breakpoints[2]}`]: {
         width: '95%'
-      },
+      }
     }
   };
 
@@ -131,7 +131,6 @@ test('creates @media rules in the correct order', t => {
   t.is(rules[2].media[0], breakpoints[1]);
   t.is(rules[3].media[0], breakpoints[2]);
 });
-
 
 test('creates pseudo selectors', t => {
   t.plan(2);
@@ -154,7 +153,6 @@ test('creates pseudo selectors', t => {
   t.true(selector.includes(pseudo));
 });
 
-
 test('creates @keyframes rules', t => {
   t.plan(2);
   const name = 'changeColor';
@@ -165,8 +163,8 @@ test('creates @keyframes rules', t => {
       animationDuration: '4s',
       animationIterationCount: 'infinite',
       [`@keyframes ${name}`]: {
-        '0%':   { color: 'blue' },
-        '50%':  { color: 'green' },
+        '0%': { color: 'blue' },
+        '50%': { color: 'green' },
         '100%': { color: 'blue' }
       }
     }
@@ -181,51 +179,51 @@ test('creates @keyframes rules', t => {
   t.true(keyrule.hasOwnProperty('keyText'));
 });
 
-
 test('adds vendor prefixes', t => {
-  t.plan(3);
+  t.plan(6);
   const styles = {
     columns: {
       columnCount: '3',
-      columnGap: '10px',
+      columnGap: '10px'
     }
   };
 
   v(styles, t.context.sheet);
 
   const rule = t.context.sheet.cssRules[0].style;
-  t.is(rule[0], 'column-count');
-  t.is(rule[2], '-webkit-column-count');
-  t.is(rule[3], '-moz-column-count');
-});
 
+  t.is(rule[0], '-webkit-column-count');
+  t.is(rule[1], '-moz-column-count');
+  t.is(rule[2], '-webkit-column-gap');
+  t.is(rule[3], '-moz-column-gap');
+  t.is(rule[4], 'column-count');
+  t.is(rule[5], 'column-gap');
+});
 
 test('creates @font-face rule', t => {
   t.plan(1);
-  
-  v.addFontFace({  
-    fontFamily: 'CalibreRegular',
-    src: `url(blah.woff2) format("woff2"),
+
+  v.addFontFace(
+    {
+      fontFamily: 'CalibreRegular',
+      src: `url(blah.woff2) format("woff2"),
       url(blah.woff) format("woff"),
       url(balh.ttf) format("truetype")`,
-    fontWeight: 'normal',
-    fontStyle: 'normal'
-  }, t.context.sheet);
+      fontWeight: 'normal',
+      fontStyle: 'normal'
+    },
+    t.context.sheet
+  );
 
   t.is(t.context.sheet.cssRules[0].style.length, 4);
 });
-
 
 test('extends atomic classes', async t => {
   t.plan(1);
   const styles = {
     extend: {
       textAlign: 'right',
-      '@composes': [
-        c.left,
-        c.py4,
-        c.purple
-      ]
+      '@composes': [c.left, c.py4, c.purple]
     }
   };
 
@@ -241,15 +239,11 @@ test('extends atomic classes', async t => {
   t.is(await getExtends(), 5);
 });
 
-
 test('extends pseudo and media query atomics', async t => {
   t.plan(1);
   const styles = {
     extendSomething: {
-      '@composes': [
-        c.col6,
-        c.mdCol4
-      ]
+      '@composes': [c.col6, c.mdCol4]
     }
   };
 
@@ -265,3 +259,22 @@ test('extends pseudo and media query atomics', async t => {
   t.is(await getExtends(), 2);
 });
 
+test('doesnt camelize selector strings within brackets', t => {
+  t.plan(1);
+
+  const selector = 'input[name="coolName"]';
+  const styles = {
+    namespace: {
+      [selector]: {
+        background: 'wheat'
+      }
+    }
+  };
+
+  v(styles, t.context.sheet);
+
+  const rule = t.context.sheet.cssRules[0].style;
+  const containsSelector = rule.parentRule.selectorText.includes(selector);
+
+  t.true(containsSelector);
+});
