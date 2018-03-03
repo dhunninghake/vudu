@@ -1,6 +1,8 @@
 const kebabCase = s => s.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
 const camelCase = s => s.replace(/-([a-z])/g, (m, w) => w.toUpperCase());
 
+export const capitalize = s => s.charAt(0).toUpperCase() + s.slice(1);
+
 export const isArray = obj => obj.constructor === Array;
 
 export const convertToKebabCase = str => {

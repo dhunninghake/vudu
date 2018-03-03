@@ -1,3 +1,5 @@
+import { capitalize } from '../utils';
+
 // from clrs.cc
 const defaultColors = {
   white: '#ffffff',
@@ -20,21 +22,22 @@ const defaultColors = {
 };
 
 export const buildColors = options => {
-  const color = {};
-  const colors = options
-    ? Object.assign({}, defaultColors, options.colors)
-    : defaultColors;
-  const capitalize = s => {
-    return s.charAt(0).toUpperCase() + s.slice(1);
+  const allColors = {
+    ...defaultColors,
+    ...(options ? options.colors : {})
   };
 
-  Object.keys(colors).forEach(c => {
-    color[c] = { color: colors[c] };
-    color[`bg${capitalize(c)}`] = { backgroundColor: colors[c] };
-    color[`border${capitalize(c)}`] = { borderColor: colors[c] };
-    color[`stroke${capitalize(c)}`] = { stroke: colors[c] };
-    color[`fill${capitalize(c)}`] = { fill: colors[c] };
-  });
-
-  return color;
+  return Object.keys(allColors).reduce((a, b) => {
+    return {
+      ...a,
+      ...{
+        [b]: { color: allColors[b] },
+        [`hover${capitalize(b)}`]: { ':hover': { color: allColors[b] } },
+        [`bg${capitalize(b)}`]: { backgroundColor: allColors[b] },
+        [`border${capitalize(b)}`]: { borderColor: allColors[b] },
+        [`stroke${capitalize(b)}`]: { stroke: allColors[b] },
+        [`fill${capitalize(b)}`]: { fill: allColors[b] }
+      }
+    };
+  }, {});
 };
