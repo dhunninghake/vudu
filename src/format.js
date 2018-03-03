@@ -1,8 +1,11 @@
 import prefixer from 'inline-style-prefixer/static';
-import { isArray, vendor } from './utils';
+import { isArray, convertToKebabCase } from './utils';
 
 const splitDeclarations = obj => {
-  return Object.keys(obj).map(k => ({ key: vendor(k), value: obj[k] }));
+  return Object.keys(obj).map(k => ({
+    key: convertToKebabCase(k),
+    value: obj[k]
+  }));
 };
 
 const flattenArrays = arr => {

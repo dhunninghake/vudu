@@ -3,17 +3,18 @@ const camelCase = s => s.replace(/-([a-z])/g, (m, w) => w.toUpperCase());
 
 export const isArray = obj => obj.constructor === Array;
 
-export const vendor = str => {
+export const convertToKebabCase = str => {
   if (str.startsWith('@keyframes')) {
     return str;
   }
 
   const isFirstLetterCapitalized = /[A-Z]/.test(str[0]);
-  const vendored = isFirstLetterCapitalized
+  const kebabed = isFirstLetterCapitalized
     ? `-${kebabCase(str)}`
     : kebabCase(str);
 
-  return vendored.replace(/\[(.+?)\]/g, insideBrackets => {
+  // convert any strings inside brackets back to camelCase
+  return kebabed.replace(/\[(.+?)\]/g, insideBrackets => {
     return camelCase(insideBrackets);
   });
 };
