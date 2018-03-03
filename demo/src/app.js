@@ -15,7 +15,7 @@ import {
 
 const e = v.composes;
 
-const calibreRegular = v.addFontFace({
+const calibreRegular = v.addFontFace({  
   fontFamily: 'CalibreRegular',
   src: `url(${woff2}) format("woff2"),
     url(${woff}) format("woff"),
@@ -35,9 +35,9 @@ const Wrapper = (props) => {
     wrapper: {
       maxWidth: '82rem',
       '@composes': [
-        e.col10,
-        e.mxAuto,
-        e.clearfix,
+        e.col10, 
+        e.mxAuto, 
+        e.clearfix, 
         e.px2
       ]
     }
@@ -111,27 +111,27 @@ const Footer = () => {
     footer: {
       backgroundColor: '#D4FD56',
       boxShadow: '0 0 0 .5rem #D4FD56',
-      '@composes': [
-        e.py3,
-        e.mt2
+      '@composes': [ 
+        e.py3, 
+        e.mt2 
       ],
     },
     left: {
-      '@composes': [
+      '@composes': [ 
         sharedObj.middle,
-        e.col12,
-        e.mdCol6,
-        e.center
+        e.col12, 
+        e.mdCol6, 
+        e.center 
       ],
       '@media (min-width: 52em)': {
         '@composes': [ e.leftAlign ]
       }
     },
     right: {
-      '@composes': [
+      '@composes': [ 
         sharedObj.middle,
-        e.col12,
-        e.mdCol6,
+        e.col12, 
+        e.mdCol6, 
         e.center
       ],
       '@media (min-width: 52em)': {
@@ -139,7 +139,7 @@ const Footer = () => {
       }
     },
     logo: {
-      '@composes': [
+      '@composes': [ 
         sharedObj.middle,
         e.mr2
       ]
@@ -147,9 +147,9 @@ const Footer = () => {
     text: {
       '@composes': [ sharedObj.middle ],
       'span': {
-        '@composes': [
-          e.inlineBlock,
-          e.mr3
+        '@composes': [ 
+          e.inlineBlock, 
+          e.mr3 
         ]
       }
     },
@@ -206,22 +206,18 @@ class App extends Component {
         'a': {
           opacity: '1',
           transition: '.2s opacity ease',
-          '@composes': [
-            e.inlineBlock,
+          '@composes': [ 
+            e.inlineBlock, 
             e.underline,
-            e.mr1,
+            e.mr1, 
             e.black
           ],
           ':hover': {
             opacity: '.5'
           }
-        },
-        'input[name="userName"]': {
-          background: 'wheat'
         }
       }
     });
-    v.logOutput();
     return (
       <div className={styles.site}>
         <Header />
