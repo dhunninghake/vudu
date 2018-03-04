@@ -1,25 +1,22 @@
 import prefixer from 'inline-style-prefixer/static';
-import { vendor } from './utils';
-
-const Format = x => {
-  return {
-    map: f => Format(f(x)),
-    fold: f => f(x),
-    log: () => console.log(x)
-  };
-};
+import { isArray, convertToKebabCase } from './utils';
 
 const splitDeclarations = obj => {
-  return Object.keys(obj).map(k => ({ key: vendor(k), value: obj[k] }));
+  return Object.keys(obj).map(k => ({
+    key: convertToKebabCase(k),
+    value: obj[k],
+  }));
 };
 
 const flattenArrays = arr => {
-  return arr.reduce((a, b) => a.concat(Array.isArray(b) ? flattenArrays(b) : b),[]);
+  return arr.reduce((a, b) => a.concat(isArray(b) ? flattenArrays(b) : b), []);
 };
 
 const handleArrays = arr => {
   return arr.map(obj => {
-    if (!Array.isArray(obj.value)) { return obj; }
+    if (!isArray(obj.value)) {
+      return obj;
+    }
 
     if (obj.value.every(i => typeof i === 'string')) {
       return obj.value.map(v => ({ key: obj.key, value: v }));
@@ -31,42 +28,53 @@ const handleArrays = arr => {
 
 const handleRecursion = arr => {
   return arr.map(obj => {
-    if (typeof obj.value !== 'object') { return obj; }
-    
-    return { 
-      key: obj.key, 
-      value: formatRule(obj.value) 
+    if (typeof obj.value !== 'object') {
+      return obj;
+    }
+
+    return {
+      key: obj.key,
+      value: formatRule(obj.value),
     };
   });
 };
 
 const handleMediaQueries = arr => {
-  const isMQ = str => str.startsWith('@media');
-  if (!arr.some(r => isMQ(r.key))) { return arr; }
+  const isMediaQuery = str => str.startsWith('@media');
+  if (!arr.some(r => isMediaQuery(r.key))) {
+    return arr;
+  }
 
   return arr.map(r => {
-    if (!isMQ(r.key)) { return r; }
+    if (!isMediaQuery(r.key)) {
+      return r;
+    }
 
     const recurse = val => {
       return val.map(v => {
-        return typeof v.value === 'object' ? ({key: v.key, value: recurse(v.value), query: r.key}) : v;
+        return typeof v.value === 'object'
+          ? {
+              key: v.key,
+              value: recurse(v.value),
+              query: r.key,
+            }
+          : v;
       });
     };
 
     return {
       key: r.key,
-      value: recurse(r.value)
+      value: recurse(r.value),
     };
   });
 };
 
 export const formatRule = styles => {
-  return Format(styles)
+  return [styles]
     .map(prefixer)
     .map(splitDeclarations)
     .map(handleArrays)
     .map(flattenArrays)
     .map(handleRecursion)
-    .fold(handleMediaQueries);
+    .map(handleMediaQueries)[0];
 };
-
