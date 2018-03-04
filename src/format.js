@@ -4,7 +4,7 @@ import { isArray, convertToKebabCase } from './utils';
 const splitDeclarations = obj => {
   return Object.keys(obj).map(k => ({
     key: convertToKebabCase(k),
-    value: obj[k]
+    value: obj[k],
   }));
 };
 
@@ -34,7 +34,7 @@ const handleRecursion = arr => {
 
     return {
       key: obj.key,
-      value: formatRule(obj.value)
+      value: formatRule(obj.value),
     };
   });
 };
@@ -56,7 +56,7 @@ const handleMediaQueries = arr => {
           ? {
               key: v.key,
               value: recurse(v.value),
-              query: r.key
+              query: r.key,
             }
           : v;
       });
@@ -64,7 +64,7 @@ const handleMediaQueries = arr => {
 
     return {
       key: r.key,
-      value: recurse(r.value)
+      value: recurse(r.value),
     };
   });
 };

@@ -9,12 +9,12 @@ const buildRule = (s, classname) => {
   if (s.key.startsWith(':')) {
     return {
       classname: `${classname}${s.key}`,
-      rule: `.${classname}${s.key} { ${joinDeclarations(s.value)}; }`
+      rule: `.${classname}${s.key} { ${joinDeclarations(s.value)}; }`,
     };
   } else if (s.key.startsWith('@media')) {
     return {
       classname: `${classname}`,
-      rule: `${s.key} { .${classname} { ${joinDeclarations(s.value)} } }`
+      rule: `${s.key} { .${classname} { ${joinDeclarations(s.value)} } }`,
     };
   } else if (s.key.startsWith('@keyframes')) {
     const dec = s.value
@@ -22,12 +22,12 @@ const buildRule = (s, classname) => {
       .join(' ');
     return {
       classname: `${s.key}`,
-      rule: `${s.key} { ${dec} }`
+      rule: `${s.key} { ${dec} }`,
     };
   } else {
     return {
       classname: `${classname} ${s.key}`,
-      rule: `.${classname} ${s.key} { ${joinDeclarations(s.value)}; }`
+      rule: `.${classname} ${s.key} { ${joinDeclarations(s.value)}; }`,
     };
   }
 };

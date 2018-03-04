@@ -6,15 +6,14 @@ import { buildLayout } from './layout';
 import { buildGrid } from './grid';
 
 const buildComposes = options => {
-  return Object.assign(
-    {},
-    buildColors(options),
-    buildWhitespace(options),
-    buildGrid(options),
-    buildPositioning(),
-    buildTypography(),
-    buildLayout()
-  );
+  return {
+    ...buildColors(options),
+    ...buildWhitespace(options),
+    ...buildGrid(options),
+    ...buildPositioning(),
+    ...buildTypography(),
+    ...buildLayout(),
+  };
 };
 
 export const composes = buildComposes();

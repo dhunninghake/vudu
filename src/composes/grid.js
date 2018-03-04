@@ -3,7 +3,7 @@ const breakpoints = {
   md: '@media (min-width: 52em)',
   lg: '@media (min-width: 64em)',
   xl: '@media (min-width: 76em)',
-  xx: '@media (min-width: 88em)'
+  xx: '@media (min-width: 88em)',
 };
 
 function setupGridValues(count) {

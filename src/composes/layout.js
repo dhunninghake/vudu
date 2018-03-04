@@ -22,13 +22,13 @@ export const buildLayout = () => {
   layout['clearfix'] = {
     ':before': {
       content: '" "',
-      display: 'table'
+      display: 'table',
     },
     ':after': {
       content: '" "',
       display: 'table',
-      clear: 'both'
-    }
+      clear: 'both',
+    },
   };
 
   return layout;

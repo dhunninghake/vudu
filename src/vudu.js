@@ -24,7 +24,7 @@ const buildRuleset = (group, sheet) => {
     return {
       classname,
       vuduClass: `${classname}-${uniqueId()}`,
-      styles: group[classname]
+      styles: group[classname],
     };
   });
   rules.forEach(r => addRule(formatRule(r.styles), r.vuduClass, sheet, true));

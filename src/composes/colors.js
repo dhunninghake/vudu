@@ -18,13 +18,13 @@ const defaultColors = {
   purple: '#B10DC9',
   black: '#111111',
   gray: '#AAAAAA',
-  silver: '#DDDDDD'
+  silver: '#DDDDDD',
 };
 
 export const buildColors = options => {
   const allColors = {
     ...defaultColors,
-    ...(options ? options.colors : {})
+    ...(options ? options.colors : {}),
   };
 
   return Object.keys(allColors).reduce((a, b) => {
@@ -36,8 +36,8 @@ export const buildColors = options => {
         [`bg${capitalize(b)}`]: { backgroundColor: allColors[b] },
         [`border${capitalize(b)}`]: { borderColor: allColors[b] },
         [`stroke${capitalize(b)}`]: { stroke: allColors[b] },
-        [`fill${capitalize(b)}`]: { fill: allColors[b] }
-      }
+        [`fill${capitalize(b)}`]: { fill: allColors[b] },
+      },
     };
   }, {});
 };

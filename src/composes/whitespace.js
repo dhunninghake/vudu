@@ -29,7 +29,7 @@ export const buildWhitespace = options => {
     if (i > 0) {
       whitespace[`mxn${i}`] = {
         marginRight: `-${scale[i]}`,
-        marginLeft: `-${scale[i]}`
+        marginLeft: `-${scale[i]}`,
       };
     }
 
