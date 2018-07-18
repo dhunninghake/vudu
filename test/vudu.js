@@ -64,7 +64,7 @@ test('returns an object of values with type string', t => {
   t.is(typeof style.container, 'string');
 });
 
-test('handles configuration via options properly', t => {
+test('handles suffix string configuration via options properly', t => {
   t.plan(2);
 
   const suffix = 'test';
@@ -78,6 +78,23 @@ test('handles configuration via options properly', t => {
   v.options({ suffix })(style1, t.context.sheet);
   t.is(t.context.sheet.cssRules.length, 1);
   t.true(RegExp(`${suffix}$`).test(t.context.sheet.cssRules[0].selectorText))
+});
+
+test('handles suffix function configuration via options properly', t => {
+  t.plan(2);
+
+  const suffixText = 'test'
+  const suffix = () => suffixText;
+  const style1 = {
+    container: {
+      color: 'yellow',
+      textAlign: 'center'
+    }
+  };
+
+  v.options({ suffix })(style1, t.context.sheet);
+  t.is(t.context.sheet.cssRules.length, 1);
+  t.true(RegExp(`${suffixText}$`).test(t.context.sheet.cssRules[0].selectorText))
 });
 
 test('only adds rule once if deep equal', t => {
