@@ -17,21 +17,23 @@ let vuduSheet = createSheet('vSheet');
  *
  * @param {Object} group
  * @param {Object} sheet
+ * @param {Object} [options={}]
  * @returns {Object}
  */
-const buildRuleset = (group, sheet) => {
+const buildRuleset = (group, sheet, options={}) => {
+  const suffix = typeof options.suffix === 'function' ? options.suffix() : options.suffix;
   const rules = Object.keys(group).map(classname => {
     return {
       classname,
-      vuduClass: `${classname}-${uniqueId()}`,
+      vuduClass: `${classname}-${suffix || uniqueId()}`,
       styles: group[classname],
     };
   });
   rules.forEach(r => addRule(formatRule(r.styles), r.vuduClass, sheet, true));
-  return rules.reduce((a, b) => {
-    a[b.classname] = b.vuduClass;
-    return a;
-  }, {});
+  return rules.reduce((a, b) => ({
+    ...a,
+    [b.classname]: b.vuduClass,
+  }), {});
 };
 
 /**
@@ -39,16 +41,17 @@ const buildRuleset = (group, sheet) => {
  *
  * @param {Object} el
  * @param {Object} [customSheet]
+ * @param {Object} [options={}]
  * @returns {Object}
  */
-const v = (el, customSheet) => {
+const v = (el, customSheet, options={}) => {
   const cachedItem = cache.find(item => deepEqual(item.element, el));
   if (cachedItem) {
     return cachedItem.classes;
   }
 
   const sheet = customSheet || vuduSheet;
-  const classes = buildRuleset(el, sheet);
+  const classes = buildRuleset(el, sheet, options);
   const cacheItem = {};
   cacheItem.element = el;
   cacheItem.classes = classes;
@@ -78,10 +81,19 @@ const logOutput = () => {
   );
 };
 
+/**
+ * Curries v to make configuring v easier
+ *
+ * @param {Object} options
+ * @returns {Function}
+ */
+const options = (options) => (el, customSheet) => v(el, customSheet, options)
+
 v.addFontFace = addFontFace;
 v.logOutput = logOutput;
 v.composes = composes;
 v.config = config;
+v.options = options;
 v.v = v;
 
 export default v;
