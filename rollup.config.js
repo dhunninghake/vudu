@@ -9,8 +9,11 @@ export default {
   entry: 'src/vudu.js',
   format: 'cjs',
   plugins: [
+    commonjs({
+      include: 'node_modules/**',
+    }),
     babel({
-      exclude: 'node_modules/**'
+      exclude: 'node_modules/**',
     }),
     uglify(),
     nodeResolve({
@@ -19,15 +22,12 @@ export default {
       main: true,
       browser: true,
       extensions: ['.js', '.json'],
-      preferBuiltins: false
-    }),
-    commonjs({
-      include: 'node_modules/**'
+      preferBuiltins: false,
     }),
     filesize({
-      showGzippedSize: true
+      showGzippedSize: true,
     }),
-    gzip()
+    gzip(),
   ],
-  dest: 'dist/vudu.js'
+  dest: 'dist/vudu.js',
 };

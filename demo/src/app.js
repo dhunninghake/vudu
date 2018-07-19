@@ -4,51 +4,35 @@ import { ttf, woff, woff2 } from './fonts';
 import { Logo, TwoColumn } from './components';
 import { sharedStyles as shared } from './styles/shared';
 import { sharedObj } from './styles/shared';
-import pkg from '../../package.json';
 import v from '../../dist/vudu';
-import {
-  Pseudos,
-  MediaQueries,
-  Keyframes,
-  FontFace,
-  Nesting } from './modules';
+import { Pseudos, MediaQueries, Keyframes, FontFace, Nesting } from './modules';
 
 const e = v.composes;
 
-const calibreRegular = v.addFontFace({  
+const calibreRegular = v.addFontFace({
   fontFamily: 'CalibreRegular',
   src: `url(${woff2}) format("woff2"),
     url(${woff}) format("woff"),
     url(${ttf}) format("truetype")`,
   fontWeight: 'normal',
-  fontStyle: 'normal'
+  fontStyle: 'normal',
 });
 
 const tw = {
   root: 'https://twitter.com/intent/tweet',
-  url:  'http://dhunninghake.com/vudu',
+  url: 'http://dhunninghake.com/vudu',
   text: 'Vudu',
 };
 
-const Wrapper = (props) => {
+const Wrapper = props => {
   const styles = v({
     wrapper: {
       maxWidth: '82rem',
-      '@composes': [
-        e.col10, 
-        e.mxAuto, 
-        e.clearfix, 
-        e.px2
-      ]
-    }
+      '@composes': [e.col10, e.mxAuto, e.clearfix, e.px2],
+    },
   });
-  return (
-    <div className={styles.wrapper}>
-      {props.children}
-    </div>
-  );
+  return <div className={styles.wrapper}>{props.children}</div>;
 };
-
 
 const Header = () => {
   const styles = v({
@@ -61,31 +45,44 @@ const Header = () => {
       fontSize: '3.2rem',
       maxWidth: '30rem',
       lineHeight: '1.25',
-      '@composes': [
-        e.mxAuto,
-        e.normal,
-        e.mt3
-      ]
+      '@composes': [e.mxAuto, e.normal, e.mt3],
     },
     nav: {
       listStyleType: 'none',
-      '@composes': [ e.pt2, e.m0, e.rightAlign ],
-      'li': {
-        '@composes': [ e.mb1, e.inlineBlock, e.ml1 ]
-      }
-    }
+      '@composes': [e.pt2, e.m0, e.rightAlign],
+      li: {
+        '@composes': [e.mb1, e.inlineBlock, e.ml1],
+      },
+    },
   });
   return (
     <div className={styles.header}>
       <Wrapper>
         <ul className={styles.nav}>
-          <li><a href='https://github.com/dhunninghake/vudu' target='_blank'>Github</a></li>
-          <li><a href={`${tw.root}?text=${tw.text}&url=${tw.url}`} target='_blank'>Tweet</a></li>
-          <li><a href='https://www.npmjs.com/package/vudu' target='_blank'>Npm</a></li>
+          <li>
+            <a href="https://github.com/dhunninghake/vudu" target="_blank">
+              Github
+            </a>
+          </li>
+          <li>
+            <a
+              href={`${tw.root}?text=${tw.text}&url=${tw.url}`}
+              target="_blank"
+            >
+              Tweet
+            </a>
+          </li>
+          <li>
+            <a href="https://www.npmjs.com/package/vudu" target="_blank">
+              Npm
+            </a>
+          </li>
         </ul>
         <div className={styles.top}>
           <Logo size={100} />
-          <h1 className={styles.title}>{'Vudu is a composable approach to writing CSS in JavaScript.'}</h1>
+          <h1 className={styles.title}>
+            {'Vudu is a composable approach to writing CSS in JavaScript.'}
+          </h1>
         </div>
       </Wrapper>
     </div>
@@ -105,53 +102,33 @@ const Header = () => {
 //   <p>Vudu is ~17kb minified and 6kb gzipped</p>
 // </div>
 
-
 const Footer = () => {
   const styles = v({
     footer: {
       backgroundColor: '#D4FD56',
       boxShadow: '0 0 0 .5rem #D4FD56',
-      '@composes': [ 
-        e.py3, 
-        e.mt2 
-      ],
+      '@composes': [e.py3, e.mt2],
     },
     left: {
-      '@composes': [ 
-        sharedObj.middle,
-        e.col12, 
-        e.mdCol6, 
-        e.center 
-      ],
+      '@composes': [sharedObj.middle, e.col12, e.mdCol6, e.center],
       '@media (min-width: 52em)': {
-        '@composes': [ e.leftAlign ]
-      }
+        '@composes': [e.leftAlign],
+      },
     },
     right: {
-      '@composes': [ 
-        sharedObj.middle,
-        e.col12, 
-        e.mdCol6, 
-        e.center
-      ],
+      '@composes': [sharedObj.middle, e.col12, e.mdCol6, e.center],
       '@media (min-width: 52em)': {
-        '@composes': [ e.rightAlign ]
-      }
+        '@composes': [e.rightAlign],
+      },
     },
     logo: {
-      '@composes': [ 
-        sharedObj.middle,
-        e.mr2
-      ]
+      '@composes': [sharedObj.middle, e.mr2],
     },
     text: {
-      '@composes': [ sharedObj.middle ],
-      'span': {
-        '@composes': [ 
-          e.inlineBlock, 
-          e.mr3 
-        ]
-      }
+      '@composes': [sharedObj.middle],
+      span: {
+        '@composes': [e.inlineBlock, e.mr3],
+      },
     },
   });
   return (
@@ -163,32 +140,41 @@ const Footer = () => {
           </div>
           <div className={styles.text}>
             <p>
-              <span>{`Vudu v${pkg.version}`}</span>
-              <a href='https://github.com/dhunninghake/vudu' target='_blank'>Github</a>
-              <a href={`${tw.root}?text=${tw.text}&url=${tw.url}`} target='_blank'>Tweet</a>
-              <a href='https://www.npmjs.com/package/vudu' target='_blank'>Npm</a>
+              <a href="https://github.com/dhunninghake/vudu" target="_blank">
+                Github
+              </a>
+              <a
+                href={`${tw.root}?text=${tw.text}&url=${tw.url}`}
+                target="_blank"
+              >
+                Tweet
+              </a>
+              <a href="https://www.npmjs.com/package/vudu" target="_blank">
+                Npm
+              </a>
             </p>
           </div>
         </div>
         <div className={styles.right}>
-          <p>Made by <a href="http://dhunninghake.com">dhunninghake</a></p>
+          <p>
+            Made by <a href="http://dhunninghake.com">dhunninghake</a>
+          </p>
         </div>
       </Wrapper>
     </div>
   );
 };
 
-
 const Callout = () => {
   const styles = v({
     container: {
       borderLeft: '3px solid #ccc',
       backgroundColor: '#f6f6f6',
-      '@composes': [ e.p3, e.mt4 ],
-      'h2': {
-        '@composes': [ e.normal, e.m0 ]
-      }
-    }
+      '@composes': [e.p3, e.mt4],
+      h2: {
+        '@composes': [e.normal, e.m0],
+      },
+    },
   });
   return (
     <div className={styles.container}>
@@ -203,20 +189,15 @@ class App extends Component {
       site: {
         fontFamily: `${calibreRegular}, Times`,
         '*': { boxSizing: 'border-box' },
-        'a': {
+        a: {
           opacity: '1',
           transition: '.2s opacity ease',
-          '@composes': [ 
-            e.inlineBlock, 
-            e.underline,
-            e.mr1, 
-            e.black
-          ],
+          '@composes': [e.inlineBlock, e.underline, e.mr1, e.black],
           ':hover': {
-            opacity: '.5'
-          }
-        }
-      }
+            opacity: '.5',
+          },
+        },
+      },
     });
     return (
       <div className={styles.site}>
@@ -231,8 +212,4 @@ class App extends Component {
   }
 }
 
-
-render(
-  <App />,
-  document.getElementById('app')
-);
+render(<App />, document.getElementById('app'));

@@ -1,4 +1,4 @@
-const webpack           = require('webpack');
+const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
@@ -8,35 +8,42 @@ module.exports = {
     filename: 'bundle.js',
   },
   module: {
-    loaders: [
+    rules: [
       {
         loader: 'babel-loader',
         exclude: /node_modules/,
         test: /\.js$/,
-        query: {
+        options: {
           presets: ['es2015'],
-          plugins: ['transform-runtime']
-        }
+          plugins: ['transform-runtime'],
+        },
       },
       {
-        loader: 'file-loader',
-        test: /\.(ttf|eot|woff(2)?)(\?[a-z0-9=&.]+)?$/
+        test: /\.(ttf|eot|woff(2)?)(\?[a-z0-9=&.]+)?$/,
+        use: 'file-loader',
       },
-      { 
-        loader: 'html!markdown',
-        test: /\.md/ 
+      {
+        test: /\.md/,
+        use: [
+          {
+            loader: 'html-loader',
+          },
+          {
+            loader: 'markdown-loader',
+          },
+        ],
       },
-      { 
-        loader: 'json',
-        test: /\.json$/
-      }
-    ]
+      {
+        test: /\.json$/,
+        use: 'json-loader',
+      },
+    ],
   },
   plugins: [
     new HtmlWebpackPlugin({
       template: __dirname + '/demo/src/index.html',
       filename: 'index.html',
-      inject: false
-    })
-  ]
+      inject: false,
+    }),
+  ],
 };
