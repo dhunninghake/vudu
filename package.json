@@ -9,8 +9,7 @@
     "start": "webpack-dev-server --hot --progress --colors",
     "test": "ava"
   },
-  "author":
-    "Daniel Hunninghake <d@dhunninghake.com> (http://dhunninghake.com/)",
+  "author": "Daniel Hunninghake <d@dhunninghake.com> (http://dhunninghake.com/)",
   "license": "MIT",
   "dependencies": {
     "deep-equal": "^1.0.1",
@@ -51,13 +50,29 @@
     "webpack-dev-server": "^3.1.4"
   },
   "babel": {
-    "presets": ["es2015-rollup", "stage-0", "react"]
+    "presets": [
+      "es2015-rollup",
+      "stage-0",
+      "react"
+    ]
   },
   "ava": {
-    "require": ["./test/helpers/setup-browser-env.js"],
+    "require": [
+      "./test/helpers/setup-browser-env.js"
+    ],
     "babel": {
-      "presets": ["es2015", "stage-0", "react"]
+      "presets": [
+        "es2015",
+        "stage-0",
+        "react"
+      ]
     }
   },
-  "keywords": ["react", "css", "js", "css-in-js", "inline styles"]
+  "keywords": [
+    "react",
+    "css",
+    "js",
+    "css-in-js",
+    "inline styles"
+  ]
 }
