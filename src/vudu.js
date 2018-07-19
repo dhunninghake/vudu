@@ -25,7 +25,7 @@ const buildRuleset = (group, sheet, options={}) => {
   const rules = Object.keys(group).map(classname => {
     return {
       classname,
-      vuduClass: `${classname}-${suffix ? suffix : uniqueId()}`,
+      vuduClass: `${classname}-${suffix || uniqueId()}`,
       styles: group[classname],
     };
   });
