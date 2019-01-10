@@ -1,4 +1,3 @@
-import uniqueId from 'lodash.uniqueid';
 import { createSheet, deepEqual } from './utils';
 import { attachRule, addRule } from './attach';
 import { formatRule } from './format';
@@ -6,6 +5,7 @@ import { formatRule } from './format';
 let cache = [];
 
 let vuduSheet = createSheet('vSheet');
+const uniqueId = () => (Math.random() + 1).toString(36).substring(7);
 
 const buildRuleset = (group, sheet, options = {}) => {
   const suffix =
