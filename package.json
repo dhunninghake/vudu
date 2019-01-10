@@ -12,7 +12,6 @@
   "author": "Daniel Hunninghake <d@dhunninghake.com> (http://dhunninghake.com/)",
   "license": "MIT",
   "dependencies": {
-    "deep-equal": "^1.0.1",
     "inline-style-prefixer": "^2.0.1",
     "lodash.uniqueid": "^4.0.1"
   },

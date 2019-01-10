@@ -1,6 +1,5 @@
-import deepEqual from 'deep-equal';
 import uniqueId from 'lodash.uniqueid';
-import { createSheet } from './utils';
+import { createSheet, deepEqual } from './utils';
 import { attachRule, addRule } from './attach';
 import { formatRule } from './format';
 
