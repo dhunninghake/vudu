@@ -13,25 +13,6 @@ module.exports = {
         exclude: /node_modules/,
         test: /\.js$/,
       },
-      {
-        test: /\.(ttf|eot|woff(2)?)(\?[a-z0-9=&.]+)?$/,
-        use: 'file-loader',
-      },
-      {
-        test: /\.md/,
-        use: [
-          {
-            loader: 'html-loader',
-          },
-          {
-            loader: 'markdown-loader',
-          },
-        ],
-      },
-      {
-        test: /\.json$/,
-        use: 'json-loader',
-      },
     ],
     plugins: [
       new webpack.DefinePlugin({

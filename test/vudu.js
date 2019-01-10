@@ -1,61 +1,14 @@
 import test from 'ava';
-import v from '../dist/vudu';
-
-const c = v.composes;
-
-const createSheet = id => {
-  const existingSheet = document.getElementById(id);
-  if (existingSheet) {
-    return existingSheet.sheet;
-  } else {
-    let style = document.createElement('style');
-    style.appendChild(document.createTextNode(''));
-    style.setAttribute('id', id);
-    document.head.appendChild(style);
-    return style.sheet;
-  }
-};
-
-const guid = () => {
-  return (
-    Math.random()
-      .toString(26)
-      .substring(2, 10) +
-    Math.random()
-      .toString(26)
-      .substring(2, 10)
-  );
-};
+import v from '../src/vudu';
 
 const styles = {
   container: {
-    color: 'chartreuse'
+    color: 'chartreuse',
   },
   heading: {
-    fontSize: '2rem'
-  }
+    fontSize: '2rem',
+  },
 };
-
-test.beforeEach(t => {
-  const id = guid();
-  t.context.id = id;
-  t.context.sheet = createSheet(id);
-});
-
-test('doesnt throw an error', t => {
-  t.notThrows(() => {
-    v(styles);
-  });
-});
-
-test('attaches a style tag', t => {
-  t.plan(1);
-  return Promise.resolve(document.getElementById(t.context.id).tagName).then(
-    tag => {
-      t.is(tag, 'STYLE');
-    }
-  );
-});
 
 test('returns an object of values with type string', t => {
   t.plan(2);
@@ -71,30 +24,32 @@ test('handles suffix string configuration via options properly', t => {
   const style1 = {
     container: {
       color: 'blue',
-      textAlign: 'left'
-    }
+      textAlign: 'left',
+    },
   };
 
   v.options({ suffix })(style1, t.context.sheet);
   t.is(t.context.sheet.cssRules.length, 1);
-  t.true(RegExp(`${suffix}$`).test(t.context.sheet.cssRules[0].selectorText))
+  t.true(RegExp(`${suffix}$`).test(t.context.sheet.cssRules[0].selectorText));
 });
 
 test('handles suffix function configuration via options properly', t => {
   t.plan(2);
 
-  const suffixText = 'test'
+  const suffixText = 'test';
   const suffix = () => suffixText;
   const style1 = {
     container: {
       color: 'yellow',
-      textAlign: 'center'
-    }
+      textAlign: 'center',
+    },
   };
 
   v.options({ suffix })(style1, t.context.sheet);
   t.is(t.context.sheet.cssRules.length, 1);
-  t.true(RegExp(`${suffixText}$`).test(t.context.sheet.cssRules[0].selectorText))
+  t.true(
+    RegExp(`${suffixText}$`).test(t.context.sheet.cssRules[0].selectorText)
+  );
 });
 
 test('only adds rule once if deep equal', t => {
@@ -102,14 +57,14 @@ test('only adds rule once if deep equal', t => {
   const style1 = {
     container: {
       color: 'red',
-      textAlign: 'right'
-    }
+      textAlign: 'right',
+    },
   };
   const style2 = {
     container: {
       textAlign: 'right',
-      color: 'red'
-    }
+      color: 'red',
+    },
   };
 
   v(style1, t.context.sheet);
@@ -124,9 +79,9 @@ test('creates @media query rules', t => {
     container: {
       width: '50%',
       '@media (min-width: 40em)': {
-        width: '75%'
-      }
-    }
+        width: '75%',
+      },
+    },
   };
 
   v(styles, t.context.sheet);
@@ -140,21 +95,21 @@ test('creates @media rules in the correct order', t => {
   const breakpoints = [
     '(min-width: 40em)',
     '(min-width: 52em)',
-    '(min-width: 64em)'
+    '(min-width: 64em)',
   ];
   const styles = {
     container: {
       width: '50%',
       [`@media ${breakpoints[0]}`]: {
-        width: '75%'
+        width: '75%',
       },
       [`@media ${breakpoints[1]}`]: {
-        width: '85%'
+        width: '85%',
       },
       [`@media ${breakpoints[2]}`]: {
-        width: '95%'
-      }
-    }
+        width: '95%',
+      },
+    },
   };
 
   v(styles, t.context.sheet);
@@ -172,9 +127,9 @@ test('creates pseudo selectors', t => {
     container: {
       color: 'yellow',
       [pseudo]: {
-        color: 'blue'
-      }
-    }
+        color: 'blue',
+      },
+    },
   };
 
   v(styles, t.context.sheet);
@@ -198,9 +153,9 @@ test('creates @keyframes rules', t => {
       [`@keyframes ${name}`]: {
         '0%': { color: 'blue' },
         '50%': { color: 'green' },
-        '100%': { color: 'blue' }
-      }
-    }
+        '100%': { color: 'blue' },
+      },
+    },
   };
 
   v(styles, t.context.sheet);
@@ -217,8 +172,8 @@ test('adds vendor prefixes', t => {
   const styles = {
     columns: {
       columnCount: '3',
-      columnGap: '10px'
-    }
+      columnGap: '10px',
+    },
   };
 
   v(styles, t.context.sheet);
@@ -243,7 +198,7 @@ test('creates @font-face rule', t => {
       url(blah.woff) format("woff"),
       url(balh.ttf) format("truetype")`,
       fontWeight: 'normal',
-      fontStyle: 'normal'
+      fontStyle: 'normal',
     },
     t.context.sheet
   );
@@ -256,8 +211,8 @@ test('extends atomic classes', async t => {
   const styles = {
     extend: {
       textAlign: 'right',
-      '@composes': [c.left, c.py4, c.purple]
-    }
+      '@composes': [c.left, c.py4, c.purple],
+    },
   };
 
   const getExtends = () => {
@@ -276,8 +231,8 @@ test('extends pseudo and media query atomics', async t => {
   t.plan(1);
   const styles = {
     extendSomething: {
-      '@composes': [c.col6, c.mdCol4]
-    }
+      '@composes': [c.col6, c.mdCol4],
+    },
   };
 
   const getExtends = () => {
@@ -299,9 +254,9 @@ test('doesnt camelize selector strings within brackets', t => {
   const styles = {
     namespace: {
       [selector]: {
-        background: 'wheat'
-      }
-    }
+        background: 'wheat',
+      },
+    },
   };
 
   v(styles, t.context.sheet);

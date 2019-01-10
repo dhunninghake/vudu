@@ -6,7 +6,7 @@
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "rollup -c",
-    "start": "webpack-dev-server --hot --progress --colors",
+    "start": "node_modules/.bin/webpack-dev-server --content-base demo/build/",
     "test": "ava"
   },
   "author": "Daniel Hunninghake <d@dhunninghake.com> (http://dhunninghake.com/)",
@@ -20,18 +20,11 @@
     "@babel/core": "^7.2.2",
     "@babel/preset-env": "^7.2.3",
     "@babel/register": "^7.0.0",
-    "ava": "^0.16.0",
+    "ava": "1.0.0-beta.1",
     "babel-loader": "^7.1.5",
+    "babel-plugin-add-module-exports": "^1.0.0",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
     "babel-plugin-transform-runtime": "^6.15.0",
-    "babel-polyfill": "^6.13.0",
-    "file-loader": "^1.1.11",
-    "html-loader": "^0.5.5",
-    "jsdom": "^9.5.0",
-    "json-loader": "^0.5.7",
-    "markdown-loader": "^3.0.0",
-    "react": "^15.3.1",
-    "react-dom": "^15.3.1",
     "rimraf": "^2.5.4",
     "rollup": "^0.65.2",
     "rollup-plugin-babel": "^4.0.3",
@@ -39,46 +32,21 @@
     "rollup-plugin-filesize": "^6.0.0",
     "rollup-plugin-node-resolve": "^3.4.0",
     "rollup-plugin-uglify": "^5.0.2",
-    "tapable": "1.0.0-beta.5",
     "webpack": "^4.0.0",
     "webpack-cli": "^3.1.0",
     "webpack-dev-server": "^3.1.4"
   },
-  "babel": {
-    "presets": [
-      [
-        "@babel/env",
-        {
-          "modules": false,
-          "exclude": [
-            "transform-typeof-symbol"
-          ]
-        }
-      ]
+  "ava": {
+    "require": [
+      "@babel/register"
     ],
-    "env": {
-      "test": {
-        "plugins": [
-          "add-module-exports",
-          "transform-es2015-modules-commonjs"
-        ]
+    "babel": {
+      "testOptions": {
+        "babelrc": true
       }
     }
   },
-  "ava": {
-    "require": [
-      "./test/helpers/setup-browser-env.js"
-    ],
-    "babel": {
-      "presets": [
-        "es2015",
-        "stage-0",
-        "react"
-      ]
-    }
-  },
   "keywords": [
-    "react",
     "css",
     "js",
     "css-in-js",
