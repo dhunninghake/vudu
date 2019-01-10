@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
-import { ttf, woff, woff2 } from './fonts';
 import { Logo, TwoColumn } from './components';
 import { sharedStyles as shared } from './styles/shared';
 import { sharedObj } from './styles/shared';
@@ -8,15 +7,6 @@ import v from '../../dist/vudu';
 import { Pseudos, MediaQueries, Keyframes, FontFace, Nesting } from './modules';
 
 const e = v.composes;
-
-const calibreRegular = v.addFontFace({
-  fontFamily: 'CalibreRegular',
-  src: `url(${woff2}) format("woff2"),
-    url(${woff}) format("woff"),
-    url(${ttf}) format("truetype")`,
-  fontWeight: 'normal',
-  fontStyle: 'normal',
-});
 
 const tw = {
   root: 'https://twitter.com/intent/tweet',
@@ -187,7 +177,6 @@ class App extends Component {
   render() {
     const styles = v({
       site: {
-        fontFamily: `${calibreRegular}, Times`,
         '*': { boxSizing: 'border-box' },
         a: {
           opacity: '1',
