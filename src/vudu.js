@@ -13,12 +13,8 @@ const parse = (s, c, method = cl, selector) => {
   const d = str.reduce((a, b) => (a += `${kebab(b)}:${s[b]};`), '');
   const rule = method(c, d, selector);
 
-  try {
-    insert(rule);
-    console.log(rule);
-  } catch (e) {
-    console.warn('Vudu: Failed to insert rule:', rule, e);
-  }
+  console.log(rule);
+  insert(rule);
 
   obj.map(k => {
     if (k.startsWith(':')) {
@@ -52,7 +48,11 @@ if (typeof document !== 'undefined') {
     .sheet;
   insert = rule => {
     rules.push[rule];
-    sheet.insertRule(rule, sheet.cssRules.length);
+    try {
+      sheet.insertRule(rule, sheet.cssRules.length);
+    } catch (e) {
+      console.warn('Vudu: Failed to insert rule:', rule, e);
+    }
   };
 }
 
