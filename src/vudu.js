@@ -1,71 +1,59 @@
-import { createSheet, deepEqual } from './utils';
-import { attachRule, addRule } from './attach';
-import { formatRule } from './format';
+let cache = {};
+const rules = [];
 
-let cache = [];
+let insert = rule => rules.push(rule);
+const cl = (c, d, k) => `${c} {${d}}`;
+const mq = (c, d, k) => `${k} { ${cl(c, d)} }`;
+const kebab = s => s.replace(/[A-Z]|^ms/g, '-$&').toLowerCase();
 
-let vuduSheet = createSheet('vSheet');
-const uniqueId = () => (Math.random() + 1).toString(36).substring(7);
+const parse = (s, c, method = cl, selector) => {
+  const keys = Object.keys(s);
+  const str = keys.filter(k => typeof s[k] === 'string');
+  const obj = keys.filter(k => Boolean(s[k]) && typeof s[k] === 'object');
+  const d = str.reduce((a, b) => (a += `${kebab(b)}:${s[b]};`), '');
+  const rule = method(c, d, selector);
 
-const buildRuleset = (group, sheet, options = {}) => {
-  const suffix =
-    typeof options.suffix === 'function' ? options.suffix() : options.suffix;
-  const rules = Object.keys(group).map(classname => {
-    return {
-      classname,
-      vuduClass: `${classname}-${suffix || uniqueId()}`,
-      styles: group[classname],
-    };
-  });
-  rules.forEach(r => addRule(formatRule(r.styles), r.vuduClass, sheet, true));
-  return rules.reduce(
-    (a, b) => ({
-      ...a,
-      [b.classname]: b.vuduClass,
-    }),
-    {}
-  );
-};
-
-const v = (el, customSheet, options = {}) => {
-  const cachedItem = cache.find(item => deepEqual(item.element, el));
-  if (cachedItem) {
-    return cachedItem.classes;
+  try {
+    insert(rule);
+    console.log(rule);
+  } catch (e) {
+    console.warn('Vudu: Failed to insert rule:', rule, e);
   }
 
-  const sheet = customSheet || vuduSheet;
-  const classes = buildRuleset(el, sheet, options);
-  const cacheItem = {};
-  cacheItem.element = el;
-  cacheItem.classes = classes;
-  cache.push(cacheItem);
-
-  return classes;
+  obj.map(k => {
+    if (k.startsWith(':')) {
+      parse(s[k], `${c}${k}`, cl, k);
+    } else if (k.startsWith('@media')) {
+      parse(s[k], c, mq, k);
+    } else {
+      parse(s[k], `${c} ${k}`, cl, k);
+    }
+  });
 };
 
-const addFontFace = (font, customSheet) => {
-  const sheet = customSheet || vuduSheet;
-  const dec = formatRule(font)
-    .map(r => `${r.key}: ${r.value}`)
-    .join(';');
-  attachRule(`@font-face { ${dec}; }`, sheet);
-  return font.fontFamily.toString();
+const v = (styles, customClass) => {
+  const _key = JSON.stringify(styles);
+  if (cache[_key]) {
+    return cache[_key].classname;
+  }
+
+  const classname = customClass || `.v-${Math.round(Math.random() * 10000)}`;
+  parse(styles, classname);
+  cache[_key] = classname;
+  return classname;
 };
 
-const logOutput = () => {
-  const rules = vuduSheet.cssRules;
-  console.log(
-    Object.keys(rules)
-      .map(r => rules[r].cssText)
-      .join('\n\n')
-  );
+const vudu = x => {
+  return typeof x === 'string' ? styles => v(styles, x) : v(x);
 };
 
-const options = options => (el, customSheet) => v(el, customSheet, options);
+if (typeof document !== 'undefined') {
+  const sheet = document.head.appendChild(document.createElement('style'))
+    .sheet;
+  insert = rule => {
+    rules.push[rule];
+    sheet.insertRule(rule, sheet.cssRules.length);
+  };
+}
 
-export default {
-  addFontFace,
-  logOutput,
-  options,
-  v,
-};
+export default vudu;

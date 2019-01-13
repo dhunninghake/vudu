@@ -1,23 +1,10 @@
 const webpack = require('webpack');
 
 module.exports = {
-  entry: __dirname + '/demo/src/app.js',
+  mode: 'development',
+  entry: __dirname + '/dev/src.js',
   output: {
-    path: __dirname + '/demo/build',
-    filename: 'bundle.js',
-  },
-  module: {
-    rules: [
-      {
-        loader: 'babel-loader',
-        exclude: /node_modules/,
-        test: /\.js$/,
-      },
-    ],
-    plugins: [
-      new webpack.DefinePlugin({
-        'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
-      }),
-    ],
+    path: __dirname + '/dev',
+    filename: 'dist.js',
   },
 };

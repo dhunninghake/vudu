@@ -6,7 +6,7 @@
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "rollup -c",
-    "start": "node_modules/.bin/webpack-dev-server --content-base demo/build/",
+    "start": "node_modules/.bin/webpack-dev-server --content-base dev/",
     "test": "ava"
   },
   "author": "Daniel Hunninghake <d@dhunninghake.com> (http://dhunninghake.com/)",
