@@ -13,8 +13,9 @@ const parse = (s, c, method = cl, selector) => {
   const d = str.reduce((a, b) => (a += `${kebab(b)}:${s[b]};`), '');
   const rule = method(c, d, selector);
 
-  console.log(rule);
-  insert(rule);
+  if (Boolean(d)) {
+    insert(rule);
+  }
 
   obj.map(k => {
     if (k.startsWith(':')) {
@@ -41,6 +42,15 @@ const v = (styles, customClass) => {
 
 const vudu = x => {
   return typeof x === 'string' ? styles => v(styles, x) : v(x);
+};
+
+vudu.css = () => rules.join('');
+
+vudu.reset = () => {
+  cache = {};
+  while (rules.length) {
+    rules.pop();
+  }
 };
 
 if (typeof document !== 'undefined') {
