@@ -61,11 +61,11 @@ test('handles targeting child elements', t => {
 
 test('handles nesting', t => {
   t.plan(1);
-  vudu('.hi')({ a: { ':hover': { color: 'green' } } });
-  t.is(vudu.css(), '.hi a:hover {color:green;}');
+  vudu('.hi')({ a: { ':hover': { span: { color: 'green' } } } });
+  t.is(vudu.css(), '.hi a:hover span {color:green;}');
 });
 
-test('doesnt camelize selector strings within brackets', t => {
+test('doesnt kebab selector strings within brackets', t => {
   t.plan(1);
   vudu('.hi')({ 'input[name="coolName"]': { color: 'red' } });
   t.is(vudu.css(), '.hi input[name="coolName"] {color:red;}');
