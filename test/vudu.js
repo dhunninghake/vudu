@@ -70,3 +70,18 @@ test('doesnt kebab selector strings within brackets', t => {
   vudu('.hi')({ 'input[name="coolName"]': { color: 'red' } });
   t.is(vudu.css(), '.hi input[name="coolName"] {color:red;}');
 });
+
+test('handles prefixing selector properties', t => {
+  t.plan(1);
+  vudu('.hi')({ alignItems: 'center' });
+  t.is(vudu.css(), '.hi {align-items:center;-webkit-box-align:center;}');
+});
+
+test('handles prefixing selector values', t => {
+  t.plan(1);
+  vudu('.hi')({ display: 'flex' });
+  t.is(
+    vudu.css(),
+    '.hi {display:-webkit-box;display:-moz-box;display:-ms-flexbox;display:-webkit-flex;display:flex;}'
+  );
+});

@@ -1,3 +1,5 @@
+import { prefix } from 'inline-style-prefixer';
+
 let cache = {};
 const rules = [];
 
@@ -7,10 +9,20 @@ const mq = (c, d, k) => `${k} { ${cl(c, d)} }`;
 const kebab = s => s.replace(/[A-Z]|^ms/g, '-$&').toLowerCase();
 
 const parse = (s, c, method = cl, selector) => {
-  const keys = Object.keys(s);
-  const str = keys.filter(k => typeof s[k] === 'string');
-  const obj = keys.filter(k => Boolean(s[k]) && typeof s[k] === 'object');
-  const d = str.reduce((a, b) => (a += `${kebab(b)}:${s[b]};`), '');
+  const keys = Object.keys(prefix(s));
+  const str = keys.filter(k => typeof s[k] === 'string' || Array.isArray(s[k]));
+  const obj = keys.filter(
+    k => Boolean(s[k]) && typeof s[k] === 'object' && !Array.isArray(s[k])
+  );
+
+  const d = str.reduce((a, b) => {
+    const dec = Array.isArray(s[b])
+      ? s[b].reduce((c, d) => (c += `${b}:${d};`), '')
+      : `${kebab(b)}:${s[b]};`;
+
+    return (a += dec);
+  }, '');
+
   const rule = method(c, d, selector);
 
   if (Boolean(d)) {
