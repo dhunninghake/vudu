@@ -23,10 +23,8 @@ const parse = (s, c, method = cl, selector) => {
     return (a += dec);
   }, '');
 
-  const rule = method(c, d, selector);
-
   if (Boolean(d)) {
-    insert(rule);
+    insert(method(c, d, selector));
   }
 
   obj.map(k => {
