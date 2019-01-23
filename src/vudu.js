@@ -4,38 +4,49 @@ let cache = {};
 const rules = [];
 
 let insert = rule => rules.push(rule);
-const cl = (c, d, k) => `${c} {${d}}`;
-const mq = (c, d, k) => `${k} { ${cl(c, d)} }`;
-const kebab = s => s.replace(/[A-Z]|^ms/g, '-$&').toLowerCase();
+const hash = s => s.replace(/[A-Z]|^ms/g, '-$&').toLowerCase();
+const mq = (rule, media) => (media ? `${media}{${rule}}` : rule);
+const dec = (a, b) => `${hash(a)}:${b};`;
+const cl = (c, d) => `${c}{${d}}`;
 
-const parse = (s, c, method = cl, selector) => {
-  const keys = Object.keys(prefix(s));
-  const str = keys.filter(k => typeof s[k] === 'string' || Array.isArray(s[k]));
-  const obj = keys.filter(
-    k => Boolean(s[k]) && typeof s[k] === 'object' && !Array.isArray(s[k])
-  );
+const parse = (s, c, media = false) => {
+  Object.keys(prefix(s))
+    .sort()
+    .filter(k => Boolean(s[k]))
+    .reduce(
+      (a, b) =>
+        typeof s[b] === 'string' || Array.isArray(s[b])
+          ? [[...a[0], b], a[1]]
+          : [a[0], [...a[1], b]],
+      [[], []]
+    )
+    .map((arr, idx) => {
+      if (arr.length === 0) {
+        return;
+      }
 
-  const d = str.reduce((a, b) => {
-    const dec = Array.isArray(s[b])
-      ? s[b].reduce((c, d) => (c += `${b}:${d};`), '')
-      : `${kebab(b)}:${s[b]};`;
+      if (idx === 0) {
+        const declarations = arr.reduce((a, b) => {
+          return (a += Array.isArray(s[b])
+            ? s[b].reduce((c, d) => (c += dec(b, d)), '')
+            : dec(b, s[b]));
+        }, '');
 
-    return (a += dec);
-  }, '');
+        insert(mq(cl(c, declarations), media));
+      }
 
-  if (Boolean(d)) {
-    insert(method(c, d, selector));
-  }
-
-  obj.map(k => {
-    if (k.startsWith(':')) {
-      parse(s[k], `${c}${k}`, cl, k);
-    } else if (k.startsWith('@media')) {
-      parse(s[k], c, mq, k);
-    } else {
-      parse(s[k], `${c} ${k}`, cl, k);
-    }
-  });
+      if (idx === 1) {
+        arr.map(k => {
+          if (/^:/.test(k)) {
+            parse(s[k], `${c}${k}`);
+          } else if (/^@/.test(k)) {
+            parse(s[k], c, k);
+          } else {
+            parse(s[k], `${c} ${k}`);
+          }
+        });
+      }
+    });
 };
 
 const v = (styles, customClass) => {
@@ -67,7 +78,7 @@ if (typeof document !== 'undefined') {
   const sheet = document.head.appendChild(document.createElement('style'))
     .sheet;
   insert = rule => {
-    rules.push[rule];
+    rules.push(rule);
     try {
       sheet.insertRule(rule, sheet.cssRules.length);
     } catch (e) {
