@@ -4,8 +4,9 @@ let cache = {};
 const rules = [];
 
 let insert = rule => rules.push(rule);
+
 const hash = s => s.replace(/[A-Z]|^ms/g, '-$&').toLowerCase();
-const mq = (rule, media) => (media ? `${media}{${rule}}` : rule);
+const mq = (rule, media) => (media ? cl(media, rule) : rule);
 const dec = (a, b) => `${hash(a)}:${b};`;
 const cl = (c, d) => `${c}{${d}}`;
 
