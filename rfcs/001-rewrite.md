@@ -44,6 +44,21 @@ const className = vudu('.hi')({
 });
 ```
 
+You can pass multiple objects and get an array of classes back:
+
+```js
+import vudu from 'vudu';
+
+export const Example = () => (
+  <>
+    <div className={c1} />
+    <div className={c2} />
+  </>
+);
+
+const [c1, c2] = vudu({ color: 'red' }, { color: 'blue' });
+```
+
 # Motivation
 
 A few observations about the package after using it for some time:
@@ -52,8 +67,7 @@ A few observations about the package after using it for some time:
 
 ```js
 const className = vudu({
-  container: {
-    // <---- this
+  container: {               // <---- this
     color: 'red',
   },
 });
@@ -129,7 +143,7 @@ Similar to font face, these can be added to a static sheet. It’s possible supp
 
 ### `Custom style sheet`
 
-The only reason this was supported in v1 was so that I could pass a custom style sheet in tests. I’ve now taken a different approach in testing to simply unit test the string output the style object which makes a custom stylesheet unnecessary.
+Put all non-vudu styles in their own stylesheet. This feature was only meant for testing purposes.
 
 # Looking ahead
 
