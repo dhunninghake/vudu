@@ -51,19 +51,32 @@ const parse = (s, c, media = false) => {
 };
 
 const v = (styles, customClass) => {
-  const _key = JSON.stringify(styles);
+  const _key = (customClass || '') + JSON.stringify(styles);
   if (cache[_key]) {
-    return cache[_key].classname;
+    return cache[_key];
   }
 
-  const classname = customClass || `.v-${Math.round(Math.random() * 10000)}`;
+  const classname =
+    customClass ||
+    `.v-${Math.random()
+      .toString(36)
+      .substring(2, 15)}`;
+
   parse(styles, classname);
   cache[_key] = classname;
   return classname;
 };
 
-const vudu = x => {
-  return typeof x === 'string' ? styles => v(styles, x) : v(x);
+const vudu = (...x) => {
+  const classnames = x.map((y, i) => {
+    if (typeof y === 'string') {
+      return (...styles) => v(styles[i], y);
+    }
+
+    return v(y);
+  });
+
+  return classnames.length === 1 ? classnames[0] : classnames;
 };
 
 vudu.css = () => rules.join('');
