@@ -67,16 +67,8 @@ const v = (styles, customClass) => {
   return classname;
 };
 
-const vudu = (...x) => {
-  const classnames = x.map((y, i) => {
-    if (typeof y === 'string') {
-      return (...styles) => v(styles[i], y);
-    }
-
-    return v(y);
-  });
-
-  return classnames.length === 1 ? classnames[0] : classnames;
+const vudu = x => {
+  return typeof x === 'string' ? styles => v(styles, x) : v(x);
 };
 
 vudu.css = () => rules.join('');

@@ -85,20 +85,3 @@ test('handles prefixing selector values', t => {
     '.hi{display:-webkit-box;display:-moz-box;display:-ms-flexbox;display:-webkit-flex;display:flex;}'
   );
 });
-
-test('returns an array of classes if multiple objects are provided', t => {
-  t.plan(2);
-  const [c1, c2] = vudu({ color: 'red' }, { color: 'blue' });
-  t.is(typeof c1, 'string');
-  t.is(typeof c2, 'string');
-});
-
-test('returns an array of functions if multiple deterministic classes are provided', t => {
-  t.plan(4);
-  const c = vudu('.hey', '.you');
-  t.is(typeof c, 'object');
-  t.is(typeof c[0], 'function');
-  t.is(typeof c[1], 'function');
-  c.map(v => v({ color: 'blue' }, { color: 'red' }));
-  t.is(vudu.css(), '.hey{color:blue;}.you{color:red;}');
-});
