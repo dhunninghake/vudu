@@ -1,99 +1,96 @@
-import deepEqual from 'deep-equal';
-import uniqueId from 'lodash.uniqueid';
-import { createSheet } from './utils';
-import { composes, config } from './composes';
-import { attachRule, addRule } from './attach';
-import { formatRule } from './format';
+import { prefix } from 'inline-style-prefixer';
 
-let cache = [];
+let cache = {};
+const rules = [];
 
-let vuduSheet = createSheet('vSheet');
+let insert = rule => rules.push(rule);
 
-/**
- * buildRuleset:
- * 1) Generates unique vudu classes
- * 2) Adds formatted rules to the sheet
- * 3) Returns an object of vudu classes
- *
- * @param {Object} group
- * @param {Object} sheet
- * @param {Object} [options={}]
- * @returns {Object}
- */
-const buildRuleset = (group, sheet, options={}) => {
-  const suffix = typeof options.suffix === 'function' ? options.suffix() : options.suffix;
-  const rules = Object.keys(group).map(classname => {
-    return {
-      classname,
-      vuduClass: `${classname}-${suffix || uniqueId()}`,
-      styles: group[classname],
-    };
-  });
-  rules.forEach(r => addRule(formatRule(r.styles), r.vuduClass, sheet, true));
-  return rules.reduce((a, b) => ({
-    ...a,
-    [b.classname]: b.vuduClass,
-  }), {});
+const hash = s => s.replace(/[A-Z]|^ms/g, '-$&').toLowerCase();
+const mq = (rule, media) => (media ? cl(media, rule) : rule);
+const dec = (a, b) => `${hash(a)}:${b};`;
+const cl = (c, d) => `${c}{${d}}`;
+
+const parse = (s, c, media = false) => {
+  Object.keys(prefix(s))
+    .sort()
+    .filter(k => Boolean(s[k]))
+    .reduce(
+      (a, b) =>
+        typeof s[b] === 'string' || Array.isArray(s[b])
+          ? [[...a[0], b], a[1]]
+          : [a[0], [...a[1], b]],
+      [[], []]
+    )
+    .map((arr, idx) => {
+      if (arr.length === 0) {
+        return;
+      }
+
+      if (idx === 0) {
+        const declarations = arr.reduce((a, b) => {
+          return (a += Array.isArray(s[b])
+            ? s[b].reduce((c, d) => (c += dec(b, d)), '')
+            : dec(b, s[b]));
+        }, '');
+
+        insert(mq(cl(c, declarations), media));
+      }
+
+      if (idx === 1) {
+        arr.map(k => {
+          if (/^:/.test(k)) {
+            parse(s[k], `${c}${k}`);
+          } else if (/^@/.test(k)) {
+            parse(s[k], c, k);
+          } else {
+            parse(s[k], `${c} ${k}`);
+          }
+        });
+      }
+    });
 };
 
-/**
- * V kicks off adding a new rule.
- *
- * @param {Object} el
- * @param {Object} [customSheet]
- * @param {Object} [options={}]
- * @returns {Object}
- */
-const v = (el, customSheet, options={}) => {
-  const cachedItem = cache.find(item => deepEqual(item.element, el));
-  if (cachedItem) {
-    return cachedItem.classes;
+const v = (styles, customClass) => {
+  const _key = (customClass || '') + JSON.stringify(styles);
+  if (cache[_key]) {
+    return cache[_key];
   }
 
-  const sheet = customSheet || vuduSheet;
-  const classes = buildRuleset(el, sheet, options);
-  const cacheItem = {};
-  cacheItem.element = el;
-  cacheItem.classes = classes;
-  cache.push(cacheItem);
+  const classname =
+    customClass ||
+    `.v-${Math.random()
+      .toString(36)
+      .substring(2, 15)}`;
 
-  return classes;
+  parse(styles, classname);
+  cache[_key] = classname;
+  return classname;
 };
 
-/**
- * PUBLIC METHODS
- */
-const addFontFace = (font, customSheet) => {
-  const sheet = customSheet || vuduSheet;
-  const dec = formatRule(font)
-    .map(r => `${r.key}: ${r.value}`)
-    .join(';');
-  attachRule(`@font-face { ${dec}; }`, sheet);
-  return font.fontFamily.toString();
+const vudu = x => {
+  return typeof x === 'string' ? styles => v(styles, x) : v(x);
 };
 
-const logOutput = () => {
-  const rules = vuduSheet.cssRules;
-  console.log(
-    Object.keys(rules)
-      .map(r => rules[r].cssText)
-      .join('\n\n')
-  );
+vudu.css = () => rules.join('');
+
+vudu.reset = () => {
+  cache = {};
+  while (rules.length) {
+    rules.pop();
+  }
 };
 
-/**
- * Curries v to make configuring v easier
- *
- * @param {Object} options
- * @returns {Function}
- */
-const options = (options) => (el, customSheet) => v(el, customSheet, options)
+if (typeof document !== 'undefined') {
+  const sheet = document.head.appendChild(document.createElement('style'))
+    .sheet;
+  insert = rule => {
+    rules.push(rule);
+    try {
+      sheet.insertRule(rule, sheet.cssRules.length);
+    } catch (e) {
+      console.warn('Vudu: Failed to insert rule:', rule, e);
+    }
+  };
+}
 
-v.addFontFace = addFontFace;
-v.logOutput = logOutput;
-v.composes = composes;
-v.config = config;
-v.options = options;
-v.v = v;
-
-export default v;
+export default vudu;

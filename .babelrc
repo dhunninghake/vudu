@@ -1,0 +1,16 @@
+{
+  "presets": [
+    [
+      "@babel/env",
+      {
+        "modules": false,
+        "exclude": ["transform-typeof-symbol"]
+      }
+    ]
+  ],
+  "env": {
+    "test": {
+      "plugins": ["add-module-exports", "transform-es2015-modules-commonjs"]
+    }
+  }
+}

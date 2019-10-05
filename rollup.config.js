@@ -1,33 +1,20 @@
 import babel from 'rollup-plugin-babel';
-import uglify from 'rollup-plugin-uglify';
+import { uglify } from 'rollup-plugin-uglify';
 import commonjs from 'rollup-plugin-commonjs';
-import nodeResolve from 'rollup-plugin-node-resolve';
+import resolve from 'rollup-plugin-node-resolve';
 import filesize from 'rollup-plugin-filesize';
-import gzip from 'rollup-plugin-gzip';
+import path from 'path';
 
-export default {
-  entry: 'src/vudu.js',
-  format: 'cjs',
-  plugins: [
-    commonjs({
-      include: 'node_modules/**',
-    }),
-    babel({
-      exclude: 'node_modules/**',
-    }),
-    uglify(),
-    nodeResolve({
-      module: true,
-      jsnext: true,
-      main: true,
-      browser: true,
-      extensions: ['.js', '.json'],
-      preferBuiltins: false,
-    }),
-    filesize({
-      showGzippedSize: true,
-    }),
-    gzip(),
-  ],
-  dest: 'dist/vudu.js',
-};
+function inputFactory(input, name) {
+  return {
+    input: path.resolve(__dirname, `src/${input}.js`),
+    output: {
+      file: path.resolve(__dirname, `dist/${input}.js`),
+      format: 'umd',
+      name,
+    },
+    plugins: [resolve(), commonjs(), babel(), uglify(), filesize()],
+  };
+}
+
+export default [inputFactory('vudu', 'vudu')];
